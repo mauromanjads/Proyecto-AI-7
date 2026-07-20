@@ -47,11 +47,13 @@ header p{
 
 main{
 
-    display:grid;
+    display:flex;
 
-    grid-template-columns:300px 1fr;
+    flex-direction:column;
 
     gap:20px;
+
+    align-items:center;
 
 }
 
@@ -79,53 +81,6 @@ main{
 
 }
 
-#agentes{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:12px;
-
-}
-
-.agente{
-
-    background:#334155;
-
-    border-left:6px solid #38bdf8;
-
-    border-radius:8px;
-
-    padding:12px;
-
-    transition:.2s;
-
-}
-
-.agente:hover{
-
-    transform:translateX(5px);
-
-    background:#475569;
-
-}
-
-.agente h3{
-
-    margin-bottom:5px;
-
-    font-size:18px;
-
-}
-
-.agente p{
-
-    color:#cbd5e1;
-
-    font-size:14px;
-
-}
 
 #caso{
 
@@ -190,5 +145,186 @@ pre{
     word-break:break-word;
 
     font-size:13px;
+
+}
+
+#agentes{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    justify-content:center;
+
+    gap:20px;
+
+}
+
+
+.agente{
+
+    position:relative;
+
+    background:#1f2937;
+
+    border-radius:14px;
+
+    padding:20px;
+
+    border:1px solid #334155;
+
+    overflow:hidden;
+
+    transition:.25s;
+
+}
+
+.agente:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:0 10px 25px rgba(0,0,0,.35);
+
+}
+
+.agente-badge{
+
+    position:absolute;
+
+    top:15px;
+
+    right:15px;
+
+    color:#fff;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+    padding:5px 10px;
+
+    border-radius:30px;
+
+}
+
+.agente-header{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:18px;
+
+}
+
+.agente-icono{
+
+    width:60px;
+
+    height:60px;
+
+    border-radius:50%;
+
+    background:#0f172a;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:28px;
+
+}
+
+.agente-titulo h2{
+
+    margin:0;
+
+    color:#ffffff;
+
+    font-size:22px;
+
+}
+
+.agente-titulo span{
+
+    color:#38bdf8;
+
+    font-size:14px;
+
+}
+
+.agente-descripcion{
+
+    color:#cbd5e1;
+
+    line-height:1.6;
+
+    margin-bottom:18px;
+
+    min-height:55px;
+
+}
+
+.agente-info{
+
+    border-top:1px solid #334155;
+
+    padding-top:12px;
+
+}
+
+.fila{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+.fila span{
+
+    color:#94a3b8;
+
+}
+
+.fila strong{
+
+    color:#ffffff;
+
+}
+
+.agente-imagen img{
+
+    width:100%;
+
+    max-width:220px;
+
+    height:auto;
+
+    aspect-ratio:1 / 1;
+
+    object-fit:cover;
+
+    border-radius:14px;
+
+    box-shadow:0 0 25px rgba(56,189,248,.35);
+
+}
+#agentes{
+
+    width:100%;
+
+}
+
+
+#agentes .agente{
+
+    width:260px;
 
 }
