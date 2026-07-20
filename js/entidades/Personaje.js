@@ -24,6 +24,7 @@ export default class Personaje {
             color,
             icono,
             imagen,
+            avatar,
             altura
         } = datos;
 
@@ -36,6 +37,7 @@ export default class Personaje {
         this.color = color;
         this.icono = icono;
         this.imagen = imagen;
+        this.avatar = avatar;
 
         this.altura = altura;
 

@@ -67,18 +67,27 @@ export default class Tarjeta {
 
             </div>
 
-            <div class="agente-imagen">
-              
+             <div class="agente-imagen">              
                 ${
-                    agente.imagen
+                    agente.avatar
                     ?
-                    `<img src="assets/img/${agente.imagen}" alt="${agente.nombre}">`
+                    `<img src="assets/img/${agente.avatar}" alt="${agente.nombre}">`                    
                     :
                     ""
                 }
-
             </div>
 
+            <div class="agente-imagen">              
+                ${
+                    agente.imagen
+                    ?
+                    `<img src="assets/img/${agente.imagen}" alt="${agente.nombre}">`                    
+                    :
+                    ""
+                }
+            </div>
+
+           
             <div class="agente-descripcion">
                 ${agente.descripcion}
             </div>
