@@ -39,7 +39,7 @@ export default class Modal {
                         <div class="modal-agente-titulo">
 
                             <div
-                                class="agente-badge"
+                                class="modal-agente-codigo"
                                 style="background:${agente.color}"
                             >
                                 ${agente.codigo}

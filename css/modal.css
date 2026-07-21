@@ -11,6 +11,7 @@
 
 .modal-overlay {
     position: fixed;
+
     top: 0;
     left: 0;
 
@@ -20,6 +21,7 @@
     background: rgba(0, 0, 0, .75);
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
@@ -38,17 +40,13 @@
     width: 100%;
     max-width: 700px;
 
-    max-height: 90vh;
-
-    overflow-y: auto;
-
     background: #1e293b;
 
     border: 1px solid #334155;
 
     border-radius: 16px;
 
-    padding: 30px;
+    padding: 60px 30px 30px;
 
     box-shadow: 0 20px 60px rgba(0, 0, 0, .6);
 }
@@ -91,6 +89,7 @@
 
 .modal-agente-header {
     display: flex;
+
     align-items: center;
 
     gap: 25px;
@@ -123,17 +122,37 @@
 
 .modal-agente-titulo {
     display: flex;
+
     flex-direction: column;
+
     gap: 10px;
+}
+
+.modal-agente-codigo {
+    display: inline-block;
+
+    width: fit-content;
+
+    color: #ffffff;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    padding: 8px 16px;
+
+    border-radius: 30px;
 }
 
 .modal-agente-titulo h2 {
     font-size: 32px;
+
     color: #ffffff;
 }
 
 .modal-agente-titulo span {
     color: #38bdf8;
+
     font-size: 16px;
 }
 
@@ -239,4 +258,138 @@
     background: #dc2626;
 
     transform: translateY(-2px);
+}
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media (max-width: 700px) {
+
+    .modal-overlay {
+        padding: 15px;
+    }
+
+    .modal-agente {
+        max-width: 100%;
+
+        padding: 55px 20px 20px;
+    }
+
+    .modal-agente-header {
+        flex-direction: column;
+
+        text-align: center;
+
+        gap: 15px;
+
+        margin-bottom: 20px;
+    }
+
+    .modal-agente-imagen img {
+        width: 180px;
+        height: 180px;
+    }
+
+    .modal-agente-titulo {
+        align-items: center;
+    }
+
+    .modal-agente-titulo h2 {
+        font-size: 28px;
+    }
+
+    .modal-agente-descripcion {
+        line-height: 1.5;
+
+        margin-bottom: 20px;
+    }
+
+    .modal-agente-declaraciones {
+        padding-top: 15px;
+
+        margin-bottom: 20px;
+    }
+
+    .modal-cerrar-grande {
+        margin-top: 20px;
+
+        padding: 12px;
+    }
+
+}
+
+/* ==========================================================
+   RESPONSIVE PARA CELULARES PEQUEÑOS
+   ========================================================== */
+
+@media (max-width: 450px) {
+
+    .modal-overlay {
+        padding: 10px;
+    }
+
+    .modal-agente {
+        padding: 50px 15px 15px;
+
+        border-radius: 12px;
+    }
+
+    .modal-agente-imagen img {
+        width: 130px;
+        height: 130px;
+
+        border-radius: 12px;
+    }
+
+    .modal-agente-titulo {
+        gap: 6px;
+    }
+
+    .modal-agente-codigo {
+        font-size: 15px;
+
+        padding: 6px 12px;
+    }
+
+    .modal-agente-titulo h2 {
+        font-size: 24px;
+    }
+
+    .modal-agente-titulo span {
+        font-size: 14px;
+    }
+
+    .modal-agente-descripcion {
+        font-size: 14px;
+
+        margin-bottom: 15px;
+    }
+
+    .modal-agente-declaraciones h3 {
+        font-size: 18px;
+
+        margin-bottom: 10px;
+    }
+
+    .modal-agente-declaraciones p {
+        padding: 10px;
+
+        font-size: 14px;
+
+        margin-bottom: 8px;
+    }
+
+    .modal-agente-info {
+        padding-top: 15px;
+    }
+
+    .modal-cerrar-grande {
+        margin-top: 15px;
+
+        padding: 10px;
+
+        font-size: 16px;
+    }
+
 }
