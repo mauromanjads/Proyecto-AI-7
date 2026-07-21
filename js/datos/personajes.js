@@ -20,7 +20,7 @@ export const PERSONAJES = [
         color: "#2563EB",
         icono: "🔵",
         imagen: "atlas.png",
-        avatar: "avt_atlas.png",
+        avatar: "atlas_avt.png",
         altura: 192
     },
 
@@ -33,7 +33,7 @@ export const PERSONAJES = [
         color: "#16A34A",
         icono: "🟢",
         imagen: "nova.png",
-        avatar: "avt_nova.png",
+        avatar: "nova_avt.png",
         altura: 175
     },
 
@@ -46,7 +46,7 @@ export const PERSONAJES = [
         color: "#9333EA",
         icono: "🟣",
         imagen: "orion.png",
-        avatar: "avt_orion.png",
+        avatar: "orion_avt.png",
         altura: 188
     },
 
@@ -59,7 +59,7 @@ export const PERSONAJES = [
         color: "#FACC15",
         icono: "🟡",
         imagen: "echo.png",
-        avatar: "avt_echo.png",
+        avatar: "echo_avt.png",
         altura: 170
     },
 
@@ -72,7 +72,7 @@ export const PERSONAJES = [
         color: "#DC2626",
         icono: "🔴",
         imagen: "titan.png",
-        avatar: "avt_titan.png",
+        avatar: "titan_avt.png",
         altura: 205
     },
 
@@ -85,7 +85,7 @@ export const PERSONAJES = [
         color: "#F97316",
         icono: "🟠",
         imagen: "vega.png",
-        avatar: "avt_vega.png", 
+        avatar: "vega_avt.png", 
         altura: 182
     },
 
@@ -98,7 +98,7 @@ export const PERSONAJES = [
         color: "#111827",
         icono: "⚫",
         imagen: "zero.png",
-        avatar: "avt_zero.png",
+        avatar: "zero_avt.png",
         altura: 195
     }
 
