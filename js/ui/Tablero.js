@@ -8,6 +8,7 @@
  */
 
 import Tarjeta from "./Tarjeta.js";
+import Modal from "./Modal.js";
 
 export default class Tablero {
 
@@ -41,6 +42,8 @@ export default class Tablero {
 
         this.divResultado.innerHTML = "";
 
+        this.cerrarModal();
+
     }
 
     // ======================================================
@@ -59,17 +62,96 @@ export default class Tablero {
                         declaracion.personaje.nombre === agente.nombre
                 );
 
+            const tarjeta =
+                Tarjeta.agente(agente);
 
-            this.divAgentes.appendChild(
+            tarjeta.addEventListener(
+                "click",
+                () => {
 
-                Tarjeta.agente(
-                    agente,
-                    declaracionesAgente
-                )
+                    this.abrirModal(
+                        agente,
+                        declaracionesAgente
+                    );
 
+                }
             );
 
+            this.divAgentes.appendChild(tarjeta);
+
         });
+
+    }
+
+    // ======================================================
+    // Abrir Modal
+    // ======================================================
+
+    abrirModal(agente, declaraciones) {
+
+        // Si ya existe un modal, lo eliminamos
+        this.cerrarModal();
+
+        // Crear el HTML del modal
+        document.body.insertAdjacentHTML(
+            "beforeend",
+            Modal.agente(
+                agente,
+                declaraciones
+            )
+        );
+
+        // Obtener el modal recién creado
+        const modal =
+            document.querySelector(".modal-overlay");
+
+        if (!modal)
+            return;
+
+        // Botón X
+        const botonCerrar =
+            modal.querySelector(".modal-cerrar");
+
+        // Botón CERRAR
+        const botonCerrarGrande =
+            modal.querySelector(".modal-cerrar-grande");
+
+        // Cerrar con X
+        botonCerrar.addEventListener(
+            "click",
+            () => {
+
+                this.cerrarModal();
+
+            }
+        );
+
+        // Cerrar con botón grande
+        botonCerrarGrande.addEventListener(
+            "click",
+            () => {
+
+                this.cerrarModal();
+
+            }
+        );
+
+    }
+
+    // ======================================================
+    // Cerrar Modal
+    // ======================================================
+
+    cerrarModal() {
+
+        const modal =
+            document.querySelector(".modal-overlay");
+
+        if (modal) {
+
+            modal.remove();
+
+        }
 
     }
 

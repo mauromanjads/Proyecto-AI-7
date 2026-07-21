@@ -29,82 +29,45 @@ export default class Tarjeta {
 
     }
 
-    // ======================================================
-    // Agente
-    // ======================================================
+   // ======================================================
+// Agente
+// ======================================================
 
-    static agente(agente, declaraciones = []) {
+static agente(agente) {
 
-        return this.crear("agente", `
+    return this.crear("agente", `
 
-            <div class="agente-badge" style="background:${agente.color}">
-                ${agente.codigo}
+        <div class="agente-badge" style="background:${agente.color}">
+            ${agente.codigo}
+        </div>
+
+        <div class="agente-header">
+
+            <div class="agente-icono">
+                ${agente.icono}
             </div>
 
-            <div class="agente-header">
-
-                <div class="agente-icono">
-                    ${agente.icono}
-                </div>
-
-                <div class="agente-titulo">
-                    <h2>${agente.nombre}</h2>
-                    <span>${agente.especialidad}</span>
-                </div>
-
+            <div class="agente-titulo">
+                <h2>${agente.nombre}</h2>
             </div>
 
-            <div class="agente-declaraciones">
+        </div>
 
+        <div class="agente-imagen">
 
             ${
-                declaraciones.map(d => `
-                    <p>
-                        "${d.obtenerTexto()}"
-                    </p>
-                `).join("")
+                agente.avatar
+                ?
+                `<img src="assets/img/${agente.avatar}" alt="${agente.nombre}">`
+                :
+                ""
             }
 
-            </div>
+        </div>
 
-             <div class="agente-imagen">              
-                ${
-                    agente.avatar
-                    ?
-                    `<img src="assets/img/${agente.avatar}" alt="${agente.nombre}">`                    
-                    :
-                    ""
-                }
-            </div>
+    `);
 
-            <div class="agente-imagen">              
-                ${
-                    agente.imagen
-                    ?
-                    `<img src="assets/img/${agente.imagen}" alt="${agente.nombre}">`                    
-                    :
-                    ""
-                }
-            </div>
-
-           
-            <div class="agente-descripcion">
-                ${agente.descripcion}
-            </div>
-
-            <div class="agente-info">
-
-                <div class="fila">
-                    <span>📏 Altura</span>
-                    <strong>${agente.altura} cm</strong>
-                </div>
-
-            </div>
-
-
-        `);
-
-    }
+}
     // ======================================================
     // Caso
     // ======================================================

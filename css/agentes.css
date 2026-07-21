@@ -1,0 +1,95 @@
+/* ==========================================================
+   AI-7
+   agentes.css
+   ----------------------------------------------------------
+   Estilos de las tarjetas frontales de los agentes.
+   ========================================================== */
+
+#agentes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+}
+
+#agentes .agente {
+    width: 260px;
+}
+
+/* ==========================================================
+   TARJETA DEL AGENTE
+   ========================================================== */
+
+.agente {
+    position: relative;
+    background: #1f2937;
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid #334155;
+    overflow: hidden;
+    transition: .25s;
+    cursor: pointer;
+}
+
+.agente:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, .35);
+}
+
+/* ==========================================================
+   BADGE
+   ========================================================== */
+
+.agente-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 30px;
+}
+
+/* ==========================================================
+   HEADER DEL AGENTE
+   ========================================================== */
+
+.agente-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 18px;
+}
+
+.agente-icono {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+}
+
+.agente-titulo h2 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 22px;
+}
+
+/* ==========================================================
+   AVATAR
+   ========================================================== */
+
+.agente-imagen img {
+    width: 100%;
+    max-width: 220px;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 14px;
+    box-shadow: 0 0 25px rgba(56, 189, 248, .35);
+}
