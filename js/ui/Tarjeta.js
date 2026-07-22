@@ -69,7 +69,14 @@ export default class Tarjeta {
             <button
                 class="btn-mensajes"
                 type="button">
-                💬 PISTA
+                💬 INTERROGAR
+            </button>
+
+            <button
+                type="button"
+                class="btn-informacion"
+            >
+                ℹ️ PERFIL
             </button>
 
         `);

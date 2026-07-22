@@ -95,78 +95,305 @@
 }
 
 /* ==========================================================
-   Botón Ver Declaraciones
+   BOTONES DE ACCIÓN DEL AGENTE
    ========================================================== */
 
-.btn-mensajes {
+.btn-mensajes,
+.btn-informacion {
+
     width: calc(100% - 32px);
 
-    margin: 16px;
+    min-height: 52px;
 
-    padding: 12px 18px;
+    margin: 10px 16px;
+
+    padding: 14px 20px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
-    gap: 8px;
 
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 10px;
+    gap: 10px;
 
-    background: rgba(15, 23, 42, 0.9);
-    color: #ffffff;
+    border-radius: 12px;
 
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 16px;
+
+    font-weight: 700;
+
     letter-spacing: 0.3px;
 
     cursor: pointer;
 
+    position: relative;
+
+    overflow: hidden;
+
     transition:
-        background 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        border-color 0.2s ease;
+        transform 0.25s ease,
+        background 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+
+    animation:
+        botonEntrada 0.45s ease both;
+
 }
 
+
 /* ==========================================================
-   Hover
+   EFECTO DE BRILLO
+   ========================================================== */
+
+.btn-mensajes::before,
+.btn-informacion::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: -120%;
+
+    width: 80%;
+
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.18),
+            transparent
+        );
+
+    transform: skewX(-20deg);
+
+    transition:
+        left 0.6s ease;
+
+}
+
+
+.btn-mensajes:hover::before,
+.btn-informacion:hover::before {
+
+    left: 130%;
+
+}
+
+
+/* ==========================================================
+   BOTÓN VER DECLARACIONES
+   ========================================================== */
+
+.btn-mensajes {
+
+    border: 1px solid rgba(148, 163, 184, 0.35);
+
+    background:
+        linear-gradient(
+            135deg,
+            #0f172a,
+            #1e293b
+        );
+
+    color: #ffffff;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.25);
+
+}
+
+
+/* ==========================================================
+   HOVER DECLARACIONES
    ========================================================== */
 
 .btn-mensajes:hover {
 
-    background: #1e293b;
+    background:
+        linear-gradient(
+            135deg,
+            #1e293b,
+            #334155
+        );
 
-    border-color: rgba(255, 255, 255, 0.35);
+    border-color:
+        rgba(148, 163, 184, 0.65);
 
-    transform: translateY(-2px);
+    transform:
+        translateY(-3px)
+        scale(1.02);
 
     box-shadow:
-        0 6px 16px rgba(0, 0, 0, 0.25);
+        0 10px 22px rgba(0, 0, 0, 0.35);
 
 }
 
+
 /* ==========================================================
-   Click
+   BOTÓN VER INFORMACIÓN
    ========================================================== */
 
-.btn-mensajes:active {
+.btn-informacion {
 
-    transform: translateY(0);
+    border:
+        1px solid rgba(96, 165, 250, 0.5);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(30, 64, 175, 0.75),
+            rgba(37, 99, 235, 0.45)
+        );
+
+    color:
+        #dbeafe;
 
     box-shadow:
-        0 3px 8px rgba(0, 0, 0, 0.2);
+        0 4px 14px rgba(37, 99, 235, 0.2);
 
 }
 
+
 /* ==========================================================
-   Accesibilidad
+   HOVER INFORMACIÓN
    ========================================================== */
 
-.btn-mensajes:focus-visible {
+.btn-informacion:hover {
 
-    outline: 2px solid #60a5fa;
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #3b82f6
+        );
 
-    outline-offset: 3px;
+    border-color:
+        #60a5fa;
+
+    color:
+        #ffffff;
+
+    transform:
+        translateY(-3px)
+        scale(1.02);
+
+    box-shadow:
+        0 10px 25px rgba(37, 99, 235, 0.4);
+
+}
+
+
+/* ==========================================================
+   CLICK
+   ========================================================== */
+
+.btn-mensajes:active,
+.btn-informacion:active {
+
+    transform:
+        translateY(0)
+        scale(0.98);
+
+    box-shadow:
+        0 3px 8px rgba(0, 0, 0, 0.25);
+
+}
+
+
+/* ==========================================================
+   ACCESIBILIDAD
+   ========================================================== */
+
+.btn-mensajes:focus-visible,
+.btn-informacion:focus-visible {
+
+    outline:
+        2px solid #60a5fa;
+
+    outline-offset:
+        3px;
+
+}
+
+
+/* ==========================================================
+   ANIMACIÓN DE ENTRADA
+   ========================================================== */
+
+@keyframes botonEntrada {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(8px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+/* ==========================================================
+   ANIMACIÓN DE ATENCIÓN
+   ========================================================== */
+
+.btn-informacion:hover {
+
+    animation:
+        pulsoInformacion 1.5s ease-in-out infinite;
+
+}
+
+
+@keyframes pulsoInformacion {
+
+    0%,
+    100% {
+
+        box-shadow:
+            0 10px 25px rgba(37, 99, 235, 0.35);
+
+    }
+
+    50% {
+
+        box-shadow:
+            0 10px 30px rgba(59, 130, 246, 0.6);
+
+    }
+
+}
+
+
+/* ==========================================================
+   REDUCIR ANIMACIONES SI EL USUARIO LO PREFIERE
+   ========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .btn-mensajes,
+    .btn-informacion {
+
+        animation: none;
+
+        transition: none;
+
+    }
 
 }
