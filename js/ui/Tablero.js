@@ -9,6 +9,7 @@
 
 import Tarjeta from "./Tarjeta.js";
 import Modal from "./Modal.js";
+import Mensajes from "./Mensajes.js";
 
 export default class Tablero {
 
@@ -46,7 +47,7 @@ export default class Tablero {
 
     }
 
-    // ======================================================
+   // ======================================================
     // Mostrar Agentes
     // ======================================================
 
@@ -65,6 +66,41 @@ export default class Tablero {
             const tarjeta =
                 Tarjeta.agente(agente);
 
+            // ==================================================
+            // Botón de declaraciones
+            // ==================================================
+
+            const botonMensajes =
+                tarjeta.querySelector(".btn-mensajes");
+
+            if (botonMensajes) {
+
+                botonMensajes.addEventListener(
+                    "click",
+                    (evento) => {
+
+                        // Evita que el clic llegue
+                        // al evento de la tarjeta
+                        evento.stopPropagation();                         
+
+                        const mensajes =
+                            new Mensajes();                             
+
+                        mensajes.mostrar(
+                            agente,
+                            declaracionesAgente
+                        );
+                       
+
+                    }
+                );
+
+            }
+
+            // ==================================================
+            // Clic sobre la tarjeta
+            // ==================================================
+
             tarjeta.addEventListener(
                 "click",
                 () => {
@@ -82,7 +118,6 @@ export default class Tablero {
         });
 
     }
-
     // ======================================================
     // Abrir Modal
     // ======================================================

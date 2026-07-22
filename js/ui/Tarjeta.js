@@ -30,44 +30,57 @@ export default class Tarjeta {
     }
 
    // ======================================================
-// Agente
-// ======================================================
+    // Agente
+    // ======================================================
 
-static agente(agente) {
 
-    return this.crear("agente", `
+    static agente(agente) {
 
-        <div class="agente-badge" style="background:${agente.color}">
-            ${agente.codigo}
-        </div>
+        const tarjeta = this.crear("agente", `
 
-        <div class="agente-header">
-
-            <div class="agente-icono">
-                ${agente.icono}
+            <div class="agente-badge" style="background:${agente.color}">
+                ${agente.codigo}
             </div>
 
-            <div class="agente-titulo">
-                <h2>${agente.nombre}</h2>
+            <div class="agente-header">
+
+                <div class="agente-icono">
+                    ${agente.icono}
+                </div>
+
+                <div class="agente-titulo">
+                    <h2>${agente.nombre}</h2>
+                </div>
+
             </div>
 
-        </div>
+            <div class="agente-imagen">
 
-        <div class="agente-imagen">
+                ${
+                    agente.avatar
+                    ?
+                    `<img src="assets/img/${agente.avatar}" alt="${agente.nombre}">`
+                    :
+                    ""
+                }
 
-            ${
-                agente.avatar
-                ?
-                `<img src="assets/img/${agente.avatar}" alt="${agente.nombre}">`
-                :
-                ""
-            }
+            </div>
 
-        </div>
+            <button
+                class="btn-mensajes"
+                type="button">
+                💬 Ver declaraciones
+            </button>
 
-    `);
+        `);
 
-}
+        // Guardamos el personaje en la tarjeta
+        // para utilizarlo cuando se pulse
+        // el botón de declaraciones.
+        tarjeta.agente = agente;
+
+        return tarjeta;
+    }
     // ======================================================
     // Caso
     // ======================================================
