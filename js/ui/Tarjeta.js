@@ -69,7 +69,7 @@ export default class Tarjeta {
             <button
                 class="btn-mensajes"
                 type="button">
-                💬 Ver declaraciones
+                💬 PISTA
             </button>
 
         `);
