@@ -7,51 +7,19 @@
  * ==========================================================
  */
 
-import { PERSONAJES } from "./datos/personajes.js";
-import Personaje from "./entidades/Personaje.js";
-import GeneradorCasos from "./motor/GeneradorCasos.js";
-import Solucionador from "./motor/Solucionador.js";
-import Tablero from "./ui/Tablero.js";
+import Juego from "./juego.js";
 
 
 // ==========================================================
-// Cargar agentes
+// Crear instancia del juego
 // ==========================================================
 
-const agentes = PERSONAJES.map(
-    datos => new Personaje(datos)
-);
+const juego =
+    new Juego();
 
 
 // ==========================================================
-// Crear caso
+// Iniciar juego
 // ==========================================================
 
-const generador = new GeneradorCasos();
-
-const caso = generador.crearCaso();
-
-const tablero = new Tablero();
-
-// ==========================================================
-// Resolver caso
-// ==========================================================
-
-const solucionador = new Solucionador(caso);
-
-const resultado = solucionador.resolver();
-
-// ==========================================================
-// Interfaz Grafica
-// ==========================================================
-
-
-tablero.mostrarAgentes(agentes,caso.declaraciones);
-
-tablero.mostrarCaso(caso);
-
-tablero.mostrarResultado(resultado);
-
-tablero.mostrarConocimientos(resultado.conocimientos);
-
-tablero.mostrarErrores(resultado.errores);
+juego.iniciar();

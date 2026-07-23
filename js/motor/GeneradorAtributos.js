@@ -10,7 +10,6 @@
  * ==========================================================
  */
 
-import { PERSONAJES } from "../datos/personajes.js";
 import Proposicion from "../entidades/Proposicion.js";
 
 export default class GeneradorAtributos {
@@ -46,11 +45,11 @@ export default class GeneradorAtributos {
 
             new Proposicion({
 
-                id:500,
+                id: 500,
 
-                tipo:"ATRIBUTO_CULPABLE",
+                tipo: "ATRIBUTO_CULPABLE",
 
-                atributo:"altura",
+                atributo: "altura",
 
                 operador,
 
@@ -67,15 +66,18 @@ export default class GeneradorAtributos {
 
         const culpable = caso.culpable;
 
-        if(!culpable.especialidad){
+        if (!culpable.especialidad) {
+
             return;
+
         }
+
 
         const especialidades = [
 
             ...new Set(
 
-                PERSONAJES
+                caso.personajes
                     .map(p => p.especialidad)
                     .filter(Boolean)
 
@@ -83,54 +85,69 @@ export default class GeneradorAtributos {
 
         ];
 
+
         let operador;
+
         let valor;
 
-        if(Math.random() < 0.5){
+
+        if (Math.random() < 0.5) {
 
             operador = "IGUAL";
 
             valor = culpable.especialidad;
 
         }
-        else{
+        else {
 
             const otrasEspecialidades =
 
                 especialidades.filter(
 
-                    e => e !== culpable.especialidad
+                    e =>
+                        e !==
+                        culpable.especialidad
 
                 );
 
-            if(otrasEspecialidades.length === 0){
+
+            if (
+                otrasEspecialidades.length === 0
+            ) {
+
                 return;
+
             }
 
+
             operador = "DIFERENTE";
+
 
             valor =
 
                 otrasEspecialidades[
 
                     Math.floor(
+
                         Math.random() *
                         otrasEspecialidades.length
+
                     )
 
                 ];
 
         }
 
+
         caso.agregarProposicion(
 
             new Proposicion({
 
-                id:550,
+                id: 550,
 
-                tipo:"ATRIBUTO_CULPABLE",
+                tipo: "ATRIBUTO_CULPABLE",
 
-                atributo:"especialidad",
+                atributo: "especialidad",
 
                 operador,
 
@@ -147,42 +164,63 @@ export default class GeneradorAtributos {
 
         const culpable = caso.culpable;
 
+
         const posibles =
 
-            PERSONAJES.filter(
+            caso.personajes.filter(
 
-                p => p.nombre !== culpable.nombre
+                p =>
+                    p.nombre !==
+                    culpable.nombre
 
             );
 
-        if(posibles.length === 0){
+
+        if (
+            posibles.length === 0
+        ) {
+
             return;
+
         }
+
 
         const referencia =
 
             posibles[
 
                 Math.floor(
+
                     Math.random() *
                     posibles.length
+
                 )
 
             ];
 
+
         let operador;
 
-        if(culpable.altura > referencia.altura){
 
-            operador = "MAYOR_QUE_PERSONA";
+        if (
+            culpable.altura >
+            referencia.altura
+        ) {
+
+            operador =
+                "MAYOR_QUE_PERSONA";
 
         }
-        else if(culpable.altura < referencia.altura){
+        else if (
+            culpable.altura <
+            referencia.altura
+        ) {
 
-            operador = "MENOR_QUE_PERSONA";
+            operador =
+                "MENOR_QUE_PERSONA";
 
         }
-        else{
+        else {
 
             // Si tienen la misma altura no generamos
             // una comparación inválida.
@@ -191,19 +229,21 @@ export default class GeneradorAtributos {
 
         }
 
+
         caso.agregarProposicion(
 
             new Proposicion({
 
-                id:580,
+                id: 580,
 
-                tipo:"ATRIBUTO_CULPABLE",
+                tipo: "ATRIBUTO_CULPABLE",
 
-                atributo:"altura",
+                atributo: "altura",
 
                 operador,
 
-                referencia:referencia.nombre
+                referencia:
+                    referencia.nombre
 
             })
 
@@ -216,38 +256,49 @@ export default class GeneradorAtributos {
 
         const personajes =
 
-            PERSONAJES.filter(
+            caso.personajes.filter(
 
-                p => p.especialidad
+                p =>
+                    p.especialidad
 
             );
 
-        if(personajes.length === 0){
+
+        if (
+            personajes.length === 0
+        ) {
+
             return;
+
         }
+
 
         const personaje =
 
             personajes[
 
                 Math.floor(
+
                     Math.random() *
                     personajes.length
+
                 )
 
             ];
+
 
         caso.agregarProposicion(
 
             new Proposicion({
 
-                id:600,
+                id: 600,
 
-                tipo:"ATRIBUTO",
+                tipo: "ATRIBUTO",
 
-                atributo:"especialidad",
+                atributo: "especialidad",
 
-                valor:personaje.especialidad,
+                valor:
+                    personaje.especialidad,
 
                 condicion:
 

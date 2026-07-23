@@ -16,6 +16,9 @@ export default class Tablero {
 
     constructor() {
 
+        this.divProgreso =
+              document.getElementById("progreso");
+
         this.divAgentes =
             document.getElementById("agentes");
 
@@ -505,6 +508,26 @@ export default class Tablero {
 
             }
         );
+
+    }
+
+    mostrarProgreso(capitulo, caso) {
+
+        this.divProgreso.innerHTML = `
+
+            <div class="progreso-capitulo">
+                CAPÍTULO ${capitulo}
+            </div>
+
+            <div class="progreso-caso">
+                CASO ${caso}
+            </div>
+
+            <div class="progreso-numerico">
+                ${caso} / 10
+            </div>
+
+        `;
 
     }
 

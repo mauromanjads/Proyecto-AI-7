@@ -36,40 +36,58 @@ export default class GeneradorCasos {
     }
 
 
-    crearCaso() {
+    crearCaso(cantidadPersonajes = 7) {
+
+        if (
+            cantidadPersonajes < 3 ||
+            cantidadPersonajes > PERSONAJES.length
+        ) {
+
+            throw new Error(
+                "La cantidad de personajes debe estar entre 3 y 7."
+            );
+
+        }
+
 
         let intentos = 0;
 
 
-        while(intentos < 100) {
+        while (intentos < 100) {
 
-
-            const caso =  this.crearCasoInterno();
-
-            this.inferencia.analizarCaso(
-                    caso,
-                    this.estado
+            const caso =
+                this.crearCasoInterno(
+                    cantidadPersonajes
                 );
 
 
-            const solucion =
-                  this.inferencia.obtenerSolucion();
+            this.inferencia.analizarCaso(
+                caso,
+                this.estado
+            );
 
+
+            const solucion =
+                this.inferencia.obtenerSolucion();
 
 
             const errores =
-                 this.inferencia.obtenerErrores();
+                this.inferencia.obtenerErrores();
 
 
-              if(
-                    solucion &&
-                    errores.length === 0 &&
-                    solucion.culpable.nombre === caso.culpable.nombre
-                ){
+            if (
+                solucion &&
+                errores.length === 0 &&
+                solucion.culpable &&
+                caso.culpable &&
+                solucion.culpable.nombre ===
+                caso.culpable.nombre
+            ) {
 
-                    return caso;
+                return caso;
 
-                }
+            }
+
 
             intentos++;
 
@@ -83,22 +101,24 @@ export default class GeneradorCasos {
     }
 
 
+    crearCasoInterno(cantidadPersonajes) {
 
-    crearCasoInterno(){
+        this.estado =
+            new EstadoMundo();
 
-         this.estado = new EstadoMundo();
 
-          this.inferencia.estado = 
+        this.inferencia.estado =
             this.estado;
 
 
         const caso =
             this.crearCasoBase();
 
-            this.agregarPersonajes(
-                caso
-            );
 
+        this.agregarPersonajes(
+            caso,
+            cantidadPersonajes
+        );
 
 
         this.estado.establecerPersonajes(
@@ -106,15 +126,14 @@ export default class GeneradorCasos {
         );
 
 
-
         this.elegirCulpable(
             caso
         );
 
 
-
-        this.generarEstadoMundo();
-
+        this.generarEstadoMundo(
+            caso
+        );
 
 
         this.generarProposiciones(
@@ -122,75 +141,111 @@ export default class GeneradorCasos {
         );
 
 
-
         this.generarProposicionesAtributos(
             caso
         );
-
 
 
         this.generarDeclaraciones(
             caso
         );
 
-        caso.estado = this.estado;
+
+        caso.estado =
+            this.estado;
+
 
         return caso;
 
     }
 
 
-
-    crearCasoBase(){
+    crearCasoBase() {
 
         return new Caso({
 
-            id:Date.now(),
+            id: Date.now(),
 
-            nombre:"Caso generado",
+            nombre: "Caso generado",
 
             descripcion:
-            "Caso lógico generado automáticamente"
+                "Caso lógico generado automáticamente"
 
         });
 
     }
 
 
+    agregarPersonajes(
+        caso,
+        cantidadPersonajes
+    ) {
 
-    agregarPersonajes(caso){
+        const personajesDisponibles =
+            [...PERSONAJES];
 
-        PERSONAJES.forEach(personaje=>{
 
-            caso.agregarPersonaje(
-                personaje
+        // Mezclamos los 7 personajes
+        // para obtener una selección aleatoria.
+
+        for (
+            let i = personajesDisponibles.length - 1;
+            i > 0;
+            i--
+        ) {
+
+            const j =
+                Math.floor(
+                    Math.random() * (i + 1)
+                );
+
+
+            [
+                personajesDisponibles[i],
+                personajesDisponibles[j]
+            ] = [
+                personajesDisponibles[j],
+                personajesDisponibles[i]
+            ];
+
+        }
+
+
+        const personajesSeleccionados =
+            personajesDisponibles.slice(
+                0,
+                cantidadPersonajes
             );
 
-        });
+
+        personajesSeleccionados.forEach(
+            personaje => {
+
+                caso.agregarPersonaje(
+                    personaje
+                );
+
+            }
+        );
 
     }
 
 
-
-    elegirCulpable(caso){
-
+    elegirCulpable(caso) {
 
         const indice =
             Math.floor(
                 Math.random() *
-                PERSONAJES.length
+                caso.personajes.length
             );
 
 
-
         const culpable =
-            PERSONAJES[indice];
-
+            caso.personajes[indice];
 
 
         caso.culpable =
             culpable;
-
 
 
         this.estado.establecerCulpable(
@@ -200,209 +255,202 @@ export default class GeneradorCasos {
     }
 
 
+    generarEstadoMundo(caso) {
 
-    generarEstadoMundo(){
+        caso.personajes.forEach(
+            personaje => {
 
-
-        PERSONAJES.forEach(personaje=>{
-
-
-            const diceVerdad =
-                Math.random() < 0.5;
+                const diceVerdad =
+                    Math.random() < 0.5;
 
 
+                this.estado.establecerEstado(
+                    personaje,
+                    diceVerdad
+                );
 
-            this.estado.establecerEstado(
-                personaje,
-                diceVerdad
-            );
-
-
-        });
-
+            }
+        );
 
     }
-
 
 
     // =====================================================
     // Proposiciones lógicas
     // =====================================================
 
-    generarProposiciones(caso){
+    generarProposiciones(caso) {
+
+        caso.personajes.forEach(
+            (personaje, indice) => {
+
+                this.crearProposicionCulpable(
+                    caso,
+                    personaje,
+                    indice
+                );
 
 
-        PERSONAJES.forEach((personaje, indice)=>{
+                this.crearProposicionInocente(
+                    caso,
+                    personaje,
+                    indice
+                );
 
 
-            this.crearProposicionCulpable(
-                caso,
-                personaje,
-                indice
-            );
+                this.crearProposicionMiente(
+                    caso,
+                    personaje,
+                    indice
+                );
 
 
+                this.crearProposicionDiceVerdad(
+                    caso,
+                    personaje,
+                    indice
+                );
 
-            this.crearProposicionInocente(
-                caso,
-                personaje,
-                indice
-            );
-
-
-
-            this.crearProposicionMiente(
-                caso,
-                personaje,
-                indice
-            );
-
-
-
-            this.crearProposicionDiceVerdad(
-                caso,
-                personaje,
-                indice
-            );
-
-
-        });
-
+            }
+        );
 
     }
-
 
 
     // =====================================================
     // Proposiciones de atributos
     // =====================================================
 
-    generarProposicionesAtributos(caso){
-
+    generarProposicionesAtributos(caso) {
 
         this.generadorAtributos.generar(
             caso
         );
 
-
     }
 
 
-
-    crearProposicionCulpable(caso, personaje, indice){
-
+    crearProposicionCulpable(
+        caso,
+        personaje,
+        indice
+    ) {
 
         caso.agregarProposicion(
 
             new Proposicion({
 
-                id:indice + 1,
+                id: indice + 1,
 
-                tipo:TIPOS_PROPOSICION.CULPABLE,
+                tipo:
+                    TIPOS_PROPOSICION.CULPABLE,
 
                 sujeto:
                     personaje.nombre,
 
-                verbo:"es",
+                verbo: "es",
 
-                objeto:"culpable"
+                objeto: "culpable"
 
             })
 
         );
 
-
     }
 
 
-
-    crearProposicionInocente(caso, personaje, indice){
-
+    crearProposicionInocente(
+        caso,
+        personaje,
+        indice
+    ) {
 
         caso.agregarProposicion(
 
             new Proposicion({
 
-                id:indice + 100,
+                id: indice + 100,
 
-                tipo:TIPOS_PROPOSICION.INOCENTE,
+                tipo:
+                    TIPOS_PROPOSICION.INOCENTE,
 
                 sujeto:
                     personaje.nombre,
 
-                verbo:"es",
+                verbo: "es",
 
-                objeto:"inocente"
+                objeto: "inocente"
 
             })
 
         );
 
-
     }
 
 
-
-    crearProposicionMiente(caso, personaje, indice){
-
+    crearProposicionMiente(
+        caso,
+        personaje,
+        indice
+    ) {
 
         caso.agregarProposicion(
 
             new Proposicion({
 
-                id:indice + 200,
+                id: indice + 200,
 
-                tipo:TIPOS_PROPOSICION.MIENTE,
+                tipo:
+                    TIPOS_PROPOSICION.MIENTE,
 
                 sujeto:
                     personaje.nombre,
 
-                verbo:"miente",
+                verbo: "miente",
 
-                objeto:""
+                objeto: ""
 
             })
 
         );
 
-
     }
 
 
-
-    crearProposicionDiceVerdad(caso, personaje, indice){
-
+    crearProposicionDiceVerdad(
+        caso,
+        personaje,
+        indice
+    ) {
 
         caso.agregarProposicion(
 
             new Proposicion({
 
-                id:indice + 300,
+                id: indice + 300,
 
-                tipo:TIPOS_PROPOSICION.DICE_VERDAD,
+                tipo:
+                    TIPOS_PROPOSICION.DICE_VERDAD,
 
                 sujeto:
                     personaje.nombre,
 
-                verbo:"dice",
+                verbo: "dice",
 
-                objeto:"la verdad"
+                objeto: "la verdad"
 
             })
 
         );
 
-
     }
-
 
 
     // =====================================================
     // Declaraciones
     // =====================================================
 
-    generarDeclaraciones(caso){
-
+    generarDeclaraciones(caso) {
 
         const disponibles =
             [
@@ -410,98 +458,105 @@ export default class GeneradorCasos {
             ];
 
 
+        caso.personajes.forEach(
+            (personaje, indice) => {
 
-        PERSONAJES.forEach((personaje, indice)=>{
-
-
-            const estado =
-                this.estado.obtenerEstado(
-                    personaje
-                );
-
-
-
-            const diceVerdad =
-                estado.diceVerdad;
-
-            const posibles =
-            disponibles.filter(
-                proposicion => {
-
-
-                    if(
-                        proposicion.sujeto === personaje.nombre
-                    ){
-                        return false;
-                    }
-
-
-                    if(
-                        proposicion.tipo === TIPOS_PROPOSICION.CULPABLE &&
-                        proposicion.sujeto === caso.culpable.nombre
-                    ){
-                        return false;
-                    }
-
-
-                    return (
-                        this.estado.evaluar(proposicion)
-                        ===
-                        diceVerdad
+                const estado =
+                    this.estado.obtenerEstado(
+                        personaje
                     );
 
+
+                const diceVerdad =
+                    estado.diceVerdad;
+
+
+                const posibles =
+                    disponibles.filter(
+                        proposicion => {
+
+                            if (
+                                proposicion.sujeto ===
+                                personaje.nombre
+                            ) {
+
+                                return false;
+
+                            }
+
+
+                            if (
+                                proposicion.tipo ===
+                                TIPOS_PROPOSICION.CULPABLE &&
+                                proposicion.sujeto ===
+                                caso.culpable.nombre
+                            ) {
+
+                                return false;
+
+                            }
+
+
+                            return (
+                                this.estado.evaluar(
+                                    proposicion
+                                ) ===
+                                diceVerdad
+                            );
+
+                        }
+                    );
+
+
+                if (
+                    posibles.length === 0
+                ) {
+
+                    return;
+
                 }
-            );
 
 
-
-            if(posibles.length === 0){
-
-                return;
-
-            }
-
+                const indiceProposicion =
+                    Math.floor(
+                        Math.random() *
+                        posibles.length
+                    );
 
 
-            const indiceProposicion =
-                Math.floor(
-                    Math.random() *
-                    posibles.length
+                const proposicion =
+                    posibles[
+                        indiceProposicion
+                    ];
+
+
+                disponibles.splice(
+                    disponibles.indexOf(
+                        proposicion
+                    ),
+                    1
                 );
 
 
+                caso.agregarDeclaracion(
 
-            const proposicion =
-                posibles[indiceProposicion];
+                    new Declaracion({
 
+                        id:
+                            indice + 1,
 
+                        personaje,
 
-            disponibles.splice(
-                disponibles.indexOf(proposicion),
-                1
-            );
+                        proposicion,
 
+                        diceVerdad
 
+                    })
 
-            caso.agregarDeclaracion(
+                );
 
-                new Declaracion({
-
-                    id:indice + 1,
-
-                    personaje,
-
-                    proposicion,
-
-                    diceVerdad
-
-                })
-
-            );
-
-         
-        });
-
+            }
+        );
 
     }
 
