@@ -64,7 +64,7 @@ export default class Juego {
         // =====================================================
 
         this.tablero =
-            new Tablero();
+            new Tablero(this);
 
     }
 
@@ -184,16 +184,23 @@ export default class Juego {
         // Generar caso lógico
         // =====================================================
 
-        this.casoLogico =
+       this.casoLogico =
             this.generador.crearCaso(
                 cantidadPersonajes
             );
-            
-            this.tablero.mostrarProgreso(
-                this.capituloActual + 1,
-                this.casoActual + 1
-            );
 
+        const casoNarrativo =
+            this.obtenerCasoNarrativoActual();
+
+        this.tablero.mostrarProgreso(
+            this.capituloActual + 1,
+            this.casoActual + 1
+        );
+
+        this.tablero.mostrarNarrativa(
+            capitulo,
+            casoNarrativo
+        );
 
         this.casoLogico.personajes.forEach(
             personaje => {
@@ -268,17 +275,6 @@ export default class Juego {
             this.casoLogico.personajes,
 
             this.casoLogico.declaraciones
-
-        );
-
-
-        // =====================================================
-        // Mostrar información del caso
-        // =====================================================
-
-        this.tablero.mostrarCaso(
-
-            this.casoLogico
 
         );
 
@@ -480,5 +476,78 @@ export default class Juego {
         );
 
     }
+
+    // ==========================================================
+// VERIFICAR CULPABLE
+// ==========================================================
+
+verificarCulpable(agenteSeleccionado) {
+
+    if (!this.casoLogico)
+        return;
+
+    const culpable =
+        this.casoLogico.culpable;
+
+
+    // =====================================================
+    // RESPUESTA CORRECTA
+    // =====================================================
+
+    if (
+        agenteSeleccionado.id ===
+        culpable.id
+    ) {
+
+        console.log(
+            "¡Respuesta correcta!"
+        );
+
+        console.log(
+            "Culpable:",
+            culpable.nombre
+        );
+
+
+        // Avanzar al siguiente caso
+
+        this.siguienteCaso();
+
+        return;
+
+    }
+
+
+    // =====================================================
+    // RESPUESTA INCORRECTA
+    // =====================================================
+
+    console.log(
+        "Respuesta incorrecta."
+    );
+
+    console.log(
+        "El jugador seleccionó:",
+        agenteSeleccionado.nombre
+    );
+
+
+    // =====================================================
+    // IMPORTANTE
+    // =====================================================
+    // No aumentamos casoActual.
+    //
+    // El caso narrativo sigue siendo el mismo.
+    //
+    // Se genera un nuevo caso lógico con:
+    // - Nuevas declaraciones
+    // - Nuevo culpable
+    //
+    // =====================================================
+
+    this.iniciarCaso();
+
+}
+
 
 }

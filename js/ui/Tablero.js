@@ -14,31 +14,28 @@ import Mensajes from "./Mensajes.js";
 
 export default class Tablero {
 
-    constructor() {
+   constructor(juego) {
 
-        this.divProgreso =
-              document.getElementById("progreso");
+    this.juego = juego;
 
-        this.divAgentes =
-            document.getElementById("agentes");
+    this.divProgreso =
+        document.getElementById("progreso");
 
-        this.divCaso =
-            document.getElementById("caso");
+    this.divAgentes =
+        document.getElementById("agentes");
 
-        this.divDeclaraciones =
-            document.getElementById("declaraciones");
+    this.divCaso =
+        document.getElementById("caso");
 
-        this.divResultado =
-            document.getElementById("resultado");
+    this.divDeclaraciones =
+        document.getElementById("declaraciones");
 
+    this.divResultado =
+        document.getElementById("resultado");
 
-        // ==================================================
-        // Agente seleccionado por el jugador
-        // ==================================================
+    this.agenteSeleccionado = null;
 
-        this.agenteSeleccionado = null;
-
-    }
+}
 
 
     // ======================================================
@@ -374,36 +371,21 @@ export default class Tablero {
     // ======================================================
     // Confirmar Selección de Culpable
     // ======================================================
+confirmarSeleccionCulpable() {
 
-    confirmarSeleccionCulpable() {
+    if (!this.agenteSeleccionado)
+        return;
 
-        if (!this.agenteSeleccionado)
-            return;
+    const agente =
+        this.agenteSeleccionado;
 
+    this.cerrarModalConfirmacion();
 
-        const agente =
-            this.agenteSeleccionado;
+    this.juego.verificarCulpable(
+        agente
+    );
 
-
-        this.cerrarModalConfirmacion();
-
-
-        // ==================================================
-        // POR AHORA
-        // Solo registramos la selección.
-        //
-        // Aquí conectaremos posteriormente
-        // la validación con Solucionador.
-        // ==================================================
-
-        console.log(
-            "Culpable seleccionado:",
-            agente.nombre
-        );
-
-    }
-
-
+}
     // ======================================================
     // Cerrar Modal de Confirmación
     // ======================================================
@@ -511,26 +493,129 @@ export default class Tablero {
 
     }
 
-    mostrarProgreso(capitulo, caso) {
+  mostrarProgreso(
+    capitulo,
+    caso,
+    tituloCapitulo,
+    tituloCaso
+) {
 
-        this.divProgreso.innerHTML = `
+    const porcentaje = (caso / 10) * 100;
 
-            <div class="progreso-capitulo">
-                CAPÍTULO ${capitulo}
+    this.divProgreso.innerHTML = `
+
+        <div class="progreso-capitulo">
+            CAPÍTULO ${capitulo}
+        </div>
+
+        <div class="progreso-titulo-capitulo">
+            ${tituloCapitulo}
+        </div>
+
+        <div class="progreso-caso">
+            CASO ${caso} / 10
+        </div>
+
+        <div class="progreso-titulo-caso">
+            ${tituloCaso}
+        </div>
+
+        <div class="progreso-barra">
+            <div
+                class="progreso-avance"
+                style="width: ${porcentaje}%"
+            ></div>
+        </div>
+
+    `;
+
+}
+
+// ======================================================
+// Mostrar Narrativa
+// ======================================================
+
+mostrarNarrativa(capitulo, caso) {
+
+    if (!capitulo || !caso)
+        return;
+
+    this.divCaso.innerHTML = `
+
+        <div class="narrativa-capitulo">
+
+            <h2>
+                ${capitulo.titulo}
+            </h2>
+
+            <p class="narrativa-descripcion">
+                ${capitulo.descripcion}
+            </p>
+
+        </div>
+
+        <div class="narrativa-caso">
+
+            <h2>
+                ${caso.titulo}
+            </h2>
+
+            <div class="narrativa-bloque">
+
+                <h3>ESCENA</h3>
+
+                <p>
+                    ${caso.escena}
+                </p>
+
             </div>
 
-            <div class="progreso-caso">
-                CASO ${caso}
+            <div class="narrativa-bloque">
+
+                <h3>OBJETIVO</h3>
+
+                <p>
+                    ${caso.objetivo}
+                </p>
+
             </div>
 
-            <div class="progreso-numerico">
-                ${caso} / 10
+            <div class="narrativa-bloque">
+
+                <h3>CONEXIÓN</h3>
+
+                <p>
+                    ${caso.conexion}
+                </p>
+
             </div>
 
-        `;
+        </div>
+
+    `;
+
+}
+
+
+    obtenerLeyendaCapitulo(capitulo) {
+
+        const leyendas = {
+
+            1: "El inicio de la investigación",
+
+            2: "Nuevas pistas salen a la luz",
+
+            3: "La verdad comienza a revelarse",
+
+            4: "Nada es lo que parece",
+
+            5: "La verdad está en tus manos"
+
+        };
+
+        return leyendas[capitulo] || "";
 
     }
-
 
     // ======================================================
     // Mostrar Errores
