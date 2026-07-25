@@ -1,0 +1,181 @@
+/* ==========================================================
+   AI-7
+   Estilos del prólogo
+   ========================================================== */
+
+#pantalla-prologo {
+
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+
+    background-image:
+        linear-gradient(
+            rgba(0, 0, 0, 0.65),
+            rgba(0, 0, 0, 0.65)
+        ),
+        url("../assets/img/background-prologo.jpg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    color: white;
+}
+
+
+.prologo-contenido {
+
+    width: 100%;
+    max-width: 800px;
+
+    text-align: center;
+
+    padding: 40px;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    border-radius: 10px;
+
+    box-sizing: border-box;
+}
+
+
+#prologo-titulo {
+
+    margin-bottom: 30px;
+
+    font-size: 32px;
+    font-weight: bold;
+
+    letter-spacing: 3px;
+}
+
+
+#prologo-texto {
+
+    min-height: 250px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    white-space: pre-line;
+
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+
+.prologo-controles {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 30px;
+}
+
+
+#prologo-progreso {
+
+    font-size: 16px;
+
+    opacity: 0.7;
+}
+
+
+#btn-prologo {
+
+    padding: 12px 25px;
+
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 5px;
+
+    background: rgba(255, 255, 255, 0.1);
+
+    color: white;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+
+#btn-prologo:hover {
+
+    background: rgba(255, 255, 255, 0.2);
+
+    border-color: white;
+}
+
+
+#pantalla-juego {
+
+    display: none;
+}
+
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media (max-width: 600px) {
+
+    #pantalla-prologo {
+
+        padding: 15px;
+    }
+
+
+    .prologo-contenido {
+
+        padding: 25px 20px;
+    }
+
+
+    #prologo-titulo {
+
+        font-size: 24px;
+
+        margin-bottom: 20px;
+    }
+
+
+    #prologo-texto {
+
+        min-height: 300px;
+
+        font-size: 16px;
+
+        line-height: 1.6;
+    }
+
+
+    .prologo-controles {
+
+        flex-direction: column;
+
+        gap: 20px;
+    }
+
+
+    #btn-prologo {
+
+        width: 100%;
+    }
+
+}

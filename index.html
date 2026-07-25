@@ -11,69 +11,109 @@
     <link rel="stylesheet" href="css/modal.css">
     <link rel="stylesheet" href="css/mensajes.css">
     <link rel="stylesheet" href="css/confirmacion.css">
+    <link rel="stylesheet" href="css/prologo.css">
 
 </head>
 
 <body>
 
-<header>
+    <!-- ==================================================
+         PRÓLOGO
+         ================================================== -->
 
-    <div class="logo-ai7">
-        <span>AI</span><strong>-7</strong>
+    <section id="pantalla-prologo">
+
+        <div class="prologo-contenido">
+
+            <h1 id="prologo-titulo"></h1>
+
+            <div id="prologo-texto"></div>
+
+            <div class="prologo-controles">
+
+                <span id="prologo-progreso"></span>
+
+                <button id="btn-prologo">
+                    CONTINUAR
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         JUEGO
+         ================================================== -->
+
+    <div id="pantalla-juego">
+
+        <header>
+
+            <div class="logo-ai7">
+                <span>AI</span><strong>-7</strong>
+            </div>
+
+            <div class="linea-header"></div>
+
+            <h2>PROTOCOLO DE INVESTIGACIÓN</h2>
+
+            <p>
+                Analiza las declaraciones.
+                Descubre las contradicciones.
+                Encuentra la verdad.
+            </p>
+
+        </header>
+
+
+        <main>
+
+            <section class="panel">
+
+                <div id="progreso"></div>
+
+                <h2>Agentes</h2>
+
+                <div id="agentes"></div>
+
+            </section>
+
+
+            <section class="panel">
+
+                <h2>Caso</h2>
+
+                <div id="caso"></div>
+
+            </section>
+
+
+            <section class="panel">
+
+                <h2>Declaraciones</h2>
+
+                <div id="declaraciones"></div>
+
+            </section>
+
+
+            <section class="panel">
+
+                <h2>Resultado</h2>
+
+                <div id="resultado"></div>
+
+            </section>
+
+        </main>
+
     </div>
 
-    <div class="linea-header"></div>
 
-    <h2>PROTOCOLO DE INVESTIGACIÓN</h2>
-
-    <p>
-        Analiza las declaraciones.
-        Descubre las contradicciones.
-        Encuentra la verdad.
-    </p>
-
-</header>
-
-<main>
-
-    <section class="panel">
-
-        <div id="progreso"></div>
-
-        <h2>Agentes</h2>
-
-        <div id="agentes"></div>
-
-    </section>
-
-    <section class="panel">
-
-        <h2>Caso</h2>
-
-        <div id="caso"></div>
-
-    </section>
-
-    <section class="panel">
-
-        <h2>Declaraciones</h2>
-
-        <div id="declaraciones"></div>
-
-    </section>
-
-    <section class="panel">
-
-        <h2>Resultado</h2>
-
-        <div id="resultado"></div>
-       
-
-    </section>
-
-</main>
-
-<script type="module" src="js/app.js"></script>
+    <script type="module" src="js/app.js"></script>
 
 </body>
 

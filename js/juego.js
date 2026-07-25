@@ -75,23 +75,6 @@ export default class Juego {
 
     iniciar() {
 
-        console.log(
-            "=========================================="
-        );
-
-        console.log(
-            "AI-7"
-        );
-
-        console.log(
-            "Iniciando juego..."
-        );
-
-        console.log(
-            "=========================================="
-        );
-
-
         this.iniciarCapitulo();
 
     }
@@ -117,26 +100,7 @@ export default class Juego {
 
         }
 
-
-        console.log(
-            "=========================================="
-        );
-
-        console.log(
-            "CAPÍTULO:",
-            capitulo.id
-        );
-
-        console.log(
-            "TÍTULO:",
-            capitulo.titulo
-        );
-
-        console.log(
-            "=========================================="
-        );
-
-
+        
         // Reiniciar el caso al comenzar
         // un nuevo capítulo.
 
@@ -202,33 +166,7 @@ export default class Juego {
             casoNarrativo
         );
 
-        this.casoLogico.personajes.forEach(
-            personaje => {
-
-                console.log(
-                    "-",
-                    personaje.nombre
-                );
-
-            }
-        );
-
-
-        console.log(
-            "------------------------------------------"
-        );
-
-
-        console.log(
-            "Culpable:",
-            this.casoLogico.culpable.nombre
-        );
-
-
-        console.log(
-            "=========================================="
-        );
-
+       
 
         // =====================================================
         // Resolver caso
@@ -453,27 +391,7 @@ export default class Juego {
     // FINALIZAR JUEGO
     // ==========================================================
 
-    finalizarJuego() {
-
-        console.log(
-            "=========================================="
-        );
-
-        console.log(
-            "AI-7"
-        );
-
-        console.log(
-            "INVESTIGACIÓN COMPLETADA"
-        );
-
-        console.log(
-            "Todos los capítulos han sido completados."
-        );
-
-        console.log(
-            "=========================================="
-        );
+    finalizarJuego() {       
 
     }
 
@@ -497,17 +415,7 @@ verificarCulpable(agenteSeleccionado) {
     if (
         agenteSeleccionado.id ===
         culpable.id
-    ) {
-
-        console.log(
-            "¡Respuesta correcta!"
-        );
-
-        console.log(
-            "Culpable:",
-            culpable.nombre
-        );
-
+    ) {       
 
         // Avanzar al siguiente caso
 
@@ -517,19 +425,6 @@ verificarCulpable(agenteSeleccionado) {
 
     }
 
-
-    // =====================================================
-    // RESPUESTA INCORRECTA
-    // =====================================================
-
-    console.log(
-        "Respuesta incorrecta."
-    );
-
-    console.log(
-        "El jugador seleccionó:",
-        agenteSeleccionado.nombre
-    );
 
 
     // =====================================================

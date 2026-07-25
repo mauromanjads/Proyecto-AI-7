@@ -8,18 +8,50 @@
  */
 
 import Juego from "./juego.js";
+import Prologo from "./ui/Prologo.js";
 
 
 // ==========================================================
-// Crear instancia del juego
+// Elementos de la interfaz
 // ==========================================================
 
-const juego =
-    new Juego();
+const pantallaPrologo =
+    document.getElementById("pantalla-prologo");
+
+const pantallaJuego =
+    document.getElementById("pantalla-juego");
 
 
 // ==========================================================
-// Iniciar juego
+// Mostrar prólogo
 // ==========================================================
 
-juego.iniciar();
+const prologo =
+    new Prologo();
+
+
+// ==========================================================
+// Iniciar prólogo
+// ==========================================================
+
+prologo.iniciar(() => {
+
+    // ======================================================
+    // Finalizar prólogo
+    // ======================================================
+
+    pantallaPrologo.style.display = "none";
+
+    pantallaJuego.style.display = "block";
+
+
+    // ======================================================
+    // Iniciar juego
+    // ======================================================
+
+    const juego =
+        new Juego();
+
+    juego.iniciar();
+
+});
