@@ -22,8 +22,11 @@ export default class Prologo {
         this.texto =
             document.getElementById("prologo-texto");
 
-        this.progreso =
-            document.getElementById("prologo-progreso");
+        this.puntos =
+            document.getElementById("prologo-puntos");
+
+        this.contador =
+            document.getElementById("prologo-contador");
 
         this.boton =
             document.getElementById("btn-prologo");
@@ -34,6 +37,8 @@ export default class Prologo {
         this.escenaActual = 0;
 
         this.callbackFinal = null;
+
+        this.transicionando = false;
 
         this.pantalla.style.backgroundImage =
             `url("${PROLOGO.background}")`;
@@ -48,6 +53,8 @@ export default class Prologo {
 
         this.escenaActual = 0;
 
+        this.crearIndicadores();
+
         this.mostrarEscena();
 
         this.boton.addEventListener(
@@ -58,6 +65,59 @@ export default class Prologo {
         this.botonAtras.addEventListener(
             "click",
             () => this.escenaAnterior()
+        );
+
+    }
+
+
+    crearIndicadores() {
+
+        this.puntos.innerHTML = "";
+
+        PROLOGO.escenas.forEach(
+            (_, indice) => {
+
+                const punto =
+                    document.createElement("span");
+
+                punto.classList.add(
+                    "prologo-punto"
+                );
+
+                punto.dataset.escena =
+                    indice;
+
+                this.puntos.appendChild(
+                    punto
+                );
+
+            }
+        );
+
+    }
+
+
+    actualizarIndicadores() {
+
+        const puntos =
+            this.puntos.querySelectorAll(
+                ".prologo-punto"
+            );
+
+        puntos.forEach(
+            (punto, indice) => {
+
+                punto.classList.toggle(
+                    "activo",
+                    indice === this.escenaActual
+                );
+
+                punto.classList.toggle(
+                    "completado",
+                    indice < this.escenaActual
+                );
+
+            }
         );
 
     }
@@ -77,8 +137,11 @@ export default class Prologo {
             escena.texto;
 
 
-        this.progreso.textContent =
-            `${this.escenaActual + 1} / ${PROLOGO.escenas.length}`;
+        this.contador.textContent =
+            `ESCENA ${this.escenaActual + 1} DE ${PROLOGO.escenas.length}`;
+
+
+        this.actualizarIndicadores();
 
 
         this.botonAtras.disabled =
@@ -103,16 +166,97 @@ export default class Prologo {
     }
 
 
+    cambiarEscena(nuevaEscena) {
+
+        if (this.transicionando) {
+
+            return;
+
+        }
+
+
+        this.transicionando = true;
+
+
+        this.titulo.classList.add(
+            "prologo-salida"
+        );
+
+        this.texto.classList.add(
+            "prologo-salida"
+        );
+
+
+        setTimeout(
+            () => {
+
+                this.escenaActual =
+                    nuevaEscena;
+
+
+                this.mostrarEscena();
+
+
+                this.titulo.classList.remove(
+                    "prologo-salida"
+                );
+
+                this.texto.classList.remove(
+                    "prologo-salida"
+                );
+
+
+                this.titulo.classList.add(
+                    "prologo-entrada"
+                );
+
+                this.texto.classList.add(
+                    "prologo-texto-entrada"
+                );
+
+
+                setTimeout(
+                    () => {
+
+                        this.titulo.classList.remove(
+                            "prologo-entrada"
+                        );
+
+                        this.texto.classList.remove(
+                            "prologo-texto-entrada"
+                        );
+
+                        this.transicionando =
+                            false;
+
+                    },
+                    500
+                );
+
+            },
+            250
+        );
+
+    }
+
+
     siguienteEscena() {
+
+        if (this.transicionando) {
+
+            return;
+
+        }
+
 
         if (
             this.escenaActual <
             PROLOGO.escenas.length - 1
         ) {
 
-            this.escenaActual++;
-
-            this.mostrarEscena();
+            this.cambiarEscena(
+                this.escenaActual + 1
+            );
 
             return;
 
@@ -126,26 +270,45 @@ export default class Prologo {
 
     escenaAnterior() {
 
+        if (this.transicionando) {
+
+            return;
+
+        }
+
+
         if (
             this.escenaActual > 0
         ) {
 
-            this.escenaActual--;
-
-            this.mostrarEscena();
+            this.cambiarEscena(
+                this.escenaActual - 1
+            );
 
         }
 
     }
 
 
-    terminar() {
+   terminar() {
 
-        if (this.callbackFinal) {
+        this.pantalla.classList.add(
+            "prologo-finalizando"
+        );
 
-            this.callbackFinal();
 
-        }
+        setTimeout(
+            () => {
+
+                if (this.callbackFinal) {
+
+                    this.callbackFinal();
+
+                }
+
+            },
+            300
+        );
 
     }
 

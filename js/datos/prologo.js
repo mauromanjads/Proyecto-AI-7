@@ -45,14 +45,9 @@ const PROLOGO = {
 
                 Siete unidades de inteligencia artificial
                 aparecen registradas dentro de AI-7.
-
-                ATLAS.
-                NOVA.
-                ORION.
-                ECHO.
-                TITAN.
-                VEGA.
-                ZERO.
+                
+                ATLAS.  NOVA. ORION.ECHO.
+                TITAN.VEGA.ZERO.
             `
         },
 
@@ -114,20 +109,15 @@ const PROLOGO = {
             titulo: "CÓMO COMENZAR",
 
             texto: `
-                Para iniciar una investigación,
-                selecciona uno de los agentes involucrados
-                en el caso.
+                escoge uno de los agentes del caso.
 
-                Puedes consultar su PERFIL para conocer
-                la información general del personaje.
+                Consulta su PERFIL para conocer
+                su información.
 
-                También puedes INTERROGARLO para conocer
-                su declaración sobre el incidente.
+                INTERROGA a los agentes para conocer
+                sus declaraciones.
 
-                Analiza toda la información disponible.
-
-                Cuando estés preparado,
-                selecciona al agente que consideres culpable.
+                Analiza y selecciona al CULPABLE
             `
         },
 

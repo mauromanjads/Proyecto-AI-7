@@ -37,21 +37,43 @@ const prologo =
 prologo.iniciar(() => {
 
     // ======================================================
-    // Finalizar prólogo
+    // Iniciar transición de salida del prólogo
     // ======================================================
 
-    pantallaPrologo.style.display = "none";
-
-    pantallaJuego.style.display = "block";
+    pantallaPrologo.classList.add(
+        "prologo-finalizando"
+    );
 
 
     // ======================================================
-    // Iniciar juego
+    // Esperar a que termine la transición
     // ======================================================
 
-    const juego =
-        new Juego();
+    setTimeout(() => {
 
-    juego.iniciar();
+        pantallaPrologo.classList.add(
+            "prologo-oculto"
+        );
+
+
+        // ==================================================
+        // Iniciar juego
+        // ==================================================
+
+        const juego =
+            new Juego();
+
+        juego.iniciar();
+
+
+        // ==================================================
+        // Mostrar juego
+        // ==================================================
+
+        pantallaJuego.classList.add(
+            "juego-visible"
+        );
+
+    }, 300);
 
 });
