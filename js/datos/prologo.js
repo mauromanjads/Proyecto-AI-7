@@ -13,7 +13,7 @@ const PROLOGO = {
 
     titulo: "LA ACTIVACIÓN",
 
-    background: "assets/img/background-prologo.jpg",
+    background: "assets/img/background-prologo.png",
 
     escenas: [
 

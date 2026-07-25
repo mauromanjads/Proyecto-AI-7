@@ -28,9 +28,15 @@ export default class Prologo {
         this.boton =
             document.getElementById("btn-prologo");
 
+        this.botonAtras =
+            document.getElementById("btn-prologo-atras");
+
         this.escenaActual = 0;
 
         this.callbackFinal = null;
+
+        this.pantalla.style.backgroundImage =
+            `url("${PROLOGO.background}")`;
 
     }
 
@@ -47,6 +53,11 @@ export default class Prologo {
         this.boton.addEventListener(
             "click",
             () => this.siguienteEscena()
+        );
+
+        this.botonAtras.addEventListener(
+            "click",
+            () => this.escenaAnterior()
         );
 
     }
@@ -68,6 +79,10 @@ export default class Prologo {
 
         this.progreso.textContent =
             `${this.escenaActual + 1} / ${PROLOGO.escenas.length}`;
+
+
+        this.botonAtras.disabled =
+            this.escenaActual === 0;
 
 
         if (
@@ -105,6 +120,21 @@ export default class Prologo {
 
 
         this.terminar();
+
+    }
+
+
+    escenaAnterior() {
+
+        if (
+            this.escenaActual > 0
+        ) {
+
+            this.escenaActual--;
+
+            this.mostrarEscena();
+
+        }
 
     }
 
