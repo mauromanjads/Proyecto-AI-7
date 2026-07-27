@@ -12,6 +12,16 @@ import Prologo from "./ui/Prologo.js";
 
 
 // ==========================================================
+// MODO DE PRUEBA
+// ==========================================================
+
+// true  = saltar el prólogo y entrar directamente al juego
+// false = mostrar el prólogo normalmente
+
+const MODO_PRUEBA = true;
+
+
+// ==========================================================
 // Elementos de la interfaz
 // ==========================================================
 
@@ -23,57 +33,110 @@ const pantallaJuego =
 
 
 // ==========================================================
-// Mostrar prólogo
+// INICIAR APLICACIÓN
 // ==========================================================
 
-const prologo =
-    new Prologo();
-
-
-// ==========================================================
-// Iniciar prólogo
-// ==========================================================
-
-prologo.iniciar(() => {
+if (MODO_PRUEBA) {
 
     // ======================================================
-    // Iniciar transición de salida del prólogo
+    // MODO PRUEBA
     // ======================================================
 
-    pantallaPrologo.classList.add(
-        "prologo-finalizando"
-    );
+    console.log("AI-7: Modo prueba activado");
 
+
+    // ------------------------------------------------------
+    // Ocultar completamente el prólogo
+    // ------------------------------------------------------
+
+    if (pantallaPrologo) {
+
+        pantallaPrologo.style.display = "none";
+
+    }
+
+
+    // ------------------------------------------------------
+    // Mostrar directamente la pantalla del juego
+    // ------------------------------------------------------
+
+    if (pantallaJuego) {
+
+        pantallaJuego.style.display = "block";
+        pantallaJuego.classList.add("juego-visible");
+
+    }
+
+
+    // ------------------------------------------------------
+    // Iniciar juego
+    // ------------------------------------------------------
+
+    const juego = new Juego();
+
+    juego.iniciar();
+
+
+} else {
 
     // ======================================================
-    // Esperar a que termine la transición
+    // MODO NORMAL
     // ======================================================
 
-    setTimeout(() => {
+    const prologo = new Prologo();
+
+
+    prologo.iniciar(() => {
+
+        // ==================================================
+        // Iniciar transición de salida del prólogo
+        // ==================================================
 
         pantallaPrologo.classList.add(
-            "prologo-oculto"
+            "prologo-finalizando"
         );
 
 
         // ==================================================
-        // Iniciar juego
+        // Esperar a que termine la transición
         // ==================================================
 
-        const juego =
-            new Juego();
+        setTimeout(() => {
 
-        juego.iniciar();
+            // ----------------------------------------------
+            // Ocultar completamente el prólogo
+            // ----------------------------------------------
+
+            pantallaPrologo.style.display = "none";
 
 
-        // ==================================================
-        // Mostrar juego
-        // ==================================================
+            // ----------------------------------------------
+            // Crear juego
+            // ----------------------------------------------
 
-        pantallaJuego.classList.add(
-            "juego-visible"
-        );
+            const juego =
+                new Juego();
 
-    }, 300);
 
-});
+            // ----------------------------------------------
+            // Iniciar juego
+            // ----------------------------------------------
+
+            juego.iniciar();
+
+
+            // ----------------------------------------------
+            // Mostrar pantalla del juego
+            // ----------------------------------------------
+
+            pantallaJuego.style.display = "block";
+
+            pantallaJuego.classList.add(
+                "juego-visible"
+            );
+
+        }, 300);
+
+    });
+
+}

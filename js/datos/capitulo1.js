@@ -23,7 +23,7 @@ const CAPITULO_1 = {
 
     titulo: "EL PRIMER INCIDENTE",
 
-    background: "assets/img/background-capitulo1.jpg",
+    background: "assets/img/background-capitulo1.png",
 
     descripcion: `
         Los primeros incidentes parecen ser hechos aislados

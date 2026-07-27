@@ -493,44 +493,37 @@ confirmarSeleccionCulpable() {
 
     }
 
-  mostrarProgreso(
+// ======================================================
+// Mostrar Progreso
+// ======================================================
+
+mostrarProgreso(
     capitulo,
     caso,
     tituloCapitulo,
     tituloCaso
 ) {
 
-    const porcentaje = (caso / 10) * 100;
+    const porcentaje =
+        (caso / 10) * 100;
 
     this.divProgreso.innerHTML = `
-
-        <div class="progreso-capitulo">
-            CAPÍTULO ${capitulo}
-        </div>
-
-        <div class="progreso-titulo-capitulo">
-            ${tituloCapitulo}
-        </div>
 
         <div class="progreso-caso">
             CASO ${caso} / 10
         </div>
 
-        <div class="progreso-titulo-caso">
-            ${tituloCaso}
-        </div>
-
         <div class="progreso-barra">
+
             <div
                 class="progreso-avance"
                 style="width: ${porcentaje}%"
             ></div>
+
         </div>
 
     `;
-
 }
-
 // ======================================================
 // Mostrar Narrativa
 // ======================================================
