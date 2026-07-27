@@ -67,6 +67,8 @@ export default class Tablero {
         this.agenteSeleccionado =
             null;
 
+        this.cerrarMenusNarrativos();
+
         this.cerrarModal();
 
         this.cerrarModalConfirmacion();
@@ -404,7 +406,6 @@ export default class Tablero {
         this.divCaso.innerHTML =
             "";
 
-
         this.divCaso.appendChild(
             Tarjeta.caso(
                 caso
@@ -556,7 +557,8 @@ export default class Tablero {
 
     mostrarNarrativa(
         capitulo,
-        caso
+        caso,
+        numeroCaso
     ) {
 
         if (
@@ -567,6 +569,13 @@ export default class Tablero {
             return;
 
         }
+
+
+        // ==================================================
+        // ELIMINAR MENÚS ANTERIORES
+        // ==================================================
+
+        this.cerrarMenusNarrativos();
 
 
         // ==================================================
@@ -582,19 +591,8 @@ export default class Tablero {
 
 
         // ==================================================
-        // INFORMACIÓN NARRATIVA
-        // --------------------------------------------------
-        // Estructura visual:
-        //
-        // 1. ARCHIVO DE MISIÓN
-        //
-        // 2. EVENTO DETECTADO
-        //    ANÁLISIS NEXUS
-        //
-        // 3. REGISTRO DE EVENTOS
-        //
-        // El evento y el análisis comparten
-        // el mismo panel central.
+        // ARCHIVO DE MISIÓN
+        // EVENTO DETECTADO
         // ==================================================
 
         this.divCaso.innerHTML = `
@@ -624,33 +622,314 @@ export default class Tablero {
 
             </div>
 
+        `;
 
-            <div class="narrativa-bloque analisis-nexus">
+
+        // ==================================================
+        // CONTENEDOR DE MENÚS NARRATIVOS
+        // ==================================================
+
+        const menusNarrativos =
+            document.createElement(
+                "div"
+            );
+
+
+        menusNarrativos.id =
+            "menus-narrativos";
+
+
+        // ==================================================
+        // REGISTRO DE EVENTOS
+        // ==================================================
+
+        const registroEventos =
+            this.crearMenuNarrativo(
+                {
+                    id:
+                        "registro-eventos",
+
+                    clase:
+                        "registro-eventos",
+
+                    icono:
+                        "◈",
+
+                    // NÚMERO DEL EVENTO ACTUAL
+                    titulo:
+                        `EVENTO #${numeroCaso}`,
+
+                    // NOMBRE DEL CASO
+                    contenidoTitulo:
+                        caso.titulo,
+
+                    contenido:
+                        caso.escena
+                }
+            );
+
+
+        // ==================================================
+        // ANÁLISIS NEXUS
+        // ==================================================
+
+        const analisisNexus =
+            this.crearMenuNarrativo(
+                {
+                    id:
+                        "analisis-nexus",
+
+                    clase:
+                        "analisis-nexus",
+
+                    icono:
+                        "⌬",
+
+                    titulo:
+                        "ANÁLISIS NEXUS",
+
+                    contenidoTitulo:
+                        "ANÁLISIS NEXUS",
+
+                    contenido:
+                        caso.conexion
+                }
+            );
+
+
+        // ==================================================
+        // AGREGAR LOS DOS MENÚS
+        // ==================================================
+
+        menusNarrativos.appendChild(
+            registroEventos
+        );
+
+
+        menusNarrativos.appendChild(
+            analisisNexus
+        );
+
+
+        // ==================================================
+        // INSERTAR MENÚS ANTES DE #CASO
+        // ==================================================
+
+        this.divCaso.parentElement.insertBefore(
+            menusNarrativos,
+            this.divCaso
+        );
+
+
+        // ==================================================
+        // CONFIGURAR REGISTRO DE EVENTOS
+        // ==================================================
+
+        this.configurarMenuNarrativo(
+            registroEventos,
+            analisisNexus
+        );
+
+
+        // ==================================================
+        // CONFIGURAR ANÁLISIS NEXUS
+        // ==================================================
+
+        this.configurarMenuNarrativo(
+            analisisNexus,
+            registroEventos
+        );
+
+    }
+
+
+    // ======================================================
+    // CREAR MENÚ NARRATIVO
+    // ======================================================
+
+    crearMenuNarrativo(
+        configuracion
+    ) {
+
+        const menu =
+            document.createElement(
+                "div"
+            );
+
+
+        menu.id =
+            configuracion.id;
+
+
+        menu.className =
+            configuracion.clase;
+
+
+        menu.innerHTML = `
+
+            <button
+                class="registro-eventos-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="${configuracion.id}-contenido"
+            >
+
+                <div class="registro-eventos-icono">
+
+                    ${configuracion.icono}
+
+                </div>
+
 
                 <h3>
-                    ANÁLISIS NEXUS
+
+                    ${configuracion.titulo}
+
                 </h3>
 
-                <p>
-                    ${caso.conexion}
-                </p>
 
-            </div>
+                <span class="registro-eventos-flecha">
+
+                    ▾
+
+                </span>
+
+            </button>
 
 
-            <div class="narrativa-bloque registro-eventos">
+            <div
+                id="${configuracion.id}-contenido"
+                class="registro-eventos-contenido"
+            >
 
                 <h3>
-                    REGISTRO DE EVENTOS
+
+                    ${configuracion.contenidoTitulo}
+
                 </h3>
 
+
                 <p>
-                    ${caso.escena}
+
+                    ${configuracion.contenido}
+
                 </p>
 
             </div>
 
         `;
+
+
+        return menu;
+
+    }
+
+
+    // ======================================================
+    // CONFIGURAR MENÚ NARRATIVO
+    // ======================================================
+
+    configurarMenuNarrativo(
+        menu,
+        otroMenu
+    ) {
+
+        const boton =
+            menu.querySelector(
+                ".registro-eventos-toggle"
+            );
+
+
+        if (!boton)
+            return;
+
+
+        boton.addEventListener(
+            "click",
+            evento => {
+
+                evento.stopPropagation();
+
+
+                const estabaAbierto =
+                    menu.classList.contains(
+                        "abierto"
+                    );
+
+
+                // ==========================================
+                // CERRAR EL OTRO MENÚ
+                // ==========================================
+
+                if (otroMenu) {
+
+                    otroMenu.classList.remove(
+                        "abierto"
+                    );
+
+
+                    const otroBoton =
+                        otroMenu.querySelector(
+                            ".registro-eventos-toggle"
+                        );
+
+
+                    if (otroBoton) {
+
+                        otroBoton.setAttribute(
+                            "aria-expanded",
+                            "false"
+                        );
+
+                    }
+
+                }
+
+
+                // ==========================================
+                // CAMBIAR ESTADO DEL MENÚ ACTUAL
+                // ==========================================
+
+                const abierto =
+                    !estabaAbierto;
+
+
+                menu.classList.toggle(
+                    "abierto",
+                    abierto
+                );
+
+
+                boton.setAttribute(
+                    "aria-expanded",
+                    String(
+                        abierto
+                    )
+                );
+
+            }
+        );
+
+    }
+
+
+    // ======================================================
+    // CERRAR MENÚS NARRATIVOS
+    // ======================================================
+
+    cerrarMenusNarrativos() {
+
+        const menus =
+            document.getElementById(
+                "menus-narrativos"
+            );
+
+
+        if (menus) {
+
+            menus.remove();
+
+        }
 
     }
 

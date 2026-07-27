@@ -1,0 +1,753 @@
+/* ==========================================================
+   AI-7
+   eventos.css
+   ----------------------------------------------------------
+   Menús narrativos:
+   - Registro de Eventos
+   - Análisis Nexus
+   ========================================================== */
+
+
+/* ==========================================================
+   CONTENEDOR DE LOS DOS MENÚS
+   ========================================================== */
+
+#menus-narrativos {
+
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: row;
+
+    align-items: flex-start;
+
+    gap: 14px;
+
+    margin: 0 0 10px 0;
+
+    position: relative;
+
+    z-index: 100;
+
+    box-sizing: border-box;
+}
+
+
+/* ==========================================================
+   CADA MENÚ
+   ========================================================== */
+
+#registro-eventos,
+#analisis-nexus {
+
+    position: relative;
+
+    width: 250px;
+
+    flex: 0 0 250px;
+
+    box-sizing: border-box;
+}
+
+
+/* ==========================================================
+   BOTÓN
+   ========================================================== */
+
+.registro-eventos-toggle {
+
+    position: relative;
+
+    width: 250px;
+
+    height: 100px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 14px;
+
+    padding: 12px 20px;
+
+    box-sizing: border-box;
+
+    border: 1px solid rgba(56, 189, 248, .40);
+
+    border-radius: 50px;
+
+    background:
+        radial-gradient(
+            circle at 20% 50%,
+            rgba(34, 211, 238, .18),
+            transparent 48%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(10, 30, 43, .98),
+            rgba(3, 12, 20, .99)
+        );
+
+    color: #67e8f9;
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .06),
+        0 8px 22px rgba(0, 0, 0, .24),
+        0 0 18px rgba(56, 189, 248, .08);
+
+    transition:
+        border-color .25s ease,
+        box-shadow .25s ease,
+        transform .25s ease;
+}
+
+
+/* ==========================================================
+   EFECTO HOVER
+   ========================================================== */
+
+.registro-eventos-toggle:hover {
+
+    border-color:
+        rgba(56, 189, 248, .75);
+
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, .30),
+        0 0 28px rgba(56, 189, 248, .16);
+
+    transform:
+        translateY(-2px);
+}
+
+
+/* ==========================================================
+   LÍNEA SUPERIOR
+   ========================================================== */
+
+.registro-eventos-toggle::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: 15%;
+
+    width: 70%;
+
+    height: 2px;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(103, 232, 249, .90),
+            transparent
+        );
+
+    box-shadow:
+        0 0 8px rgba(34, 211, 238, .35);
+}
+
+
+/* ==========================================================
+   ICONO CIRCULAR
+   ========================================================== */
+
+.registro-eventos-icono {
+
+    width: 64px;
+
+    height: 64px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: #67e8f9;
+
+    font-size: 42px;
+
+    line-height: 1;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(56, 189, 248, .22),
+            rgba(3, 12, 20, .95)
+        );
+
+    border:
+        1px solid rgba(103, 232, 249, .50);
+
+    box-shadow:
+        inset 0 0 14px rgba(56, 189, 248, .10),
+        0 0 20px rgba(56, 189, 248, .14);
+
+    text-shadow:
+        0 0 12px rgba(103, 232, 249, .75);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+}
+
+
+/* ==========================================================
+   ICONO AL PASAR EL RATÓN
+   ========================================================== */
+
+.registro-eventos-toggle:hover
+.registro-eventos-icono {
+
+    transform:
+        scale(1.08);
+
+    box-shadow:
+        inset 0 0 16px rgba(56, 189, 248, .14),
+        0 0 28px rgba(56, 189, 248, .25);
+}
+
+
+/* ==========================================================
+   TÍTULO DEL BOTÓN
+   ========================================================== */
+
+.registro-eventos-toggle h3 {
+
+    margin: 0;
+
+    color: #a5f3fc;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.6px;
+
+    line-height: 1.35;
+
+    text-align: left;
+
+    text-transform: uppercase;
+
+    text-shadow:
+        0 0 12px rgba(34, 211, 238, .25);
+}
+
+
+/* ==========================================================
+   FLECHA
+   ========================================================== */
+
+.registro-eventos-flecha {
+
+    position: absolute;
+
+    right: 18px;
+
+    bottom: 12px;
+
+    width: 24px;
+
+    height: 24px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #67e8f9;
+
+    font-size: 22px;
+
+    font-weight: 400;
+
+    line-height: 1;
+
+    border-radius: 50%;
+
+    background:
+        rgba(56, 189, 248, .10);
+
+    border:
+        1px solid rgba(103, 232, 249, .25);
+
+    text-shadow:
+        0 0 10px rgba(34, 211, 238, .55);
+
+    transition:
+        transform .25s ease,
+        background .25s ease;
+}
+
+
+/* ==========================================================
+   FLECHA AL PASAR EL RATÓN
+   ========================================================== */
+
+.registro-eventos-toggle:hover
+.registro-eventos-flecha {
+
+    background:
+        rgba(56, 189, 248, .18);
+}
+
+
+/* ==========================================================
+   ESTADO ABIERTO
+   ========================================================== */
+
+#registro-eventos.abierto
+.registro-eventos-flecha {
+
+    transform:
+        rotate(180deg);
+
+    background:
+        rgba(56, 189, 248, .20);
+}
+
+
+/* ==========================================================
+   PANEL DESPLEGABLE
+   ========================================================== */
+
+.registro-eventos-contenido {
+
+    position: absolute;
+
+    left: 0;
+
+    top:
+        calc(100% + 10px);
+
+    width:
+        min(560px, 90vw);
+
+    max-height:
+        320px;
+
+    padding:
+        22px 24px;
+
+    box-sizing:
+        border-box;
+
+    overflow-y:
+        auto;
+
+    border:
+        1px solid rgba(56, 189, 248, .40);
+
+    border-radius:
+        20px;
+
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(56, 189, 248, .10),
+            transparent 55%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(7, 24, 35, .99),
+            rgba(2, 10, 17, .99)
+        );
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .06),
+        0 18px 40px rgba(0, 0, 0, .45),
+        0 0 26px rgba(56, 189, 248, .10);
+
+    opacity:
+        0;
+
+    visibility:
+        hidden;
+
+    transform:
+        translateY(-10px)
+        scale(.98);
+
+    transform-origin:
+        top left;
+
+    pointer-events:
+        none;
+
+    z-index:
+        200;
+
+    transition:
+        opacity .25s ease,
+        visibility .25s ease,
+        transform .25s ease;
+}
+
+
+/* ==========================================================
+   PANEL ABIERTO
+   ========================================================== */
+
+#registro-eventos.abierto
+.registro-eventos-contenido {
+
+    opacity:
+        1;
+
+    visibility:
+        visible;
+
+    transform:
+        translateY(0)
+        scale(1);
+
+    pointer-events:
+        auto;
+}
+
+
+/* ==========================================================
+   TÍTULO DEL PANEL
+   ========================================================== */
+
+.registro-eventos-contenido h3 {
+
+    margin:
+        0 0 14px 0;
+
+    color:
+        #67e8f9;
+
+    font-size:
+        18px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        2px;
+
+    line-height:
+        1.3;
+
+    text-transform:
+        uppercase;
+
+    text-shadow:
+        0 0 14px rgba(34, 211, 238, .25);
+}
+
+
+/* ==========================================================
+   TEXTO DEL EVENTO
+   ========================================================== */
+
+.registro-eventos-contenido p {
+
+    margin:
+        0;
+
+    color:
+        #e0f2fe;
+
+    font-size:
+        17px;
+
+    line-height:
+        1.65;
+
+    white-space:
+        pre-line;
+
+    overflow-wrap:
+        break-word;
+
+    overflow:
+        visible;
+}
+
+
+/* ==========================================================
+   BARRA SUPERIOR DEL PANEL
+   ========================================================== */
+
+.registro-eventos-contenido::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    top:
+        0;
+
+    left:
+        8%;
+
+    width:
+        84%;
+
+    height:
+        2px;
+
+    border-radius:
+        50%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(34, 211, 238, .90),
+            transparent
+        );
+
+    box-shadow:
+        0 0 10px rgba(34, 211, 238, .35);
+}
+
+
+/* ==========================================================
+   TABLET
+   ========================================================== */
+
+@media (max-width: 700px) {
+
+    #menus-narrativos {
+
+        gap:
+            10px;
+    }
+
+
+    #registro-eventos,
+    #analisis-nexus {
+
+        width:
+            220px;
+
+        flex-basis:
+            220px;
+    }
+
+
+    .registro-eventos-toggle {
+
+        width:
+            220px;
+
+        height:
+            90px;
+
+        border-radius:
+            45px;
+    }
+
+
+    .registro-eventos-icono {
+
+        width:
+            56px;
+
+        height:
+            56px;
+
+        font-size:
+            36px;
+    }
+
+
+    .registro-eventos-toggle h3 {
+
+        font-size:
+            12px;
+    }
+
+
+    .registro-eventos-contenido {
+
+        width:
+            min(460px, 88vw);
+
+        max-height:
+            280px;
+
+        padding:
+            20px;
+    }
+
+
+    .registro-eventos-contenido h3 {
+
+        font-size:
+            16px;
+    }
+
+
+    .registro-eventos-contenido p {
+
+        font-size:
+            16px;
+
+        line-height:
+            1.6;
+    }
+
+}
+
+
+/* ==========================================================
+   CELULARES PEQUEÑOS
+   ========================================================== */
+
+@media (max-width: 380px) {
+
+    #menus-narrativos {
+
+        gap:
+            6px;
+    }
+
+
+    #registro-eventos,
+    #analisis-nexus {
+
+        width:
+            175px;
+
+        flex-basis:
+            175px;
+    }
+
+
+    .registro-eventos-toggle {
+
+        width:
+            175px;
+
+        height:
+            78px;
+
+        border-radius:
+            39px;
+
+        gap:
+            8px;
+
+        padding:
+            8px 10px;
+    }
+
+
+    .registro-eventos-icono {
+
+        width:
+            46px;
+
+        height:
+            46px;
+
+        font-size:
+            30px;
+    }
+
+
+    .registro-eventos-toggle h3 {
+
+        font-size:
+            10px;
+
+        letter-spacing:
+            1px;
+    }
+
+
+    .registro-eventos-flecha {
+
+        right:
+            10px;
+
+        bottom:
+            8px;
+
+        width:
+            20px;
+
+        height:
+            20px;
+
+        font-size:
+            17px;
+    }
+
+
+    .registro-eventos-contenido {
+
+        width:
+            88vw;
+
+        max-height:
+            240px;
+
+        padding:
+            16px;
+    }
+
+
+    .registro-eventos-contenido h3 {
+
+        font-size:
+            14px;
+
+        letter-spacing:
+            1.5px;
+    }
+
+
+    .registro-eventos-contenido p {
+
+        font-size:
+            15px;
+
+        line-height:
+            1.55;
+    }
+
+}
+
+
+/* ==========================================================
+   REDUCIR ANIMACIONES
+   ========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .registro-eventos-toggle,
+    .registro-eventos-icono,
+    .registro-eventos-flecha,
+    .registro-eventos-contenido {
+
+        transition:
+            none;
+    }
+
+}

@@ -185,10 +185,26 @@ export default class Juego {
         // =====================================================
         // Mostrar narrativa
         // =====================================================
+        //
+        // Se envía:
+        // - El capítulo actual.
+        // - El objeto narrativo del caso.
+        // - El número visible del evento.
+        //
+        // casoActual comienza en 0 internamente.
+        // Por eso se suma 1 para mostrar:
+        //
+        // EVENTO #1
+        // EVENTO #2
+        // EVENTO #3
+        // ...
+        //
+        // =====================================================
 
         this.tablero.mostrarNarrativa(
             capitulo,
-            casoNarrativo
+            casoNarrativo,
+            this.casoActual + 1
         );
 
 
