@@ -14,55 +14,56 @@ import Mensajes from "./Mensajes.js";
 
 export default class Tablero {
 
-   constructor(juego) {
+    constructor(juego) {
 
-    this.juego = juego;
+        this.juego = juego;
 
-    this.divProgreso =
-        document.getElementById("progreso");
+        this.divProgreso =
+            document.getElementById("progreso");
 
-    this.divAgentes =
-        document.getElementById("agentes");
+        this.tituloCapitulo =
+            document.getElementById("titulo-capitulo");
 
-    this.divCaso =
-        document.getElementById("caso");
+        this.divAgentes =
+            document.getElementById("agentes");
 
-    this.divDeclaraciones =
-        document.getElementById("declaraciones");
+        this.divCaso =
+            document.getElementById("caso");
 
-    this.divResultado =
-        document.getElementById("resultado");
+        this.divDeclaraciones =
+            document.getElementById("declaraciones");
 
-    this.agenteSeleccionado = null;
+        this.divResultado =
+            document.getElementById("resultado");
 
-}
+        this.agenteSeleccionado = null;
+    }
 
 
     // ======================================================
-    // Limpiar
+    // LIMPIAR
     // ======================================================
 
     limpiar() {
 
         this.divAgentes.innerHTML = "";
-
         this.divCaso.innerHTML = "";
 
-        this.divDeclaraciones.innerHTML = "";
+        if (this.divDeclaraciones) {
+            this.divDeclaraciones.innerHTML = "";
+        }
 
         this.divResultado.innerHTML = "";
 
         this.agenteSeleccionado = null;
 
         this.cerrarModal();
-
         this.cerrarModalConfirmacion();
-
     }
 
 
     // ======================================================
-    // Mostrar Agentes
+    // MOSTRAR AGENTES
     // ======================================================
 
     mostrarAgentes(agentes, declaraciones) {
@@ -74,36 +75,28 @@ export default class Tablero {
             const declaracionesAgente =
                 declaraciones.filter(
                     declaracion =>
-                        declaracion.personaje.nombre === agente.nombre
+                        declaracion.personaje.nombre ===
+                        agente.nombre
                 );
-
 
             const tarjeta =
                 Tarjeta.agente(agente);
 
 
-            // ==================================================
             // Botón de declaraciones
-            // ==================================================
 
             const botonMensajes =
                 tarjeta.querySelector(".btn-mensajes");
-
 
             if (botonMensajes) {
 
                 botonMensajes.addEventListener(
                     "click",
-                    (evento) => {
+                    evento => {
 
                         evento.stopPropagation();
 
-
-                        const mensajes =
-                            new Mensajes();
-
-
-                        mensajes.mostrar(
+                        new Mensajes().mostrar(
                             agente,
                             declaracionesAgente
                         );
@@ -114,24 +107,18 @@ export default class Tablero {
             }
 
 
-            // ==================================================
             // Botón de información
-            // ==================================================
 
             const botonInformacion =
                 tarjeta.querySelector(".btn-informacion");
-
 
             if (botonInformacion) {
 
                 botonInformacion.addEventListener(
                     "click",
-                    (evento) => {
+                    evento => {
 
-                        // Evita que el clic llegue
-                        // a la tarjeta
                         evento.stopPropagation();
-
 
                         this.abrirModal(
                             agente,
@@ -144,9 +131,7 @@ export default class Tablero {
             }
 
 
-            // ==================================================
-            // Clic sobre la tarjeta
-            // ==================================================
+            // Seleccionar posible culpable
 
             tarjeta.addEventListener(
                 "click",
@@ -170,7 +155,7 @@ export default class Tablero {
 
 
     // ======================================================
-    // Abrir Modal de Información del Agente
+    // MODAL DE INFORMACIÓN
     // ======================================================
 
     abrirModal(agente, declaraciones) {
@@ -185,123 +170,76 @@ export default class Tablero {
             )
         );
 
-
         const modal =
-            document.querySelector(
-                ".modal-overlay"
-            );
-
+            document.querySelector(".modal-overlay");
 
         if (!modal)
             return;
 
-
         const botonCerrar =
-            modal.querySelector(
-                ".modal-cerrar"
-            );
-
+            modal.querySelector(".modal-cerrar");
 
         const botonCerrarGrande =
-            modal.querySelector(
-                ".modal-cerrar-grande"
-            );
-
+            modal.querySelector(".modal-cerrar-grande");
 
         if (botonCerrar) {
 
             botonCerrar.addEventListener(
                 "click",
-                () => {
-
-                    this.cerrarModal();
-
-                }
+                () => this.cerrarModal()
             );
 
         }
-
 
         if (botonCerrarGrande) {
 
             botonCerrarGrande.addEventListener(
                 "click",
-                () => {
-
-                    this.cerrarModal();
-
-                }
+                () => this.cerrarModal()
             );
 
         }
 
     }
 
-
-    // ======================================================
-    // Cerrar Modal de Información
-    // ======================================================
 
     cerrarModal() {
 
         const modal =
-            document.querySelector(
-                ".modal-overlay"
-            );
-
+            document.querySelector(".modal-overlay");
 
         if (modal) {
-
             modal.remove();
-
         }
 
     }
 
 
     // ======================================================
-    // Abrir Modal de Confirmación
+    // MODAL DE CONFIRMACIÓN
     // ======================================================
 
     abrirModalConfirmacion(agente) {
 
         this.cerrarModalConfirmacion();
 
-
-        // Guardamos temporalmente la selección
         this.agenteSeleccionado =
             agente;
-
 
         const modal =
             ModalConfirmacion.mostrar(
                 agente
             );
 
-
-        // ==================================================
-        // Botón X
-        // ==================================================
-
         const botonCerrar =
             modal.querySelector(
                 ".modal-confirmacion-cerrar"
             );
 
-
-        // ==================================================
-        // Botón Cancelar
-        // ==================================================
-
         const botonCancelar =
             modal.querySelector(
                 ".btn-cancelar-culpable"
             );
-
-
-        // ==================================================
-        // Botón Confirmar
-        // ==================================================
 
         const botonConfirmar =
             modal.querySelector(
@@ -309,86 +247,67 @@ export default class Tablero {
             );
 
 
-        // ==================================================
-        // Cerrar con X
-        // ==================================================
+        if (botonCerrar) {
 
-        botonCerrar.addEventListener(
-            "click",
-            () => {
+            botonCerrar.addEventListener(
+                "click",
+                () => this.cancelarSeleccionCulpable()
+            );
 
-                this.cancelarSeleccionCulpable();
-
-            }
-        );
+        }
 
 
-        // ==================================================
-        // Cancelar
-        // ==================================================
+        if (botonCancelar) {
 
-        botonCancelar.addEventListener(
-            "click",
-            () => {
+            botonCancelar.addEventListener(
+                "click",
+                () => this.cancelarSeleccionCulpable()
+            );
 
-                this.cancelarSeleccionCulpable();
-
-            }
-        );
+        }
 
 
-        // ==================================================
-        // Confirmar
-        // ==================================================
+        if (botonConfirmar) {
 
-        botonConfirmar.addEventListener(
-            "click",
-            () => {
+            botonConfirmar.addEventListener(
+                "click",
+                () => this.confirmarSeleccionCulpable()
+            );
 
-                this.confirmarSeleccionCulpable();
-
-            }
-        );
+        }
 
     }
 
-
-    // ======================================================
-    // Cancelar Selección de Culpable
-    // ======================================================
 
     cancelarSeleccionCulpable() {
 
         this.agenteSeleccionado =
             null;
 
-
         this.cerrarModalConfirmacion();
 
     }
 
 
-    // ======================================================
-    // Confirmar Selección de Culpable
-    // ======================================================
-confirmarSeleccionCulpable() {
+    confirmarSeleccionCulpable() {
 
-    if (!this.agenteSeleccionado)
-        return;
+        if (!this.agenteSeleccionado)
+            return;
 
-    const agente =
-        this.agenteSeleccionado;
+        const agente =
+            this.agenteSeleccionado;
 
-    this.cerrarModalConfirmacion();
+        this.agenteSeleccionado =
+            null;
 
-    this.juego.verificarCulpable(
-        agente
-    );
+        this.cerrarModalConfirmacion();
 
-}
-    // ======================================================
-    // Cerrar Modal de Confirmación
-    // ======================================================
+        this.juego.verificarCulpable(
+            agente
+        );
+
+    }
+
 
     cerrarModalConfirmacion() {
 
@@ -397,52 +316,46 @@ confirmarSeleccionCulpable() {
                 ".modal-confirmacion"
             );
 
-
         if (modal) {
-
             modal.remove();
-
         }
 
     }
 
 
     // ======================================================
-    // Mostrar Caso
+    // CASO
     // ======================================================
 
     mostrarCaso(caso) {
 
         this.divCaso.innerHTML = "";
 
-
         this.divCaso.appendChild(
-
             Tarjeta.caso(caso)
-
         );
 
     }
 
 
     // ======================================================
-    // Mostrar Declaraciones
+    // DECLARACIONES
     // ======================================================
 
     mostrarDeclaraciones(declaraciones) {
 
-        this.divDeclaraciones.innerHTML = "";
+        if (!this.divDeclaraciones)
+            return;
 
+        this.divDeclaraciones.innerHTML = "";
 
         declaraciones.forEach(
             declaracion => {
 
                 this.divDeclaraciones.appendChild(
-
                     Tarjeta.declaracion(
                         declaracion
                     )
-
                 );
 
             }
@@ -452,28 +365,19 @@ confirmarSeleccionCulpable() {
 
 
     // ======================================================
-    // Mostrar Resultado
+    // RESULTADO TEMPORAL
     // ======================================================
 
     mostrarResultado(resultado) {
 
         this.divResultado.innerHTML = "";
 
-
         this.divResultado.appendChild(
-
-            Tarjeta.resultado(
-                resultado
-            )
-
+            Tarjeta.resultado(resultado)
         );
 
     }
 
-
-    // ======================================================
-    // Mostrar Conocimientos
-    // ======================================================
 
     mostrarConocimientos(conocimientos) {
 
@@ -481,11 +385,9 @@ confirmarSeleccionCulpable() {
             conocimiento => {
 
                 this.divResultado.appendChild(
-
                     Tarjeta.conocimiento(
                         conocimiento
                     )
-
                 );
 
             }
@@ -493,125 +395,124 @@ confirmarSeleccionCulpable() {
 
     }
 
-// ======================================================
-// Mostrar Progreso
-// ======================================================
 
-mostrarProgreso(
-    capitulo,
-    caso,
-    tituloCapitulo,
-    tituloCaso
-) {
+    // ======================================================
+    // PROGRESO
+    // ======================================================
 
-    const porcentaje =
-        (caso / 10) * 100;
+    mostrarProgreso(capitulo, caso) {
 
-    this.divProgreso.innerHTML = `
+        let nodos = "";
 
-        <div class="progreso-caso">
-            CASO ${caso} / 10
-        </div>
+        for (let i = 1; i <= 10; i++) {
 
-        <div class="progreso-barra">
+            let estado = "";
 
-            <div
-                class="progreso-avance"
-                style="width: ${porcentaje}%"
-            ></div>
+            if (i < caso) {
+                estado = "completado";
+            }
+            else if (i === caso) {
+                estado = "activo";
+            }
 
-        </div>
+            nodos += `
 
-    `;
-}
-// ======================================================
-// Mostrar Narrativa
-// ======================================================
+                <div class="progreso-nodo-contenedor ${estado}">
 
-mostrarNarrativa(capitulo, caso) {
+                    <div class="progreso-nodo ${estado}"></div>
 
-    if (!capitulo || !caso)
-        return;
+                    <span class="progreso-nodo-numero">
+                        ${i}
+                    </span>
 
-    this.divCaso.innerHTML = `
+                </div>
 
-        <div class="narrativa-capitulo">
+            `;
 
-            <h2>
-                ${capitulo.titulo}
-            </h2>
+        }
 
-            <p class="narrativa-descripcion">
-                ${capitulo.descripcion}
-            </p>
+        this.divProgreso.innerHTML = `
 
-        </div>
-
-        <div class="narrativa-caso">
-
-            <h2>
-                ${caso.titulo}
-            </h2>
-
-            <div class="narrativa-bloque">
-
-                <h3>ESCENA</h3>
-
-                <p>
-                    ${caso.escena}
-                </p>
-
+            <div class="progreso-nodos">
+                ${nodos}
             </div>
 
-            <div class="narrativa-bloque">
-
-                <h3>OBJETIVO</h3>
-
-                <p>
-                    ${caso.objetivo}
-                </p>
-
-            </div>
-
-            <div class="narrativa-bloque">
-
-                <h3>CONEXIÓN</h3>
-
-                <p>
-                    ${caso.conexion}
-                </p>
-
-            </div>
-
-        </div>
-
-    `;
-
-}
-
-
-    obtenerLeyendaCapitulo(capitulo) {
-
-        const leyendas = {
-
-            1: "El inicio de la investigación",
-
-            2: "Nuevas pistas salen a la luz",
-
-            3: "La verdad comienza a revelarse",
-
-            4: "Nada es lo que parece",
-
-            5: "La verdad está en tus manos"
-
-        };
-
-        return leyendas[capitulo] || "";
+        `;
 
     }
 
+
     // ======================================================
-    // Mostrar Errores
+    // NARRATIVA
+    // ======================================================
+
+    mostrarNarrativa(capitulo, caso) {
+
+        if (!capitulo || !caso)
+            return;
+
+
+        // El título del capítulo se muestra únicamente
+        // en #titulo-capitulo.
+
+        if (this.tituloCapitulo) {
+
+            this.tituloCapitulo.textContent =
+                capitulo.titulo;
+
+        }
+
+
+        // Dentro de #caso solamente aparece
+        // la información del caso actual.
+
+        this.divCaso.innerHTML = `
+
+            <div class="narrativa-caso">
+
+                <h2>
+                    ${caso.titulo}
+                </h2>
+
+                <div class="narrativa-bloque">
+
+                    <h3>ESCENA</h3>
+
+                    <p>
+                        ${caso.escena}
+                    </p>
+
+                </div>
+
+                <div class="narrativa-bloque">
+
+                    <h3>OBJETIVO</h3>
+
+                    <p>
+                        ${caso.objetivo}
+                    </p>
+
+                </div>
+
+                <div class="narrativa-bloque">
+
+                    <h3>CONEXIÓN</h3>
+
+                    <p>
+                        ${caso.conexion}
+                    </p>
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    // ======================================================
+    // ERRORES
     // ======================================================
 
     mostrarErrores(errores) {
@@ -619,14 +520,19 @@ mostrarNarrativa(capitulo, caso) {
         if (!errores.length)
             return;
 
-
         this.divResultado.appendChild(
-
-            Tarjeta.errores(
-                errores
-            )
-
+            Tarjeta.errores(errores)
         );
+
+    }
+
+        aplicarFondoCapitulo(capitulo) {
+
+        if (!capitulo?.background)
+            return;
+
+        document.body.style.backgroundImage =
+            `url("${capitulo.background}")`;
 
     }
 

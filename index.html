@@ -9,7 +9,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-    <title>AI-7</title>
+    <title>NEXUS</title>
 
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/agentes.css">
@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="css/mensajes.css">
     <link rel="stylesheet" href="css/confirmacion.css">
     <link rel="stylesheet" href="css/prologo.css">
+      <link rel="stylesheet" href="css/capitulo.css">
 
 </head>
 
@@ -32,9 +33,7 @@
 
             <h1 id="prologo-titulo"></h1>
 
-
             <div id="prologo-texto"></div>
-
 
             <div class="prologo-controles">
 
@@ -46,7 +45,6 @@
 
                 </div>
 
-
                 <div class="prologo-navegacion">
 
                     <button
@@ -54,7 +52,6 @@
                         type="button">
                         ATRÁS
                     </button>
-
 
                     <button
                         id="btn-prologo"
@@ -79,57 +76,96 @@
 
         <header>
 
+            <!-- ==================================================
+                 IDENTIDAD DEL SISTEMA
+                 ================================================== -->
+
             <div class="logo-ai7">
-                <span>AI</span><strong>-7</strong>
+
+                <span>NEXUS</span>
+
             </div>
 
+
+            <!-- ==================================================
+                 LÍNEA DECORATIVA
+                 ================================================== -->
 
             <div class="linea-header"></div>
 
 
-            <h2>
-                PROTOCOLO DE INVESTIGACIÓN
-            </h2>
+            <!-- ==================================================
+                 TÍTULO DINÁMICO DEL CAPÍTULO
+                 ==================================================
+
+                 El título se carga desde capitulo1.js,
+                 capitulo2.js, etc.
+
+                 Ejemplo:
+
+                 EL PRIMER INCIDENTE
+
+                 ================================================== -->
+
+            <h1 id="titulo-capitulo"></h1>
 
 
-            <p>
-                Analiza las declaraciones.
-                Descubre las contradicciones.
-                Encuentra la verdad.
-            </p>
+            <!-- ==================================================
+                 PROGRESO
+                 ================================================== -->
+
+            <div id="progreso"></div>
 
         </header>
 
 
+        <!-- ==================================================
+             CONTENIDO PRINCIPAL
+             ================================================== -->
+
         <main>
+
+
+            <!-- ==================================================
+                 INFORMACIÓN DEL CASO
+                 ================================================== -->
 
             <section class="panel">
 
-                <div id="progreso"></div>
+                <div id="caso"></div>
 
-                <h2>
-                    Agentes
-                </h2>
+            </section>
 
-                  <div id="caso"></div>
+
+            <!-- ==================================================
+                 AGENTES
+                 ================================================== -->
+
+            <section class="panel">
 
                 <div id="agentes"></div>
 
             </section>
 
 
-           
+            <!-- ==================================================
+                 RESULTADO
+                 ==================================================
 
-            
+                 Se mantiene temporalmente.
+
+                 Más adelante se eliminará cuando terminemos
+                 el desarrollo y las respuestas ya no deban
+                 mostrarse visualmente.
+
+                 ================================================== -->
+
             <section class="panel">
-
-                <h2>
-                    Resultado
-                </h2>
 
                 <div id="resultado"></div>
 
             </section>
+
 
         </main>
 

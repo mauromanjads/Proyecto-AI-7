@@ -25,11 +25,8 @@
  */
 
 import HISTORIA from "./datos/historia.js";
-
 import GeneradorCasos from "./motor/GeneradorCasos.js";
-
 import Solucionador from "./motor/Solucionador.js";
-
 import Tablero from "./ui/Tablero.js";
 
 
@@ -100,14 +97,27 @@ export default class Juego {
 
         }
 
-        
+
+        // =====================================================
+        // Aplicar fondo del capítulo
+        // =====================================================
+
+        this.tablero.aplicarFondoCapitulo(
+            capitulo
+        );
+
+
+        // =====================================================
         // Reiniciar el caso al comenzar
-        // un nuevo capítulo.
+        // un nuevo capítulo
+        // =====================================================
 
         this.casoActual = 0;
 
 
-        // Iniciar primer caso.
+        // =====================================================
+        // Iniciar primer caso
+        // =====================================================
 
         this.iniciarCaso();
 
@@ -148,25 +158,39 @@ export default class Juego {
         // Generar caso lógico
         // =====================================================
 
-       this.casoLogico =
+        this.casoLogico =
             this.generador.crearCaso(
                 cantidadPersonajes
             );
 
+
+        // =====================================================
+        // Obtener narrativa del caso actual
+        // =====================================================
+
         const casoNarrativo =
             this.obtenerCasoNarrativoActual();
+
+
+        // =====================================================
+        // Mostrar progreso
+        // =====================================================
 
         this.tablero.mostrarProgreso(
             this.capituloActual + 1,
             this.casoActual + 1
         );
 
+
+        // =====================================================
+        // Mostrar narrativa
+        // =====================================================
+
         this.tablero.mostrarNarrativa(
             capitulo,
             casoNarrativo
         );
 
-       
 
         // =====================================================
         // Resolver caso
@@ -391,58 +415,59 @@ export default class Juego {
     // FINALIZAR JUEGO
     // ==========================================================
 
-    finalizarJuego() {       
+    finalizarJuego() {
 
     }
+
 
     // ==========================================================
-// VERIFICAR CULPABLE
-// ==========================================================
+    // VERIFICAR CULPABLE
+    // ==========================================================
 
-verificarCulpable(agenteSeleccionado) {
+    verificarCulpable(agenteSeleccionado) {
 
-    if (!this.casoLogico)
-        return;
-
-    const culpable =
-        this.casoLogico.culpable;
+        if (!this.casoLogico)
+            return;
 
 
-    // =====================================================
-    // RESPUESTA CORRECTA
-    // =====================================================
+        const culpable =
+            this.casoLogico.culpable;
 
-    if (
-        agenteSeleccionado.id ===
-        culpable.id
-    ) {       
 
-        // Avanzar al siguiente caso
+        // =====================================================
+        // RESPUESTA CORRECTA
+        // =====================================================
 
-        this.siguienteCaso();
+        if (
+            agenteSeleccionado.id ===
+            culpable.id
+        ) {
 
-        return;
+            // Avanzar al siguiente caso
+
+            this.siguienteCaso();
+
+            return;
+
+        }
+
+
+        // =====================================================
+        // RESPUESTA INCORRECTA
+        // =====================================================
+        //
+        // No aumentamos casoActual.
+        //
+        // El caso narrativo sigue siendo el mismo.
+        //
+        // Se genera un nuevo caso lógico con:
+        // - Nuevas declaraciones
+        // - Nuevo culpable
+        //
+        // =====================================================
+
+        this.iniciarCaso();
 
     }
-
-
-
-    // =====================================================
-    // IMPORTANTE
-    // =====================================================
-    // No aumentamos casoActual.
-    //
-    // El caso narrativo sigue siendo el mismo.
-    //
-    // Se genera un nuevo caso lógico con:
-    // - Nuevas declaraciones
-    // - Nuevo culpable
-    //
-    // =====================================================
-
-    this.iniciarCaso();
-
-}
-
 
 }

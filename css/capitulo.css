@@ -1,0 +1,536 @@
+/* ==========================================================
+   AI-7
+   capitulo.css
+   ----------------------------------------------------------
+   Diseño específico de los capítulos del juego.
+   ----------------------------------------------------------
+   Etapa actual:
+   CAPÍTULO 1
+
+   Responsabilidades:
+
+   - Identidad visual del capítulo
+   - Título del capítulo
+   - Descripción narrativa
+   - Panel del caso
+   - Presentación de agentes
+   - Resultado del caso
+   - Distribución visual del tablero
+
+   Los estilos globales están en:
+
+   styles.css
+   ========================================================== */
+
+
+/* ==========================================================
+   CABECERA DEL CAPÍTULO
+   ========================================================== */
+
+header h1 {
+
+    text-align:
+        center;
+
+    font-size:
+        26px;
+
+    font-weight:
+        600;
+
+    letter-spacing:
+        5px;
+
+    color:
+        #e0f2fe;
+
+    text-transform:
+        uppercase;
+
+    text-shadow:
+        0 0 20px rgba(56, 189, 248, .18);
+}
+
+
+/* ==========================================================
+   ESTRUCTURA DEL CAPÍTULO
+   ========================================================== */
+
+#capitulo {
+
+    width:
+        100%;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        16px;
+}
+
+
+/* ==========================================================
+   IDENTIDAD DEL CAPÍTULO
+   ========================================================== */
+
+.capitulo-identidad {
+
+    text-align:
+        center;
+
+    padding:
+        8px 0 4px;
+}
+
+
+.capitulo-identidad h2 {
+
+    font-size:
+        12px;
+
+    font-weight:
+        600;
+
+    letter-spacing:
+        4px;
+
+    text-transform:
+        uppercase;
+
+    color:
+        #38bdf8;
+}
+
+
+.capitulo-identidad p {
+
+    margin-top:
+        6px;
+
+    color:
+        #64748b;
+
+    font-size:
+        13px;
+
+    letter-spacing:
+        1px;
+}
+
+
+/* ==========================================================
+   PANEL DEL CASO
+   ========================================================== */
+
+#caso {
+
+    line-height:
+        1.7;
+
+    margin-bottom:
+        12px;
+}
+
+
+#caso h3 {
+
+    font-size:
+        22px;
+
+    font-weight:
+        600;
+
+    color:
+        #f8fafc;
+
+    margin-bottom:
+        8px;
+}
+
+
+#caso p {
+
+    color:
+        #94a3b8;
+
+    font-size:
+        14px;
+}
+
+
+/* ==========================================================
+   ZONA DE AGENTES
+   ========================================================== */
+
+#agentes {
+
+    width:
+        100%;
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        stretch;
+
+    gap:
+        16px;
+}
+
+
+/* ==========================================================
+   RESULTADO DEL CASO
+   ========================================================== */
+
+#resultado {
+
+    line-height:
+        1.7;
+}
+
+
+#resultado h2 {
+
+    font-size:
+        24px;
+
+    margin:
+        8px 0;
+
+    color:
+        #f8fafc;
+}
+
+
+#resultado p {
+
+    color:
+        #cbd5e1;
+}
+
+
+/* ==========================================================
+   CONTENEDOR DEL TABLERO
+   ========================================================== */
+
+.tablero-capitulo {
+
+    width:
+        100%;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        16px;
+}
+
+
+/* ==========================================================
+   ESTADO DEL CASO
+   ========================================================== */
+
+.estado-caso {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        12px;
+
+    padding:
+        10px 14px;
+
+    border:
+        1px solid rgba(56, 189, 248, .10);
+
+    border-radius:
+        10px;
+
+    background:
+        rgba(2, 6, 23, .35);
+}
+
+
+/* ==========================================================
+   ETIQUETA DEL CASO
+   ========================================================== */
+
+.estado-caso-label {
+
+    font-size:
+        10px;
+
+    font-weight:
+        600;
+
+    letter-spacing:
+        2px;
+
+    text-transform:
+        uppercase;
+
+    color:
+        #64748b;
+}
+
+
+/* ==========================================================
+   VALOR DEL CASO
+   ========================================================== */
+
+.estado-caso-valor {
+
+    font-size:
+        13px;
+
+    font-weight:
+        600;
+
+    color:
+        #7dd3fc;
+}
+
+
+/* ==========================================================
+   SECCIÓN DE DECLARACIONES
+   ========================================================== */
+
+.declaraciones {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        10px;
+}
+
+
+/* ==========================================================
+   TÍTULO DE DECLARACIONES
+   ========================================================== */
+
+.declaraciones-titulo {
+
+    font-size:
+        11px;
+
+    font-weight:
+        600;
+
+    letter-spacing:
+        2px;
+
+    text-transform:
+        uppercase;
+
+    color:
+        #64748b;
+}
+
+
+/* ==========================================================
+   CONTENEDOR DE ACCIONES
+   ========================================================== */
+
+.acciones-caso {
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    flex-wrap:
+        wrap;
+}
+
+
+/* ==========================================================
+   BOTONES DEL CASO
+   ========================================================== */
+
+.acciones-caso button {
+
+    min-width:
+        120px;
+
+    padding:
+        10px 16px;
+
+    border:
+        1px solid rgba(56, 189, 248, .20);
+
+    border-radius:
+        8px;
+
+    background:
+        rgba(15, 23, 42, .80);
+
+    color:
+        #bae6fd;
+
+    font-family:
+        inherit;
+
+    font-size:
+        12px;
+
+    font-weight:
+        600;
+
+    letter-spacing:
+        1px;
+
+    cursor:
+        pointer;
+
+    transition:
+        background .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease,
+        transform .25s ease;
+}
+
+
+.acciones-caso button:hover {
+
+    background:
+        rgba(14, 116, 144, .25);
+
+    border-color:
+        rgba(56, 189, 248, .55);
+
+    box-shadow:
+        0 0 15px rgba(56, 189, 248, .12);
+
+    transform:
+        translateY(-1px);
+}
+
+
+.acciones-caso button:active {
+
+    transform:
+        translateY(0);
+}
+
+
+/* ==========================================================
+   RESPONSIVE TABLET
+   ========================================================== */
+
+@media (max-width: 900px) {
+
+    #agentes {
+
+        gap:
+            12px;
+    }
+
+}
+
+
+/* ==========================================================
+   RESPONSIVE MÓVIL
+   ========================================================== */
+
+@media (max-width: 600px) {
+
+    header h1 {
+
+        font-size:
+            18px;
+
+        letter-spacing:
+            3px;
+    }
+
+
+    #agentes {
+
+        gap:
+            8px;
+    }
+
+
+    .estado-caso {
+
+        padding:
+            8px 10px;
+    }
+
+
+    .acciones-caso {
+
+        gap:
+            8px;
+    }
+
+
+    .acciones-caso button {
+
+        min-width:
+            100px;
+
+        padding:
+            9px 12px;
+
+        font-size:
+            11px;
+    }
+
+}
+
+
+/* ==========================================================
+   CELULARES MUY PEQUEÑOS
+   ========================================================== */
+
+@media (max-width: 380px) {
+
+    header h1 {
+
+        font-size:
+            16px;
+    }
+
+
+    .acciones-caso {
+
+        flex-direction:
+            column;
+    }
+
+
+    .acciones-caso button {
+
+        width:
+            100%;
+    }
+
+}

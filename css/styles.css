@@ -2,13 +2,26 @@
    AI-7
    styles.css
    ----------------------------------------------------------
-   Estilos generales de la aplicación.
-   Etapa 1 - Identidad visual del Capítulo 1.
+   Estilos globales de la aplicación.
+   Sistema NEXUS
+   ----------------------------------------------------------
+   RESPONSABILIDAD:
+
+   - Reset global
+   - Tipografía
+   - Fondo general
+   - Estructura principal de la aplicación
+   - Elementos compartidos entre capítulos
+   - Animaciones globales
+
+   Los estilos específicos del Capítulo 1 se encuentran en:
+
+   capitulo.css
    ========================================================== */
 
 
 /* ==========================================================
-   RESET
+   RESET GLOBAL
    ========================================================== */
 
 * {
@@ -21,12 +34,15 @@
 html,
 body {
     width: 100%;
-    min-height: 100%;
+    height: 100%;
 }
 
 
 body {
-    font-family: "Segoe UI", Arial, sans-serif;
+    font-family:
+        "Segoe UI",
+        Arial,
+        sans-serif;
 
     color: #f8fafc;
 
@@ -37,80 +53,184 @@ body {
     background:
         radial-gradient(
             circle at 50% -20%,
-            rgba(14, 116, 144, .18),
+            rgba(14, 116, 144, .22),
             transparent 45%
         ),
         radial-gradient(
-            circle at 10% 80%,
-            rgba(30, 64, 175, .10),
+            circle at 100% 100%,
+            rgba(30, 64, 175, .12),
             transparent 40%
         ),
         linear-gradient(
-            160deg,
-            #030712 0%,
-            #07111f 45%,
+            145deg,
+            #020617 0%,
+            #07111f 50%,
             #020617 100%
         );
 }
 
 
 /* ==========================================================
-   HEADER
+   PANTALLA PRINCIPAL DEL JUEGO
    ========================================================== */
 
-header {
+#pantalla-juego {
+
     width: 100%;
 
-    padding:
-        24px 16px 0;
+    min-height: 100vh;
 
-    margin-bottom:
-        24px;
+    display: flex;
 
-    text-align:
-        center;
+    flex-direction: column;
+
+    position: relative;
+
+    overflow: hidden;
 }
 
 
+/* ==========================================================
+   EFECTO AMBIENTAL GLOBAL
+   ========================================================== */
+
+#pantalla-juego::before {
+
+    content: "";
+
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            rgba(56, 189, 248, .015) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(56, 189, 248, .015) 1px,
+            transparent 1px
+        );
+
+    background-size:
+        40px 40px;
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            black,
+            transparent 90%
+        );
+
+    z-index: 0;
+}
+
+
+/* ==========================================================
+   HEADER GLOBAL
+   ========================================================== */
+
+header {
+
+    position: relative;
+
+    z-index: 1;
+
+    width: 100%;
+
+    padding:
+        18px 28px 14px;
+
+    border-bottom:
+        1px solid rgba(56, 189, 248, .12);
+
+    background:
+        rgba(2, 6, 23, .72);
+
+    backdrop-filter:
+        blur(12px);
+}
+
+
+/* ==========================================================
+   IDENTIDAD AI-7
+   ========================================================== */
+
 .logo-ai7 {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    width: 100%;
+
+    font-size: 26px;
+
+    font-weight: 700;
+
+    letter-spacing: 5px;
+
+    text-transform: uppercase;
+
+    color: #e0f2fe;
+}
+
+
+.logo-ai7 span,
+.logo-ai7 strong {
+
+    color: #e0f2fe;
+}
+
+
+/* ==========================================================
+   ESTADO DEL SISTEMA
+   ========================================================== */
+
+.logo-ai7::after {
+
+    content:
+        "●  SISTEMA EN LÍNEA";
+
     font-size:
-        44px;
+        11px;
 
     font-weight:
         600;
 
     letter-spacing:
-        6px;
+        2px;
+
+    color:
+        #4ade80;
 
     text-shadow:
-        0 0 20px rgba(56, 189, 248, .25);
+        0 0 10px rgba(74, 222, 128, .7);
+
+    animation:
+        sistemaPulso 2s ease-in-out infinite;
 }
 
 
-.logo-ai7 span {
-    color:
-        #38bdf8;
-}
-
-
-.logo-ai7 strong {
-    color:
-        #e0f2fe;
-}
-
+/* ==========================================================
+   LÍNEA DEL SISTEMA
+   ========================================================== */
 
 .linea-header {
+
     width:
         100%;
-
-    max-width:
-        700px;
 
     height:
         1px;
 
     margin:
-        14px auto 18px;
+        12px 0 14px;
 
     background:
         linear-gradient(
@@ -123,79 +243,28 @@ header {
 
 
 /* ==========================================================
-   TÍTULO PRINCIPAL
-   ========================================================== */
-
-header h1 {
-    font-size:
-        30px;
-
-    font-weight:
-        600;
-
-    letter-spacing:
-        4px;
-
-    color:
-        #e0f2fe;
-
-    text-transform:
-        uppercase;
-}
-
-
-header h2 {
-    margin-top:
-        12px;
-
-    font-size:
-        14px;
-
-    font-weight:
-        600;
-
-    letter-spacing:
-        3px;
-
-    color:
-        #7dd3fc;
-
-    text-transform:
-        uppercase;
-}
-
-
-header p {
-    max-width:
-        600px;
-
-    margin:
-        10px auto 0;
-
-    color:
-        #94a3b8;
-
-    font-size:
-        14px;
-
-    line-height:
-        1.7;
-}
-
-
-/* ==========================================================
    CONTENIDO PRINCIPAL
    ========================================================== */
 
 main {
+
+    position:
+        relative;
+
+    z-index:
+        1;
+
     width:
         100%;
 
     max-width:
-        1100px;
+        1400px;
 
     margin:
         0 auto;
+
+    flex:
+        1;
 
     display:
         flex;
@@ -204,26 +273,30 @@ main {
         column;
 
     gap:
-        18px;
+        16px;
 
     padding:
-        0 16px 30px;
+        16px 24px 20px;
+
+    overflow:
+        hidden;
 }
 
 
 /* ==========================================================
-   PANELES
+   PANELES GLOBALES
    ========================================================== */
 
 .panel {
+
     width:
         100%;
 
     background:
         linear-gradient(
             145deg,
-            rgba(15, 23, 42, .88),
-            rgba(7, 15, 28, .92)
+            rgba(15, 23, 42, .78),
+            rgba(3, 7, 18, .86)
         );
 
     border:
@@ -233,29 +306,31 @@ main {
         16px;
 
     padding:
-        20px;
+        18px;
 
     box-shadow:
-        0 15px 35px rgba(0, 0, 0, .35),
+        0 15px 40px rgba(0, 0, 0, .35),
         inset 0 1px 0 rgba(255, 255, 255, .025);
 
     backdrop-filter:
-        blur(8px);
+        blur(10px);
 }
 
 
-.panel h2 {
-    margin-bottom:
-        18px;
+/* ==========================================================
+   TÍTULOS GENERALES DE PANELES
+   ========================================================== */
 
-    padding-bottom:
-        12px;
+.panel > h2 {
+
+    margin-bottom:
+        14px;
 
     color:
         #7dd3fc;
 
     font-size:
-        14px;
+        12px;
 
     font-weight:
         600;
@@ -265,136 +340,15 @@ main {
 
     text-transform:
         uppercase;
-
-    border-bottom:
-        1px solid rgba(51, 65, 85, .8);
 }
 
 
 /* ==========================================================
-   CASO
+   PRE
    ========================================================== */
-
-#caso {
-    line-height:
-        1.8;
-}
-
-
-#caso h3 {
-    font-size:
-        24px;
-
-    font-weight:
-        600;
-
-    color:
-        #f8fafc;
-
-    margin-bottom:
-        10px;
-}
-
-
-#caso p {
-    color:
-        #cbd5e1;
-}
-
-
-/* ==========================================================
-   DECLARACIONES
-   ========================================================== */
-
-#declaraciones {
-    display:
-        flex;
-
-    flex-direction:
-        column;
-
-    gap:
-        15px;
-}
-
-
-.declaracion {
-    background:
-        rgba(30, 41, 59, .65);
-
-    padding:
-        18px;
-
-    border-radius:
-        12px;
-
-    border:
-        1px solid rgba(148, 163, 184, .12);
-}
-
-
-.declaracion h3 {
-    color:
-        #38bdf8;
-
-    margin-bottom:
-        10px;
-}
-
-
-.declaracion p {
-    color:
-        #cbd5e1;
-
-    line-height:
-        1.7;
-}
-
-
-.declaracion .verdadero {
-    color:
-        #22c55e;
-
-    font-weight:
-        bold;
-}
-
-
-.declaracion .falso {
-    color:
-        #ef4444;
-
-    font-weight:
-        bold;
-}
-
-
-/* ==========================================================
-   RESULTADO
-   ========================================================== */
-
-#resultado {
-    line-height:
-        1.8;
-}
-
-
-#resultado h2 {
-    font-size:
-        28px;
-
-    margin:
-        10px 0;
-}
-
-
-#resultado p {
-    color:
-        #cbd5e1;
-}
-
 
 pre {
+
     white-space:
         pre-wrap;
 
@@ -402,30 +356,30 @@ pre {
         break-word;
 
     font-size:
-        13px;
+        12px;
 }
 
 
 /* ==========================================================
-   PROGRESO DEL CAPÍTULO
+   PROGRESO GLOBAL
+   ----------------------------------------------------------
+   La estructura pertenece al sistema de progreso.
+   La apariencia visual puede ser adaptada por capítulo.
    ========================================================== */
 
 #progreso {
+
     width:
         100%;
 
     padding:
-        18px;
+        14px 18px;
 
     margin-bottom:
         0;
 
     background:
-        linear-gradient(
-            145deg,
-            rgba(8, 15, 27, .95),
-            rgba(3, 7, 18, .95)
-        );
+        rgba(2, 6, 23, .72);
 
     border:
         1px solid rgba(56, 189, 248, .16);
@@ -433,149 +387,431 @@ pre {
     border-radius:
         14px;
 
-    text-align:
-        center;
-
     box-shadow:
         0 10px 30px rgba(0, 0, 0, .25);
 }
 
 
-.progreso-capitulo {
+/* ==========================================================
+   TEXTO DEL PROGRESO
+   ----------------------------------------------------------
+   Se mantienen por compatibilidad con Tablero.js.
+   ========================================================== */
+
+.progreso-capitulo,
+.progreso-leyenda,
+.progreso-caso {
+
+    display:
+        none;
+}
+
+
+/* ==========================================================
+   BARRA ORIGINAL
+   ----------------------------------------------------------
+   Se conserva por compatibilidad.
+   ========================================================== */
+
+.progreso-barra,
+.progreso-avance {
+
+    display:
+        none;
+}
+
+
+/* ==========================================================
+   NODOS DEL PROGRESO
+   ========================================================== */
+
+.progreso-nodos {
+
+    width:
+        100%;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        clamp(8px, 2vw, 22px);
+}
+
+
+.progreso-nodo-contenedor {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    gap:
+        6px;
+
+    flex:
+        0 1 auto;
+}
+
+
+.progreso-nodo {
+
+    width:
+        clamp(20px, 3vw, 34px);
+
+    height:
+        clamp(20px, 3vw, 34px);
+
+    border-radius:
+        50%;
+
+    background:
+        #1e293b;
+
+    border:
+        2px solid #475569;
+
+    box-shadow:
+        0 0 0 rgba(56, 189, 248, 0);
+
+    transition:
+        background .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease,
+        transform .3s ease;
+
+    position:
+        relative;
+}
+
+
+.progreso-nodo::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    inset:
+        5px;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(255, 255, 255, .04);
+}
+
+
+/* ==========================================================
+   NODO ACTIVO
+   ========================================================== */
+
+.progreso-nodo.activo {
+
+    background:
+        #facc15;
+
+    border-color:
+        #fde047;
+
+    box-shadow:
+        0 0 10px rgba(250, 204, 21, .7),
+        0 0 25px rgba(250, 204, 21, .35);
+
+    animation:
+        nodoPulso 1.8s ease-in-out infinite;
+}
+
+
+/* ==========================================================
+   NODO COMPLETADO
+   ========================================================== */
+
+.progreso-nodo.completado {
+
+    background:
+        #22c55e;
+
+    border-color:
+        #4ade80;
+
+    box-shadow:
+        0 0 12px rgba(34, 197, 94, .5);
+}
+
+
+/* ==========================================================
+   NÚMERO DEL NODO
+   ========================================================== */
+
+.progreso-nodo-numero {
+
     font-size:
-        11px;
+        10px;
 
     font-weight:
         700;
 
-    letter-spacing:
-        4px;
+    color:
+        #64748b;
+}
+
+
+.progreso-nodo-contenedor.activo
+.progreso-nodo-numero {
 
     color:
-        #38bdf8;
-
-    margin-bottom:
-        8px;
+        #facc15;
 }
 
 
-.progreso-leyenda {
-    font-size:
-        16px;
+.progreso-nodo-contenedor.completado
+.progreso-nodo-numero {
 
     color:
-        #94a3b8;
-
-    margin-bottom:
-        12px;
-}
-
-
-.progreso-caso {
-    font-size:
-        20px;
-
-    font-weight:
-        600;
-
-    color:
-        #f8fafc;
-
-    margin-bottom:
-        14px;
-}
-
-
-.progreso-barra {
-    width:
-        100%;
-
-    height:
-        7px;
-
-    background:
-        #020617;
-
-    border-radius:
-        10px;
-
-    overflow:
-        hidden;
-
-    border:
-        1px solid #1e293b;
-}
-
-
-.progreso-avance {
-    height:
-        100%;
-
-    background:
-        linear-gradient(
-            90deg,
-            #0369a1,
-            #38bdf8
-        );
-
-    border-radius:
-        10px;
-
-    transition:
-        width .5s ease;
-
-    box-shadow:
-        0 0 14px rgba(56, 189, 248, .55);
+        #4ade80;
 }
 
 
 /* ==========================================================
-   TABLET
+   ANIMACIONES GLOBALES
    ========================================================== */
 
-@media (min-width: 600px) {
+@keyframes nodoPulso {
+
+    0%,
+    100% {
+
+        transform:
+            scale(1);
+
+        box-shadow:
+            0 0 10px rgba(250, 204, 21, .7),
+            0 0 25px rgba(250, 204, 21, .35);
+    }
+
+    50% {
+
+        transform:
+            scale(1.12);
+
+        box-shadow:
+            0 0 18px rgba(250, 204, 21, .9),
+            0 0 38px rgba(250, 204, 21, .45);
+    }
+}
+
+
+@keyframes sistemaPulso {
+
+    0%,
+    100% {
+
+        opacity:
+            1;
+    }
+
+    50% {
+
+        opacity:
+            .45;
+    }
+}
+
+
+/* ==========================================================
+   RESPONSIVE GLOBAL
+   ========================================================== */
+
+@media (max-width: 900px) {
 
     header {
+
         padding:
-            28px 24px 0;
+            16px 20px 12px;
     }
 
 
     main {
+
         padding:
-            0 24px 40px;
+            12px 16px 16px;
     }
 
 
     .panel {
+
         padding:
-            24px;
+            14px;
     }
 
 }
 
 
 /* ==========================================================
-   ESCRITORIO
+   MÓVIL
    ========================================================== */
 
-@media (min-width: 1000px) {
+@media (max-width: 600px) {
+
+    #pantalla-juego {
+
+        overflow:
+            auto;
+    }
+
 
     header {
+
         padding:
-            32px 40px 0;
+            14px 12px 10px;
+    }
+
+
+    .logo-ai7 {
+
+        font-size:
+            20px;
+
+        letter-spacing:
+            3px;
+    }
+
+
+    .logo-ai7::after {
+
+        font-size:
+            8px;
+
+        letter-spacing:
+            1px;
     }
 
 
     main {
+
         padding:
-            0 40px 50px;
+            10px;
+
+        gap:
+            10px;
+    }
+
+
+    #progreso {
+
+        padding:
+            10px;
+    }
+
+
+    .progreso-nodos {
+
+        gap:
+            5px;
+    }
+
+
+    .progreso-nodo {
+
+        width:
+            22px;
+
+        height:
+            22px;
+    }
+
+
+    .progreso-nodo-numero {
+
+        font-size:
+            8px;
     }
 
 
     .panel {
+
         padding:
-            28px;
+            10px;
+
+        border-radius:
+            12px;
+    }
+
+}
+
+
+/* ==========================================================
+   CELULARES MUY PEQUEÑOS
+   ========================================================== */
+
+@media (max-width: 380px) {
+
+    .logo-ai7 {
+
+        font-size:
+            17px;
+    }
+
+
+    .logo-ai7::after {
+
+        font-size:
+            7px;
+    }
+
+
+    .progreso-nodos {
+
+        gap:
+            3px;
+    }
+
+
+    .progreso-nodo {
+
+        width:
+            19px;
+
+        height:
+            19px;
+
+        border-width:
+            1px;
+    }
+
+
+    .progreso-nodo-numero {
+
+        font-size:
+            7px;
+    }
+
+}
+
+
+/* ==========================================================
+   REDUCIR ANIMACIONES
+   ========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .progreso-nodo.activo,
+    .logo-ai7::after {
+
+        animation:
+            none;
     }
 
 }
