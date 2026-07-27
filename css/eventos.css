@@ -34,8 +34,9 @@
 #registro-eventos,
 #analisis-nexus {
     position: relative;
-    width: 250px;
-    flex: 0 0 250px;
+    width: 180px;
+    height: 180px;
+    flex: 0 0 180px;
     box-sizing: border-box;
 }
 
@@ -45,45 +46,39 @@
    ========================================================== */
 
 .registro-eventos-toggle {
-    --op-a: .20;
-    --op-b: .08;
-    --border-op: .45;
-    --shadow-op: .08;
-    --bg-1: 10, 30, 43;
-    --bg-2: 3, 12, 20;
-
     position: relative;
 
-    width: 250px;
-    height: 100px;
+    width: 180px;
+    height: 180px;
 
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 
-    gap: 14px;
-    padding: 12px 20px;
+    gap: 10px;
+    padding: 20px;
 
     box-sizing: border-box;
 
-    border: 1px solid rgba(56, 189, 248, var(--border-op));
-    border-radius: 50px;
+    border: 1px solid rgba(56, 189, 248, .55);
+    border-radius: 50%;
 
     background:
         radial-gradient(
-            circle at 18% 50%,
-            rgba(34, 211, 238, var(--op-a)),
-            transparent 46%
+            circle at 30% 30%,
+            rgba(34, 211, 238, .20),
+            transparent 48%
         ),
         radial-gradient(
-            circle at 82% 50%,
-            rgba(56, 189, 248, var(--op-b)),
-            transparent 48%
+            circle at 70% 70%,
+            rgba(56, 189, 248, .10),
+            transparent 52%
         ),
         linear-gradient(
             145deg,
-            rgba(var(--bg-1), .98),
-            rgba(var(--bg-2), .99)
+            rgba(10, 30, 43, .98),
+            rgba(3, 12, 20, .99)
         );
 
     color: #67e8f9;
@@ -99,7 +94,7 @@
         inset 0 1px 0 rgba(255, 255, 255, .07),
         inset 0 -1px 0 rgba(0, 0, 0, .35),
         0 8px 22px rgba(0, 0, 0, .24),
-        0 0 18px rgba(56, 189, 248, var(--shadow-op));
+        0 0 18px rgba(56, 189, 248, .10);
 
     transition:
         border-color .25s ease,
@@ -107,6 +102,7 @@
         transform .25s ease,
         background .25s ease;
 }
+
 
 
 /* ==========================================================
@@ -118,10 +114,10 @@
 
     position: absolute;
 
-    top: 0;
-    left: 12%;
+    top: 10%;
+    left: 18%;
 
-    width: 76%;
+    width: 64%;
     height: 2px;
 
     border-radius: 50%;
@@ -146,19 +142,14 @@
    ========================================================== */
 
 .registro-eventos-toggle:hover {
-    --op-a: .25;
-    --op-b: .12;
-    --border-op: .80;
-    --shadow-op: .18;
-    --bg-1: 10, 34, 48;
-    --bg-2: 3, 14, 23;
+    transform: translateY(-3px);
 
-    transform: translateY(-2px);
+    border-color: rgba(56, 189, 248, .85);
 
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, .08),
         0 10px 28px rgba(0, 0, 0, .30),
-        0 0 28px rgba(56, 189, 248, var(--shadow-op));
+        0 0 28px rgba(56, 189, 248, .18);
 }
 
 
@@ -176,8 +167,8 @@
    ========================================================== */
 
 .registro-eventos-icono {
-    width: 64px;
-    height: 64px;
+    width: 52px;
+    height: 52px;
 
     flex-shrink: 0;
 
@@ -189,7 +180,7 @@
 
     color: #67e8f9;
 
-    font-size: 42px;
+    font-size: 32px;
     line-height: 1;
 
     background:
@@ -219,7 +210,7 @@
    ========================================================== */
 
 .registro-eventos-toggle:hover .registro-eventos-icono {
-    transform: scale(1.08);
+    transform: scale(1.06);
 
     box-shadow:
         inset 0 0 16px rgba(56, 189, 248, .14),
@@ -234,15 +225,17 @@
 .registro-eventos-toggle h3 {
     margin: 0;
 
+    max-width: 80%;
+
     color: #a5f3fc;
 
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 700;
 
-    letter-spacing: 1.6px;
+    letter-spacing: 1.3px;
     line-height: 1.35;
 
-    text-align: left;
+    text-align: center;
     text-transform: uppercase;
 
     text-shadow:
@@ -251,59 +244,11 @@
 
 
 /* ==========================================================
-   FLECHA
-   ----------------------------------------------------------
-   La flecha ya no rota ni indica un panel abierto.
-   Se mantiene únicamente como indicador visual de que
-   el botón abre contenido adicional.
+   OCULTAR COMPLETAMENTE LA FLECHA
    ========================================================== */
 
 .registro-eventos-flecha {
-    position: absolute;
-
-    right: 18px;
-    bottom: 12px;
-
-    width: 24px;
-    height: 24px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    color: #67e8f9;
-
-    font-size: 22px;
-    font-weight: 400;
-    line-height: 1;
-
-    border-radius: 50%;
-
-    background:
-        rgba(56, 189, 248, .10);
-
-    border:
-        1px solid rgba(103, 232, 249, .25);
-
-    text-shadow:
-        0 0 10px rgba(34, 211, 238, .55);
-
-    transition:
-        background .25s ease,
-        box-shadow .25s ease;
-}
-
-
-/* ==========================================================
-   HOVER DE LA FLECHA
-   ========================================================== */
-
-.registro-eventos-toggle:hover .registro-eventos-flecha {
-    background:
-        rgba(56, 189, 248, .18);
-
-    box-shadow:
-        0 0 12px rgba(56, 189, 248, .18);
+    display: none !important;
 }
 
 
@@ -319,24 +264,28 @@
 
     #registro-eventos,
     #analisis-nexus {
-        width: 220px;
-        flex-basis: 220px;
+        width: 150px;
+        height: 150px;
+        flex: 0 0 150px;
     }
 
     .registro-eventos-toggle {
-        width: 220px;
-        height: 90px;
-        border-radius: 45px;
+        width: 150px;
+        height: 150px;
+        padding: 16px;
+        gap: 8px;
+        border-radius: 50%;
     }
 
     .registro-eventos-icono {
-        width: 56px;
-        height: 56px;
-        font-size: 36px;
+        width: 44px;
+        height: 44px;
+        font-size: 28px;
     }
 
     .registro-eventos-toggle h3 {
-        font-size: 12px;
+        font-size: 10px;
+        letter-spacing: 1px;
     }
 }
 
@@ -345,7 +294,7 @@
    CELULARES PEQUEÑOS
    ========================================================== */
 
-@media (max-width: 380px) {
+@media (max-width: 450px) {
 
     #menus-narrativos {
         gap: 6px;
@@ -353,39 +302,28 @@
 
     #registro-eventos,
     #analisis-nexus {
-        width: 175px;
-        flex-basis: 175px;
+        width: 120px;
+        height: 120px;
+        flex: 0 0 120px;
     }
 
     .registro-eventos-toggle {
-        width: 175px;
-        height: 78px;
-
-        border-radius: 39px;
-
-        gap: 8px;
-        padding: 8px 10px;
+        width: 120px;
+        height: 120px;
+        padding: 12px;
+        gap: 6px;
+        border-radius: 50%;
     }
 
     .registro-eventos-icono {
-        width: 46px;
-        height: 46px;
-        font-size: 30px;
+        width: 36px;
+        height: 36px;
+        font-size: 22px;
     }
 
     .registro-eventos-toggle h3 {
-        font-size: 10px;
-        letter-spacing: 1px;
-    }
-
-    .registro-eventos-flecha {
-        right: 10px;
-        bottom: 8px;
-
-        width: 20px;
-        height: 20px;
-
-        font-size: 17px;
+        font-size: 8px;
+        letter-spacing: .8px;
     }
 }
 
@@ -397,8 +335,7 @@
 @media (prefers-reduced-motion: reduce) {
 
     .registro-eventos-toggle,
-    .registro-eventos-icono,
-    .registro-eventos-flecha {
+    .registro-eventos-icono {
         transition: none;
     }
 

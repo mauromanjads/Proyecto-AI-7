@@ -1,6 +1,6 @@
 /**
  * ==========================================================
- * AI-7
+ * NEXUS
  * Archivo: prologo.js
  * ----------------------------------------------------------
  * Narrativa del prólogo.
@@ -24,7 +24,7 @@ const PROLOGO = {
 
             texto: `
                 Has sido convocado a una instalación
-                de investigación conocida como AI-7.
+                de investigación conocida como NEXUS.
 
                 No conoces el propósito de la instalación
                 ni el motivo exacto de tu convocatoria.
@@ -44,7 +44,7 @@ const PROLOGO = {
                 el sistema central se activa.
 
                 Siete unidades de inteligencia artificial
-                aparecen registradas dentro de AI-7.
+                aparecen registradas dentro de NEXUS.
                 
                 ATLAS.  NOVA. ORION.ECHO.
                 TITAN.VEGA.ZERO.
@@ -63,7 +63,7 @@ const PROLOGO = {
                 con un incidente ocurrido dentro
                 de las instalaciones.
 
-                AI-7 no puede determinar quién es
+                NEXUS no puede determinar quién es
                 el responsable.
             `
         },
@@ -91,7 +91,7 @@ const PROLOGO = {
             titulo: "EL INVESTIGADOR",
 
             texto: `
-                AI-7 requiere un investigador externo.
+                NEXUS requiere un investigador externo.
 
                 Tu misión será analizar las declaraciones,
                 consultar la información disponible

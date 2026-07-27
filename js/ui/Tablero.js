@@ -195,7 +195,7 @@ export default class Tablero {
             this.tituloCapitulo.textContent = capitulo.titulo;
         }
 
-        this.divCaso.innerHTML = `<div class="narrativa-bloque archivo-mision"><h3>ARCHIVO DE MISIÓN</h3><p>${capitulo.descripcion}</p></div><div class="narrativa-bloque evento-detectado"><h3>EVENTO DETECTADO</h3><p>${caso.titulo}</p></div>`;
+        this.divCaso.innerHTML = `<div class="narrativa-bloque archivo-mision"><h3>CAPÍTULO ${this.juego.capituloActual + 1}</h3><p>${capitulo.descripcion}</p></div>`;
 
         const menusNarrativos = document.createElement("div");
         menusNarrativos.id = "menus-narrativos";
@@ -234,8 +234,8 @@ export default class Tablero {
             evento.stopPropagation();
 
             this.abrirModalNarrativo(
-                "ANÁLISIS NEXUS",
-                "ANÁLISIS NEXUS",
+                "ANÁLISIS NEXUS...",
+                "Algoritmo procesado",
                 caso.conexion
             );
         });

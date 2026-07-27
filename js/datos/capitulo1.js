@@ -78,7 +78,7 @@ const CAPITULO_1 = {
             titulo: "EL REGISTRO ALTERADO",
 
             escena: `
-                Poco después del primer incidente,NEXUS detecta una nueva anomalía.
+                Poco después del primer incidente, NEXUS detecta una nueva anomalía.
 
                 El registro de seguridad que documentaba el acceso al laboratorio ha sido modificado.
 
@@ -110,7 +110,7 @@ const CAPITULO_1 = {
             escena: `
                 El sistema de seguridad vuelve a presentar una anomalía.
 
-                Durante varios minutos,las cámaras de una zona de NEXUS dejaron de funcionar.
+                Durante varios minutos, las cámaras de una zona de NEXUS dejaron de funcionar.
 
                 Mientras el sistema estaba fuera de servicio,ocurrió un nuevo incidente.
 
