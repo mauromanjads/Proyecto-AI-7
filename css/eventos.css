@@ -3,6 +3,7 @@
    eventos.css
    ----------------------------------------------------------
    Botones narrativos:
+   - Capítulo
    - Registro de Eventos
    - Análisis Nexus
    ----------------------------------------------------------
@@ -11,7 +12,7 @@
 
 
 /* ==========================================================
-   CONTENEDOR DE LOS DOS BOTONES
+   CONTENEDOR DE LOS TRES BOTONES
    ========================================================== */
 
 #menus-narrativos {
@@ -31,6 +32,7 @@
    CONTENEDOR INDIVIDUAL
    ========================================================== */
 
+#capitulo-narrativo,
 #registro-eventos,
 #analisis-nexus {
     position: relative;
@@ -38,6 +40,51 @@
     height: 180px;
     flex: 0 0 180px;
     box-sizing: border-box;
+}
+
+
+/* ==========================================================
+   ACTIVACIÓN INICIAL DE LOS MÓDULOS
+   ========================================================== */
+
+#capitulo-narrativo,
+#registro-eventos,
+#analisis-nexus {
+    animation: activarModulo .38s ease-out both;
+}
+
+#capitulo-narrativo {
+    animation-delay: 0s;
+}
+
+#registro-eventos {
+    animation-delay: .08s;
+}
+
+#analisis-nexus {
+    animation-delay: .16s;
+}
+
+
+@keyframes activarModulo {
+
+    0% {
+        opacity: 0;
+        transform: scale(.94);
+        filter: brightness(1.8);
+    }
+
+    55% {
+        opacity: 1;
+        transform: scale(1.015);
+        filter: brightness(1.25);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+        filter: brightness(1);
+    }
 }
 
 
@@ -60,6 +107,8 @@
     padding: 20px;
 
     box-sizing: border-box;
+
+    overflow: hidden;
 
     border: 1px solid rgba(56, 189, 248, .55);
     border-radius: 50%;
@@ -104,6 +153,79 @@
 }
 
 
+/* ==========================================================
+   LÍNEA DE ESCANEO
+   ----------------------------------------------------------
+   Se activa una sola vez cuando aparece cada módulo.
+   ========================================================== */
+
+.registro-eventos-toggle::after {
+    content: "";
+
+    position: absolute;
+
+    top: -20%;
+    left: 8%;
+
+    width: 84%;
+    height: 2px;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(103, 232, 249, .95),
+            transparent
+        );
+
+    box-shadow:
+        0 0 8px rgba(34, 211, 238, .80),
+        0 0 18px rgba(34, 211, 238, .35);
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    animation: lineaEscaneo .65s ease-out both;
+}
+
+
+#capitulo-narrativo .registro-eventos-toggle::after {
+    animation-delay: .05s;
+}
+
+#registro-eventos .registro-eventos-toggle::after {
+    animation-delay: .13s;
+}
+
+#analisis-nexus .registro-eventos-toggle::after {
+    animation-delay: .21s;
+}
+
+
+@keyframes lineaEscaneo {
+
+    0% {
+        top: -10%;
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    85% {
+        opacity: .85;
+    }
+
+    100% {
+        top: 110%;
+        opacity: 0;
+    }
+}
+
 
 /* ==========================================================
    BRILLO SUPERIOR DEL BOTÓN
@@ -142,14 +264,32 @@
    ========================================================== */
 
 .registro-eventos-toggle:hover {
-    transform: translateY(-3px);
+    transform: translateY(-4px) scale(1.015);
 
-    border-color: rgba(56, 189, 248, .85);
+    border-color: rgba(103, 232, 249, .90);
+
+    background:
+        radial-gradient(
+            circle at 30% 30%,
+            rgba(34, 211, 238, .26),
+            transparent 48%
+        ),
+        radial-gradient(
+            circle at 70% 70%,
+            rgba(56, 189, 248, .14),
+            transparent 52%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(10, 35, 50, .98),
+            rgba(3, 12, 20, .99)
+        );
 
     box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, .08),
-        0 10px 28px rgba(0, 0, 0, .30),
-        0 0 28px rgba(56, 189, 248, .18);
+        inset 0 1px 0 rgba(255, 255, 255, .10),
+        0 12px 30px rgba(0, 0, 0, .32),
+        0 0 24px rgba(56, 189, 248, .22),
+        0 0 48px rgba(56, 189, 248, .08);
 }
 
 
@@ -158,7 +298,7 @@
    ========================================================== */
 
 .registro-eventos-toggle:active {
-    transform: translateY(0);
+    transform: translateY(-1px) scale(.985);
 }
 
 
@@ -201,7 +341,8 @@
 
     transition:
         transform .25s ease,
-        box-shadow .25s ease;
+        box-shadow .25s ease,
+        text-shadow .25s ease;
 }
 
 
@@ -210,11 +351,14 @@
    ========================================================== */
 
 .registro-eventos-toggle:hover .registro-eventos-icono {
-    transform: scale(1.06);
+    transform: scale(1.10);
 
     box-shadow:
-        inset 0 0 16px rgba(56, 189, 248, .14),
-        0 0 28px rgba(56, 189, 248, .25);
+        inset 0 0 18px rgba(56, 189, 248, .18),
+        0 0 28px rgba(56, 189, 248, .30);
+
+    text-shadow:
+        0 0 18px rgba(103, 232, 249, .95);
 }
 
 
@@ -240,6 +384,59 @@
 
     text-shadow:
         0 0 12px rgba(34, 211, 238, .25);
+
+    transition:
+        text-shadow .25s ease;
+}
+
+
+.registro-eventos-toggle:hover h3 {
+    text-shadow:
+        0 0 16px rgba(34, 211, 238, .55);
+}
+
+
+/* ==========================================================
+   EFECTO ESPECIAL NEXUS
+   ----------------------------------------------------------
+   Al pasar el mouse, el módulo NEXUS genera una onda
+   luminosa que nace desde el icono.
+   ========================================================== */
+
+#analisis-nexus .registro-eventos-icono::after {
+    content: "";
+
+    position: absolute;
+
+    width: 52px;
+    height: 52px;
+
+    border: 1px solid rgba(103, 232, 249, .55);
+    border-radius: 50%;
+
+    opacity: 0;
+    transform: scale(.65);
+
+    pointer-events: none;
+}
+
+
+#analisis-nexus .registro-eventos-toggle:hover .registro-eventos-icono::after {
+    animation: nexusOnda .7s ease-out;
+}
+
+
+@keyframes nexusOnda {
+
+    0% {
+        opacity: .75;
+        transform: scale(.65);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1.75);
+    }
 }
 
 
@@ -262,6 +459,7 @@
         gap: 10px;
     }
 
+    #capitulo-narrativo,
     #registro-eventos,
     #analisis-nexus {
         width: 150px;
@@ -300,6 +498,7 @@
         gap: 6px;
     }
 
+    #capitulo-narrativo,
     #registro-eventos,
     #analisis-nexus {
         width: 120px;
@@ -334,8 +533,14 @@
 
 @media (prefers-reduced-motion: reduce) {
 
+    #capitulo-narrativo,
+    #registro-eventos,
+    #analisis-nexus,
     .registro-eventos-toggle,
-    .registro-eventos-icono {
+    .registro-eventos-icono,
+    .registro-eventos-toggle::after,
+    #analisis-nexus .registro-eventos-icono::after {
+        animation: none;
         transition: none;
     }
 
