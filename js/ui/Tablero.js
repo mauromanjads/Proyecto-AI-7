@@ -1,980 +1,313 @@
-/**
- * ==========================================================
- * AI-7
- * Archivo: Tablero.js
- * ----------------------------------------------------------
- * Controlador de la interfaz gráfica.
- * ==========================================================
- */
-
 import Tarjeta from "./Tarjeta.js";
 import Modal from "./Modal.js";
 import ModalConfirmacion from "./ModalConfirmacion.js";
 import Mensajes from "./Mensajes.js";
 
 export default class Tablero {
-
     constructor(juego) {
-
-        this.juego =
-            juego;
-
-        this.divProgreso =
-            document.getElementById("progreso");
-
-        this.tituloCapitulo =
-            document.getElementById("titulo-capitulo");
-
-        this.divAgentes =
-            document.getElementById("agentes");
-
-        this.divCaso =
-            document.getElementById("caso");
-
-        this.divDeclaraciones =
-            document.getElementById("declaraciones");
-
-        this.divResultado =
-            document.getElementById("resultado");
-
-        this.agenteSeleccionado =
-            null;
+        this.juego = juego;
+        this.divProgreso = document.getElementById("progreso");
+        this.tituloCapitulo = document.getElementById("titulo-capitulo");
+        this.divAgentes = document.getElementById("agentes");
+        this.divCaso = document.getElementById("caso");
+        this.divDeclaraciones = document.getElementById("declaraciones");
+        this.divResultado = document.getElementById("resultado");
+        this.agenteSeleccionado = null;
     }
-
-
-    // ======================================================
-    // LIMPIAR
-    // ======================================================
 
     limpiar() {
-
-        this.divAgentes.innerHTML =
-            "";
-
-        this.divCaso.innerHTML =
-            "";
-
-        if (this.divDeclaraciones) {
-
-            this.divDeclaraciones.innerHTML =
-                "";
-
-        }
-
-        this.divResultado.innerHTML =
-            "";
-
-        this.agenteSeleccionado =
-            null;
-
+        this.divAgentes.innerHTML = "";
+        this.divCaso.innerHTML = "";
+        if (this.divDeclaraciones) this.divDeclaraciones.innerHTML = "";
+        this.divResultado.innerHTML = "";
+        this.agenteSeleccionado = null;
         this.cerrarMenusNarrativos();
-
         this.cerrarModal();
-
         this.cerrarModalConfirmacion();
+        this.cerrarModalNarrativo();
     }
 
+    mostrarAgentes(agentes, declaraciones) {
+        this.divAgentes.innerHTML = "";
 
-    // ======================================================
-    // MOSTRAR AGENTES
-    // ======================================================
+        agentes.forEach(agente => {
+            const declaracionesAgente = declaraciones.filter(
+                declaracion => declaracion.personaje.nombre === agente.nombre
+            );
 
-    mostrarAgentes(
-        agentes,
-        declaraciones
-    ) {
+            const tarjeta = Tarjeta.agente(agente);
+            const botonMensajes = tarjeta.querySelector(".btn-mensajes");
+            const botonInformacion = tarjeta.querySelector(".btn-informacion");
 
-        this.divAgentes.innerHTML =
-            "";
-
-        agentes.forEach(
-            agente => {
-
-                const declaracionesAgente =
-                    declaraciones.filter(
-                        declaracion =>
-                            declaracion.personaje.nombre ===
-                            agente.nombre
-                    );
-
-
-                const tarjeta =
-                    Tarjeta.agente(
-                        agente
-                    );
-
-
-                // ==========================================
-                // BOTÓN DE DECLARACIONES
-                // ==========================================
-
-                const botonMensajes =
-                    tarjeta.querySelector(
-                        ".btn-mensajes"
-                    );
-
-
-                if (botonMensajes) {
-
-                    botonMensajes.addEventListener(
-                        "click",
-                        evento => {
-
-                            evento.stopPropagation();
-
-                            new Mensajes().mostrar(
-                                agente,
-                                declaracionesAgente
-                            );
-
-                        }
-                    );
-
-                }
-
-
-                // ==========================================
-                // BOTÓN DE INFORMACIÓN
-                // ==========================================
-
-                const botonInformacion =
-                    tarjeta.querySelector(
-                        ".btn-informacion"
-                    );
-
-
-                if (botonInformacion) {
-
-                    botonInformacion.addEventListener(
-                        "click",
-                        evento => {
-
-                            evento.stopPropagation();
-
-                            this.abrirModal(
-                                agente,
-                                declaracionesAgente
-                            );
-
-                        }
-                    );
-
-                }
-
-
-                // ==========================================
-                // SELECCIONAR POSIBLE CULPABLE
-                // ==========================================
-
-                tarjeta.addEventListener(
-                    "click",
-                    () => {
-
-                        this.abrirModalConfirmacion(
-                            agente
-                        );
-
-                    }
-                );
-
-
-                this.divAgentes.appendChild(
-                    tarjeta
-                );
-
+            if (botonMensajes) {
+                botonMensajes.addEventListener("click", evento => {
+                    evento.stopPropagation();
+                    new Mensajes().mostrar(agente, declaracionesAgente);
+                });
             }
-        );
 
+            if (botonInformacion) {
+                botonInformacion.addEventListener("click", evento => {
+                    evento.stopPropagation();
+                    this.abrirModal(agente, declaracionesAgente);
+                });
+            }
+
+            tarjeta.addEventListener("click", () => {
+                this.abrirModalConfirmacion(agente);
+            });
+
+            this.divAgentes.appendChild(tarjeta);
+        });
     }
 
-
-    // ======================================================
-    // MODAL DE INFORMACIÓN
-    // ======================================================
-
-    abrirModal(
-        agente,
-        declaraciones
-    ) {
-
+    abrirModal(agente, declaraciones) {
         this.cerrarModal();
 
         document.body.insertAdjacentHTML(
             "beforeend",
-            Modal.agente(
-                agente,
-                declaraciones
-            )
+            Modal.agente(agente, declaraciones)
         );
 
+        const modal = document.querySelector(".modal-overlay");
 
-        const modal =
-            document.querySelector(
-                ".modal-overlay"
-            );
+        if (!modal) return;
 
-
-        if (!modal)
-            return;
-
-
-        const botonCerrar =
-            modal.querySelector(
-                ".modal-cerrar"
-            );
-
-
-        const botonCerrarGrande =
-            modal.querySelector(
-                ".modal-cerrar-grande"
-            );
-
+        const cerrar = () => this.cerrarModal();
+        const botonCerrar = modal.querySelector(".modal-cerrar");
+        const botonCerrarGrande = modal.querySelector(".modal-cerrar-grande");
 
         if (botonCerrar) {
-
-            botonCerrar.addEventListener(
-                "click",
-                () =>
-                    this.cerrarModal()
-            );
-
+            botonCerrar.addEventListener("click", cerrar);
         }
-
 
         if (botonCerrarGrande) {
-
-            botonCerrarGrande.addEventListener(
-                "click",
-                () =>
-                    this.cerrarModal()
-            );
-
+            botonCerrarGrande.addEventListener("click", cerrar);
         }
-
     }
-
 
     cerrarModal() {
-
-        const modal =
-            document.querySelector(
-                ".modal-overlay"
-            );
-
-
-        if (modal) {
-
-            modal.remove();
-
-        }
-
+        document.querySelector(".modal-overlay")?.remove();
     }
 
-
-    // ======================================================
-    // MODAL DE CONFIRMACIÓN
-    // ======================================================
-
-    abrirModalConfirmacion(
-        agente
-    ) {
-
+    abrirModalConfirmacion(agente) {
         this.cerrarModalConfirmacion();
 
-        this.agenteSeleccionado =
-            agente;
+        this.agenteSeleccionado = agente;
 
-
-        const modal =
-            ModalConfirmacion.mostrar(
-                agente
-            );
-
-
-        const botonCerrar =
-            modal.querySelector(
-                ".modal-confirmacion-cerrar"
-            );
-
-
-        const botonCancelar =
-            modal.querySelector(
-                ".btn-cancelar-culpable"
-            );
-
-
-        const botonConfirmar =
-            modal.querySelector(
-                ".btn-confirmar-culpable"
-            );
-
+        const modal = ModalConfirmacion.mostrar(agente);
+        const cancelar = () => this.cancelarSeleccionCulpable();
+        const botonCerrar = modal.querySelector(".modal-confirmacion-cerrar");
+        const botonCancelar = modal.querySelector(".btn-cancelar-culpable");
+        const botonConfirmar = modal.querySelector(".btn-confirmar-culpable");
 
         if (botonCerrar) {
-
-            botonCerrar.addEventListener(
-                "click",
-                () =>
-                    this.cancelarSeleccionCulpable()
-            );
-
+            botonCerrar.addEventListener("click", cancelar);
         }
-
 
         if (botonCancelar) {
-
-            botonCancelar.addEventListener(
-                "click",
-                () =>
-                    this.cancelarSeleccionCulpable()
-            );
-
+            botonCancelar.addEventListener("click", cancelar);
         }
-
 
         if (botonConfirmar) {
-
             botonConfirmar.addEventListener(
                 "click",
-                () =>
-                    this.confirmarSeleccionCulpable()
+                () => this.confirmarSeleccionCulpable()
             );
-
         }
-
     }
-
 
     cancelarSeleccionCulpable() {
-
-        this.agenteSeleccionado =
-            null;
-
+        this.agenteSeleccionado = null;
         this.cerrarModalConfirmacion();
-
     }
-
 
     confirmarSeleccionCulpable() {
+        if (!this.agenteSeleccionado) return;
 
-        if (!this.agenteSeleccionado)
-            return;
+        const agente = this.agenteSeleccionado;
 
-
-        const agente =
-            this.agenteSeleccionado;
-
-
-        this.agenteSeleccionado =
-            null;
-
-
+        this.agenteSeleccionado = null;
         this.cerrarModalConfirmacion();
 
-
-        this.juego.verificarCulpable(
-            agente
-        );
-
+        this.juego.verificarCulpable(agente);
     }
-
 
     cerrarModalConfirmacion() {
+        document.querySelector(".modal-confirmacion")?.remove();
+    }
 
-        const modal =
-            document.querySelector(
-                ".modal-confirmacion"
+    mostrarCaso(caso) {
+        this.divCaso.innerHTML = "";
+        this.divCaso.appendChild(Tarjeta.caso(caso));
+    }
+
+    mostrarDeclaraciones(declaraciones) {
+        if (!this.divDeclaraciones) return;
+
+        this.divDeclaraciones.innerHTML = "";
+
+        declaraciones.forEach(declaracion => {
+            this.divDeclaraciones.appendChild(
+                Tarjeta.declaracion(declaracion)
             );
-
-
-        if (modal) {
-
-            modal.remove();
-
-        }
-
+        });
     }
 
-
-    // ======================================================
-    // CASO
-    // ======================================================
-
-    mostrarCaso(
-        caso
-    ) {
-
-        this.divCaso.innerHTML =
-            "";
-
-        this.divCaso.appendChild(
-            Tarjeta.caso(
-                caso
-            )
-        );
-
-    }
-
-
-    // ======================================================
-    // DECLARACIONES
-    // ======================================================
-
-    mostrarDeclaraciones(
-        declaraciones
-    ) {
-
-        if (!this.divDeclaraciones)
-            return;
-
-
-        this.divDeclaraciones.innerHTML =
-            "";
-
-
-        declaraciones.forEach(
-            declaracion => {
-
-                this.divDeclaraciones.appendChild(
-                    Tarjeta.declaracion(
-                        declaracion
-                    )
-                );
-
-            }
-        );
-
-    }
-
-
-    // ======================================================
-    // RESULTADO TEMPORAL
-    // ======================================================
-
-    mostrarResultado(
-        resultado
-    ) {
-
-        this.divResultado.innerHTML =
-            "";
-
-
+    mostrarResultado(resultado) {
+        this.divResultado.innerHTML = "";
         this.divResultado.appendChild(
-            Tarjeta.resultado(
-                resultado
-            )
+            Tarjeta.resultado(resultado)
         );
-
     }
 
-
-    mostrarConocimientos(
-        conocimientos
-    ) {
-
-        conocimientos.forEach(
-            conocimiento => {
-
-                this.divResultado.appendChild(
-                    Tarjeta.conocimiento(
-                        conocimiento
-                    )
-                );
-
-            }
-        );
-
+    mostrarConocimientos(conocimientos) {
+        conocimientos.forEach(conocimiento => {
+            this.divResultado.appendChild(
+                Tarjeta.conocimiento(conocimiento)
+            );
+        });
     }
 
+    mostrarProgreso(capitulo, caso) {
+        let nodos = "";
 
-    // ======================================================
-    // PROGRESO
-    // ======================================================
+        for (let i = 1; i <= 10; i++) {
+            const estado =
+                i < caso
+                    ? "completado"
+                    : i === caso
+                        ? "activo"
+                        : "";
 
-    mostrarProgreso(
-        capitulo,
-        caso
-    ) {
-
-        let nodos =
-            "";
-
-
-        for (
-            let i = 1;
-            i <= 10;
-            i++
-        ) {
-
-            let estado =
-                "";
-
-
-            if (i < caso) {
-
-                estado =
-                    "completado";
-
-            }
-            else if (i === caso) {
-
-                estado =
-                    "activo";
-
-            }
-
-
-            nodos += `
-
-                <div class="progreso-nodo-contenedor ${estado}">
-
-                    <div class="progreso-nodo ${estado}"></div>
-
-                    <span class="progreso-nodo-numero">
-                        ${i}
-                    </span>
-
-                </div>
-
-            `;
-
+            nodos += `<div class="progreso-nodo-contenedor ${estado}"><div class="progreso-nodo ${estado}"></div><span class="progreso-nodo-numero">${i}</span></div>`;
         }
 
-
-        this.divProgreso.innerHTML = `
-
-            <div class="progreso-nodos">
-                ${nodos}
-            </div>
-
-        `;
-
+        this.divProgreso.innerHTML = `<div class="progreso-nodos">${nodos}</div>`;
     }
 
-
-    // ======================================================
-    // NARRATIVA DEL CAPÍTULO
-    // ======================================================
-
-    mostrarNarrativa(
-        capitulo,
-        caso,
-        numeroCaso
-    ) {
-
-        if (
-            !capitulo ||
-            !caso
-        ) {
-
-            return;
-
-        }
-
-
-        // ==================================================
-        // ELIMINAR MENÚS ANTERIORES
-        // ==================================================
+    mostrarNarrativa(capitulo, caso, numeroCaso) {
+        if (!capitulo || !caso) return;
 
         this.cerrarMenusNarrativos();
 
-
-        // ==================================================
-        // TÍTULO DEL CAPÍTULO
-        // ==================================================
-
         if (this.tituloCapitulo) {
-
-            this.tituloCapitulo.textContent =
-                capitulo.titulo;
-
+            this.tituloCapitulo.textContent = capitulo.titulo;
         }
 
+        this.divCaso.innerHTML = `<div class="narrativa-bloque archivo-mision"><h3>ARCHIVO DE MISIÓN</h3><p>${capitulo.descripcion}</p></div><div class="narrativa-bloque evento-detectado"><h3>EVENTO DETECTADO</h3><p>${caso.titulo}</p></div>`;
 
-        // ==================================================
-        // ARCHIVO DE MISIÓN
-        // EVENTO DETECTADO
-        // ==================================================
+        const menusNarrativos = document.createElement("div");
+        menusNarrativos.id = "menus-narrativos";
 
-        this.divCaso.innerHTML = `
+        const contenedorEvento = document.createElement("div");
+        contenedorEvento.id = "registro-eventos";
+        contenedorEvento.className = "registro-eventos";
 
-            <div class="narrativa-bloque archivo-mision">
+        const botonEvento = document.createElement("button");
+        botonEvento.type = "button";
+        botonEvento.className = "registro-eventos-toggle";
+        botonEvento.innerHTML = `<div class="registro-eventos-icono">◈</div><h3>EVENTO #${numeroCaso}</h3><span class="registro-eventos-flecha">▾</span>`;
 
-                <h3>
-                    ARCHIVO DE MISIÓN
-                </h3>
+        botonEvento.addEventListener("click", evento => {
+            evento.stopPropagation();
 
-                <p>
-                    ${capitulo.descripcion}
-                </p>
-
-            </div>
-
-
-            <div class="narrativa-bloque evento-detectado">
-
-                <h3>
-                    EVENTO DETECTADO
-                </h3>
-
-                <p>
-                    ${caso.titulo}
-                </p>
-
-            </div>
-
-        `;
-
-
-        // ==================================================
-        // CONTENEDOR DE MENÚS NARRATIVOS
-        // ==================================================
-
-        const menusNarrativos =
-            document.createElement(
-                "div"
+            this.abrirModalNarrativo(
+                `EVENTO #${numeroCaso}`,
+                caso.titulo,
+                caso.escena
             );
+        });
 
+        contenedorEvento.appendChild(botonEvento);
 
-        menusNarrativos.id =
-            "menus-narrativos";
+        const contenedorNexus = document.createElement("div");
+        contenedorNexus.id = "analisis-nexus";
+        contenedorNexus.className = "analisis-nexus";
 
+        const botonNexus = document.createElement("button");
+        botonNexus.type = "button";
+        botonNexus.className = "registro-eventos-toggle";
+        botonNexus.innerHTML = `<div class="registro-eventos-icono">⌬</div><h3>ANÁLISIS NEXUS</h3><span class="registro-eventos-flecha">▾</span>`;
 
-        // ==================================================
-        // REGISTRO DE EVENTOS
-        // ==================================================
+        botonNexus.addEventListener("click", evento => {
+            evento.stopPropagation();
 
-        const registroEventos =
-            this.crearMenuNarrativo(
-                {
-                    id:
-                        "registro-eventos",
-
-                    clase:
-                        "registro-eventos",
-
-                    icono:
-                        "◈",
-
-                    // NÚMERO DEL EVENTO ACTUAL
-                    titulo:
-                        `EVENTO #${numeroCaso}`,
-
-                    // NOMBRE DEL CASO
-                    contenidoTitulo:
-                        caso.titulo,
-
-                    contenido:
-                        caso.escena
-                }
+            this.abrirModalNarrativo(
+                "ANÁLISIS NEXUS",
+                "ANÁLISIS NEXUS",
+                caso.conexion
             );
+        });
 
+        contenedorNexus.appendChild(botonNexus);
 
-        // ==================================================
-        // ANÁLISIS NEXUS
-        // ==================================================
-
-        const analisisNexus =
-            this.crearMenuNarrativo(
-                {
-                    id:
-                        "analisis-nexus",
-
-                    clase:
-                        "analisis-nexus",
-
-                    icono:
-                        "⌬",
-
-                    titulo:
-                        "ANÁLISIS NEXUS",
-
-                    contenidoTitulo:
-                        "ANÁLISIS NEXUS",
-
-                    contenido:
-                        caso.conexion
-                }
-            );
-
-
-        // ==================================================
-        // AGREGAR LOS DOS MENÚS
-        // ==================================================
-
-        menusNarrativos.appendChild(
-            registroEventos
+        menusNarrativos.append(
+            contenedorEvento,
+            contenedorNexus
         );
-
-
-        menusNarrativos.appendChild(
-            analisisNexus
-        );
-
-
-        // ==================================================
-        // INSERTAR MENÚS ANTES DE #CASO
-        // ==================================================
 
         this.divCaso.parentElement.insertBefore(
             menusNarrativos,
             this.divCaso
         );
-
-
-        // ==================================================
-        // CONFIGURAR REGISTRO DE EVENTOS
-        // ==================================================
-
-        this.configurarMenuNarrativo(
-            registroEventos,
-            analisisNexus
-        );
-
-
-        // ==================================================
-        // CONFIGURAR ANÁLISIS NEXUS
-        // ==================================================
-
-        this.configurarMenuNarrativo(
-            analisisNexus,
-            registroEventos
-        );
-
     }
 
-
-    // ======================================================
-    // CREAR MENÚ NARRATIVO
-    // ======================================================
-
-    crearMenuNarrativo(
-        configuracion
-    ) {
-
-        const menu =
-            document.createElement(
-                "div"
-            );
-
-
-        menu.id =
-            configuracion.id;
-
-
-        menu.className =
-            configuracion.clase;
-
-
-        menu.innerHTML = `
-
-            <button
-                class="registro-eventos-toggle"
-                type="button"
-                aria-expanded="false"
-                aria-controls="${configuracion.id}-contenido"
-            >
-
-                <div class="registro-eventos-icono">
-
-                    ${configuracion.icono}
-
-                </div>
-
-
-                <h3>
-
-                    ${configuracion.titulo}
-
-                </h3>
-
-
-                <span class="registro-eventos-flecha">
-
-                    ▾
-
-                </span>
-
-            </button>
-
-
-            <div
-                id="${configuracion.id}-contenido"
-                class="registro-eventos-contenido"
-            >
-
-                <h3>
-
-                    ${configuracion.contenidoTitulo}
-
-                </h3>
-
-
-                <p>
-
-                    ${configuracion.contenido}
-
-                </p>
-
-            </div>
-
-        `;
-
-
-        return menu;
-
-    }
-
-
-    // ======================================================
-    // CONFIGURAR MENÚ NARRATIVO
-    // ======================================================
-
-    configurarMenuNarrativo(
-        menu,
-        otroMenu
-    ) {
-
-        const boton =
-            menu.querySelector(
-                ".registro-eventos-toggle"
-            );
-
-
-        if (!boton)
-            return;
-
-
-        boton.addEventListener(
-            "click",
-            evento => {
-
-                evento.stopPropagation();
-
-
-                const estabaAbierto =
-                    menu.classList.contains(
-                        "abierto"
-                    );
-
-
-                // ==========================================
-                // CERRAR EL OTRO MENÚ
-                // ==========================================
-
-                if (otroMenu) {
-
-                    otroMenu.classList.remove(
-                        "abierto"
-                    );
-
-
-                    const otroBoton =
-                        otroMenu.querySelector(
-                            ".registro-eventos-toggle"
-                        );
-
-
-                    if (otroBoton) {
-
-                        otroBoton.setAttribute(
-                            "aria-expanded",
-                            "false"
-                        );
-
-                    }
-
-                }
-
-
-                // ==========================================
-                // CAMBIAR ESTADO DEL MENÚ ACTUAL
-                // ==========================================
-
-                const abierto =
-                    !estabaAbierto;
-
-
-                menu.classList.toggle(
-                    "abierto",
-                    abierto
-                );
-
-
-                boton.setAttribute(
-                    "aria-expanded",
-                    String(
-                        abierto
-                    )
-                );
-
-            }
-        );
-
-    }
-
-
-    // ======================================================
-    // CERRAR MENÚS NARRATIVOS
-    // ======================================================
-
-    cerrarMenusNarrativos() {
-
-        const menus =
-            document.getElementById(
-                "menus-narrativos"
-            );
-
-
-        if (menus) {
-
-            menus.remove();
-
-        }
-
-    }
-
-
-    // ======================================================
-    // ERRORES
-    // ======================================================
-
-    mostrarErrores(
-        errores
-    ) {
-
-        if (!errores.length)
-            return;
-
-
-        this.divResultado.appendChild(
-            Tarjeta.errores(
-                errores
+    abrirModalNarrativo(titulo, contenidoTitulo, contenido) {
+        this.cerrarModalNarrativo();
+
+        document.body.insertAdjacentHTML(
+            "beforeend",
+            Modal.narrativo(
+                titulo,
+                contenidoTitulo,
+                contenido
             )
         );
 
-    }
+        const modal = document.querySelector(".modal-narrativo");
 
+        if (!modal) return;
 
-    // ======================================================
-    // FONDO DEL CAPÍTULO
-    // ======================================================
+        const cerrar = () => this.cerrarModalNarrativo();
 
-    aplicarFondoCapitulo(
-        capitulo
-    ) {
+        const botonCerrar = modal.querySelector(
+            ".modal-narrativo-cerrar"
+        );
 
-        if (
-            !capitulo?.background
-        ) {
+        const botonCerrarGrande = modal.querySelector(
+            ".modal-narrativo-cerrar-grande"
+        );
 
-            return;
-
+        if (botonCerrar) {
+            botonCerrar.addEventListener("click", cerrar);
         }
 
+        if (botonCerrarGrande) {
+            botonCerrarGrande.addEventListener("click", cerrar);
+        }
+    }
+
+    cerrarModalNarrativo() {
+        document.querySelector(".modal-narrativo")?.closest(".modal-overlay")?.remove();
+    }
+
+    cerrarMenusNarrativos() {
+        document.getElementById("menus-narrativos")?.remove();
+    }
+
+    mostrarErrores(errores) {
+        if (!errores.length) return;
+
+        this.divResultado.appendChild(
+            Tarjeta.errores(errores)
+        );
+    }
+
+    aplicarFondoCapitulo(capitulo) {
+        if (!capitulo?.background) return;
 
         document.body.style.backgroundImage =
             `url("${capitulo.background}")`;
-
     }
-
 }

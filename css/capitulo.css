@@ -342,34 +342,6 @@ header h1 {
 
 
 /* ==========================================================
-   ÍCONOS DE IDENTIDAD POR TARJETA
-   ========================================================== */
-
-.archivo-mision h3::before {
-
-    content: "\1F4C1  ";
-}
-
-
-.evento-detectado h3::before {
-
-    content: "\1F6A8  ";
-}
-
-
-.analisis-nexus h3::before {
-
-    content: "\1F9E0  ";
-}
-
-
-.registro-eventos h3::before {
-
-    content: "\1F4DC  ";
-}
-
-
-/* ==========================================================
    TEXTO NARRATIVO
    ========================================================== */
 

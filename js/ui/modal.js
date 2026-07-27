@@ -3,8 +3,11 @@
  * AI-7
  * Archivo: Modal.js
  * ----------------------------------------------------------
- * Componente visual para mostrar la información completa
- * de un agente dentro de un modal.
+ * Componentes visuales para mostrar información dentro
+ * de modales.
+ *
+ * - Modal de información de agentes.
+ * - Modal de contenido narrativo.
  * ==========================================================
  */
 
@@ -95,6 +98,51 @@ export default class Modal {
 
                     <button
                         class="modal-cerrar-grande"
+                        type="button"
+                    >
+                        CERRAR
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+    static narrativo(titulo, contenidoTitulo, contenido) {
+
+        return `
+
+            <div class="modal-overlay">
+
+                <div class="modal-narrativo">
+
+                    <button
+                        class="modal-narrativo-cerrar"
+                        type="button"
+                        aria-label="Cerrar"
+                    >
+                        ×
+                    </button>
+
+                    <div class="modal-narrativo-header">
+
+                        <h2>${titulo}</h2>
+
+                    </div>
+
+                    <div class="modal-narrativo-contenido">
+
+                        <h3>${contenidoTitulo}</h3>
+
+                        <p>${contenido}</p>
+
+                    </div>
+
+                    <button
+                        class="modal-narrativo-cerrar-grande"
                         type="button"
                     >
                         CERRAR

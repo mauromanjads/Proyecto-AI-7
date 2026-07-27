@@ -86,7 +86,7 @@ body {
 
     position: relative;
 
-    overflow: hidden;
+    overflow: visible;
 }
 
 
@@ -281,7 +281,7 @@ main {
         16px 24px 20px;
 
     overflow:
-        hidden;
+        visible;
 }
 
 
@@ -293,6 +293,9 @@ main {
 
     width:
         100%;
+
+    overflow:
+        visible;
 
     background:
         linear-gradient(
@@ -666,13 +669,6 @@ pre {
    ========================================================== */
 
 @media (max-width: 600px) {
-
-    #pantalla-juego {
-
-        overflow:
-            auto;
-    }
-
 
     header {
 

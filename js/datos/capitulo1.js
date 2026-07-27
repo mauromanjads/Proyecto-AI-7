@@ -1,6 +1,6 @@
 /**
  * ==========================================================
- * AI-7
+ * NEXUS
  * Archivo: capitulo1.js
  * ----------------------------------------------------------
  * Capítulo 1: EL PRIMER INCIDENTE
@@ -25,13 +25,11 @@ const CAPITULO_1 = {
 
     background: "assets/img/background-capitulo1.png",
 
-    descripcion: `
-        Los primeros incidentes parecen ser hechos aislados dentro de AI-7.
+    descripcion: `Los primeros incidentes parecen ser hechos aislados dentro de NEXUS.
 
         Sin embargo,a medida que avanza la investigación,comienza a aparecer un patrón.
 
-        Algo está ocurriendo dentro de la instalación.
-    `,
+        Algo está ocurriendo dentro de la instalación.`,
 
     personajes: 3,
 
@@ -49,7 +47,7 @@ const CAPITULO_1 = {
             titulo: "ACCESO NO AUTORIZADO",
 
             escena: `
-                A las 22:30,el sistema de seguridad de AI-7 detectó un acceso no autorizado al laboratorio de investigación.
+                A las 22:30, el sistema de seguridad de NEXUS detectó un acceso no autorizado al laboratorio de investigación.
 
                 Tres agentes estaban relacionados con el incidente.
 
@@ -63,7 +61,7 @@ const CAPITULO_1 = {
             conexion: `
                 El incidente no parece ser un simple error de seguridad.
 
-                Alguien logró acceder a una zona restringida de AI-7.
+                Alguien logró acceder a una zona restringida de NEXUS.
             `
         },
 
@@ -80,21 +78,20 @@ const CAPITULO_1 = {
             titulo: "EL REGISTRO ALTERADO",
 
             escena: `
-                Poco después del primer incidente,AI-7 detecta una nueva anomalía.
+                Poco después del primer incidente,NEXUS detecta una nueva anomalía.
 
                 El registro de seguridad que documentaba el acceso al laboratorio ha sido modificado.
 
                 La información original ya no coincide con los registros actuales.
 
-                Tres agentes están relacionados con el incidente.
-            `,
+                Tres agentes están relacionados con el incidente.`,
 
             objetivo: `
                 Determinar quién es responsable de alterar el registro de seguridad.
             `,
 
             conexion: `
-                Alguien parece estar intentando modificar la información relacionada con los acontecimientos ocurridos dentro de AI-7.
+                Alguien parece estar intentando modificar la información relacionada con los acontecimientos ocurridos dentro de NEXUS.
             `
         },
 
@@ -113,12 +110,11 @@ const CAPITULO_1 = {
             escena: `
                 El sistema de seguridad vuelve a presentar una anomalía.
 
-                Durante varios minutos,las cámaras de una zona de AI-7 dejaron de funcionar.
+                Durante varios minutos,las cámaras de una zona de NEXUS dejaron de funcionar.
 
                 Mientras el sistema estaba fuera de servicio,ocurrió un nuevo incidente.
 
-                Tres agentes estaban relacionados con lo ocurrido.
-            `,
+                Tres agentes estaban relacionados con lo ocurrido.`,
 
             objetivo: `
                 Determinar quién es responsable de la interrupción del sistema.
@@ -127,7 +123,7 @@ const CAPITULO_1 = {
             conexion: `
                 La interrupción parece haber sido provocada deliberadamente.
 
-                Alguien necesitaba que una parte de AI-7 quedara temporalmente fuera de vigilancia.
+                Alguien necesitaba que una parte de NEXUS quedara temporalmente fuera de vigilancia.
             `
         },
 
@@ -144,7 +140,7 @@ const CAPITULO_1 = {
             titulo: "EL ARCHIVO DESAPARECIDO",
 
             escena: `
-                Un archivo relacionado con los primeros incidentes desapareció de los sistemas de AI-7.
+                Un archivo relacionado con los primeros incidentes desapareció de los sistemas de NEXUS.
 
                 El sistema confirma que el archivo existía poco antes de desaparecer.
 
@@ -179,7 +175,7 @@ const CAPITULO_1 = {
 
                 El mensaje fue enviado correctamente,pero nunca llegó a su destino.
 
-                AI-7 confirma que la comunicación fue interceptada antes de ser recibida.
+                NEXUS confirma que la comunicación fue interceptada antes de ser recibida.
 
                 Tres agentes están relacionados con el incidente.
             `,
@@ -189,7 +185,7 @@ const CAPITULO_1 = {
             `,
 
             conexion: `
-                Alguien parece estar controlando la información que circula dentro de AI-7.
+                Alguien parece estar controlando la información que circula dentro de NEXUS.
 
                 Los incidentes anteriores podrían estar relacionados con este nuevo hecho.
             `
@@ -245,7 +241,7 @@ const CAPITULO_1 = {
 
                 El incidente ocurre poco después de los acontecimientos anteriores.
 
-                Esta vez,el acceso parece haber sido realizado utilizando información interna de AI-7.
+                Esta vez,el acceso parece haber sido realizado utilizando información interna de NEXUS.
 
                 Tres agentes están relacionados con el caso.
             `,
@@ -255,7 +251,7 @@ const CAPITULO_1 = {
             `,
 
             conexion: `
-                El responsable parece conocer el funcionamiento interno de AI-7.
+                El responsable parece conocer el funcionamiento interno de NEXUS.
 
                 Los incidentes comienzan a mostrar características similares.
             `
@@ -309,7 +305,7 @@ const CAPITULO_1 = {
             titulo: "EL PATRÓN",
 
             escena: `
-                Después de revisar los incidentes anteriores,AI-7 detecta una coincidencia.
+                Después de revisar los incidentes anteriores,NEXUS detecta una coincidencia.
 
                 Cada incidente permitió acceder,modificar o eliminar información dentro de diferentes áreas del sistema.
 
@@ -344,7 +340,7 @@ const CAPITULO_1 = {
             titulo: "NO FUE UN ACCIDENTE",
 
             escena: `
-                Un nuevo incidente ocurre dentro de AI-7.
+                Un nuevo incidente ocurre dentro de NEXUS.
 
                 Esta vez,la evidencia acumulada permite relacionarlo con los hechos anteriores.
 
@@ -364,7 +360,7 @@ const CAPITULO_1 = {
 
                 Los incidentes están conectados.
 
-                Alguien está actuando dentro de AI-7.
+                Alguien está actuando dentro de NEXUS.
 
                 La identidad de esa persona todavía es desconocida.
 
