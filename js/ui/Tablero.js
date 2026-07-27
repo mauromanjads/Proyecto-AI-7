@@ -195,10 +195,31 @@ export default class Tablero {
             this.tituloCapitulo.textContent = capitulo.titulo;
         }
 
-        this.divCaso.innerHTML = `<div class="narrativa-bloque archivo-mision"><h3>CAPÍTULO ${this.juego.capituloActual + 1}</h3><p>${capitulo.descripcion}</p></div>`;
+        this.divCaso.innerHTML = "";
 
         const menusNarrativos = document.createElement("div");
         menusNarrativos.id = "menus-narrativos";
+
+        const contenedorCapitulo = document.createElement("div");
+        contenedorCapitulo.id = "capitulo-narrativo";
+        contenedorCapitulo.className = "registro-eventos";
+
+        const botonCapitulo = document.createElement("button");
+        botonCapitulo.type = "button";
+        botonCapitulo.className = "registro-eventos-toggle";
+        botonCapitulo.innerHTML = `<div class="registro-eventos-icono">◈</div><h3>CAPÍTULO ${this.juego.capituloActual + 1}</h3><span class="registro-eventos-flecha">▾</span>`;
+
+        botonCapitulo.addEventListener("click", evento => {
+            evento.stopPropagation();
+
+            this.abrirModalNarrativo(
+                `CAPÍTULO ${this.juego.capituloActual + 1}`,
+                capitulo.titulo,
+                capitulo.descripcion
+            );
+        });
+
+        contenedorCapitulo.appendChild(botonCapitulo);
 
         const contenedorEvento = document.createElement("div");
         contenedorEvento.id = "registro-eventos";
@@ -243,6 +264,7 @@ export default class Tablero {
         contenedorNexus.appendChild(botonNexus);
 
         menusNarrativos.append(
+            contenedorCapitulo,
             contenedorEvento,
             contenedorNexus
         );
