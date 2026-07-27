@@ -33,8 +33,9 @@
         0 20px 60px rgba(0, 0, 0, 0.4);
 }
 
+
 /* ==========================================================
-   Header
+   HEADER
    ========================================================== */
 
 .modal-mensajes-header {
@@ -68,8 +69,9 @@
     cursor: pointer;
 }
 
+
 /* ==========================================================
-   Lista de mensajes
+   LISTA DE MENSAJES
    ========================================================== */
 
 .mensajes-lista {
@@ -82,8 +84,9 @@
     overflow-y: auto;
 }
 
+
 /* ==========================================================
-   Globo de mensaje
+   GLOBO DE MENSAJE
    ========================================================== */
 
 .mensaje-globo {
@@ -103,7 +106,10 @@
         0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-/* Alternar posición de los globos */
+
+/* ==========================================================
+   ALTERNAR POSICIÓN DE LOS GLOBOS
+   ========================================================== */
 
 .mensaje-globo:nth-child(even) {
     align-self: flex-end;
@@ -111,8 +117,9 @@
     background: #dbeafe;
 }
 
+
 /* ==========================================================
-   Sin declaraciones
+   SIN DECLARACIONES
    ========================================================== */
 
 .sin-mensajes {
@@ -123,8 +130,9 @@
     padding: 30px;
 }
 
+
 /* ==========================================================
-   Footer
+   FOOTER
    ========================================================== */
 
 .modal-mensajes-footer {
@@ -154,8 +162,9 @@
     opacity: 0.85;
 }
 
+
 /* ==========================================================
-   Responsive
+   RESPONSIVE
    ========================================================== */
 
 @media (max-width: 600px) {
@@ -171,6 +180,389 @@
 
     .mensaje-globo {
         max-width: 90%;
+    }
+
+}
+
+
+/* ==========================================================
+   MODAL RESULTADO
+   ========================================================== */
+
+.modal-resultado {
+
+    position: fixed;
+    inset: 0;
+
+    z-index: 9999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background:
+        rgba(0, 0, 0, .78);
+
+    backdrop-filter:
+        blur(6px);
+}
+
+
+/* ==========================================================
+   CONTENEDOR
+   ========================================================== */
+
+.modal-resultado-contenido {
+
+    position: relative;
+
+    width: 420px;
+    max-width: 90vw;
+
+    padding: 35px 30px 30px;
+
+    box-sizing: border-box;
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #0a2535,
+            #031018
+        );
+
+    border:
+        1px solid rgba(56, 189, 248, .45);
+
+    color: white;
+
+    text-align: center;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, .65),
+        0 0 35px rgba(56, 189, 248, .12);
+
+}
+
+
+/* ==========================================================
+   HEADER
+   ========================================================== */
+
+.modal-resultado-header {
+
+    position:
+        relative;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-height:
+        45px;
+
+}
+
+
+.modal-resultado-header h2 {
+
+    margin:
+        0;
+
+    font-size:
+        27px;
+
+    letter-spacing:
+        2px;
+
+    color:
+        #6ee7b7;
+
+    text-shadow:
+        0 0 15px rgba(52, 211, 153, .35);
+
+}
+
+
+/* ==========================================================
+   BOTÓN CERRAR
+   ========================================================== */
+
+.modal-resultado-cerrar {
+
+    position:
+        absolute;
+
+    top:
+        50%;
+
+    right:
+        0;
+
+    width:
+        38px;
+
+    height:
+        38px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        0;
+
+    border:
+        1px solid rgba(103, 232, 249, .30);
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(56, 189, 248, .08);
+
+    color:
+        #67e8f9;
+
+    font-size:
+        20px;
+
+    line-height:
+        1;
+
+    cursor:
+        pointer;
+
+    transform:
+        translateY(-50%);
+
+    transition:
+        .25s ease;
+
+}
+
+
+.modal-resultado-cerrar:hover {
+
+    background:
+        rgba(56, 189, 248, .20);
+
+    border-color:
+        rgba(103, 232, 249, .70);
+
+    transform:
+        translateY(-50%)
+        scale(1.08);
+
+}
+
+
+/* ==========================================================
+   MENSAJE
+   ========================================================== */
+
+.modal-resultado-mensaje {
+
+    margin:
+        25px 0;
+
+    padding:
+        18px;
+
+    border-radius:
+        14px;
+
+    background:
+        rgba(255, 255, 255, .03);
+
+    border:
+        1px solid rgba(255, 255, 255, .06);
+
+}
+
+
+.modal-resultado-mensaje p {
+
+    margin:
+        0;
+
+    color:
+        #dbeafe;
+
+    font-size:
+        23px;
+
+    line-height:
+        1.6;
+
+}
+
+
+/* ==========================================================
+   FOOTER
+   ========================================================== */
+
+.modal-resultado-footer {
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+}
+
+
+/* ==========================================================
+   BOTÓN CONTINUAR
+   ========================================================== */
+
+.btn-continuar-resultado {
+
+    min-width:
+        240px;
+
+    min-height:
+        58px;
+
+    padding:
+        15px 40px;
+
+    border:
+        1px solid #38bdf8;
+
+    border-radius:
+        30px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #0c3348,
+            #062131
+        );
+
+    color:
+        #67e8f9;
+
+    font-size:
+        17px;
+
+    font-weight:
+        bold;
+
+    letter-spacing:
+        1px;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 0 15px rgba(56, 189, 248, .08);
+
+    transition:
+        .25s ease;
+
+}
+
+
+.btn-continuar-resultado:hover {
+
+    background:
+        #164b63;
+
+    box-shadow:
+        0 0 22px rgba(56, 189, 248, .2);
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+/* ==========================================================
+   INCORRECTO
+   ========================================================== */
+
+.modal-resultado.incorrecto
+.modal-resultado-contenido {
+
+    border-color:
+        rgba(248, 113, 113, .5);
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, .65),
+        0 0 35px rgba(248, 113, 113, .12);
+
+}
+
+
+.modal-resultado.incorrecto
+.modal-resultado-header h2 {
+
+    color:
+        #fca5a5;
+
+    text-shadow:
+        0 0 15px rgba(248, 113, 113, .35);
+
+}
+
+
+.modal-resultado.incorrecto
+.btn-continuar-resultado {
+
+    border-color:
+        #f87171;
+
+    color:
+        #fca5a5;
+
+}
+
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media (max-width: 500px) {
+
+    .modal-resultado-contenido {
+
+        width:
+            100%;
+
+        padding:
+            30px 20px 25px;
+
+    }
+
+
+    .modal-resultado-header h2 {
+
+        font-size:
+            22px;
+
+    }
+
+
+    .modal-resultado-mensaje p {
+
+        font-size:
+            20px;
+
     }
 
 }

@@ -28,6 +28,7 @@ import HISTORIA from "./datos/historia.js";
 import GeneradorCasos from "./motor/GeneradorCasos.js";
 import Solucionador from "./motor/Solucionador.js";
 import Tablero from "./ui/Tablero.js";
+import ModalResultado from "./ui/ModalResultado.js";
 
 
 export default class Juego {
@@ -62,6 +63,9 @@ export default class Juego {
 
         this.tablero =
             new Tablero(this);
+
+        this.modalResultado =
+            new ModalResultado();
 
     }
 
@@ -436,7 +440,7 @@ export default class Juego {
     }
 
 
-    // ==========================================================
+     // ==========================================================
     // VERIFICAR CULPABLE
     // ==========================================================
 
@@ -459,9 +463,21 @@ export default class Juego {
             culpable.id
         ) {
 
-            // Avanzar al siguiente caso
+            this.modalResultado.mostrar(
 
-            this.siguienteCaso();
+                "correcto",
+
+                "¡CORRECTO!",
+
+                `Has identificado correctamente al culpable: ${culpable.nombre}.`,
+
+                () => {
+
+                    this.siguienteCaso();
+
+                }
+
+            );
 
             return;
 
@@ -471,19 +487,22 @@ export default class Juego {
         // =====================================================
         // RESPUESTA INCORRECTA
         // =====================================================
-        //
-        // No aumentamos casoActual.
-        //
-        // El caso narrativo sigue siendo el mismo.
-        //
-        // Se genera un nuevo caso lógico con:
-        // - Nuevas declaraciones
-        // - Nuevo culpable
-        //
-        // =====================================================
 
-        this.iniciarCaso();
+        this.modalResultado.mostrar(
+
+            "incorrecto",
+
+            "INCORRECTO",
+
+            "El agente seleccionado no es el culpable.",
+
+            () => {
+
+                this.iniciarCaso();
+
+            }
+
+        );
 
     }
-
 }
