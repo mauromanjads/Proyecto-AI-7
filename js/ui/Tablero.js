@@ -16,7 +16,8 @@ export default class Tablero {
 
     constructor(juego) {
 
-        this.juego = juego;
+        this.juego =
+            juego;
 
         this.divProgreso =
             document.getElementById("progreso");
@@ -36,7 +37,8 @@ export default class Tablero {
         this.divResultado =
             document.getElementById("resultado");
 
-        this.agenteSeleccionado = null;
+        this.agenteSeleccionado =
+            null;
     }
 
 
@@ -46,18 +48,27 @@ export default class Tablero {
 
     limpiar() {
 
-        this.divAgentes.innerHTML = "";
-        this.divCaso.innerHTML = "";
+        this.divAgentes.innerHTML =
+            "";
+
+        this.divCaso.innerHTML =
+            "";
 
         if (this.divDeclaraciones) {
-            this.divDeclaraciones.innerHTML = "";
+
+            this.divDeclaraciones.innerHTML =
+                "";
+
         }
 
-        this.divResultado.innerHTML = "";
+        this.divResultado.innerHTML =
+            "";
 
-        this.agenteSeleccionado = null;
+        this.agenteSeleccionado =
+            null;
 
         this.cerrarModal();
+
         this.cerrarModalConfirmacion();
     }
 
@@ -66,90 +77,111 @@ export default class Tablero {
     // MOSTRAR AGENTES
     // ======================================================
 
-    mostrarAgentes(agentes, declaraciones) {
+    mostrarAgentes(
+        agentes,
+        declaraciones
+    ) {
 
-        this.divAgentes.innerHTML = "";
+        this.divAgentes.innerHTML =
+            "";
 
-        agentes.forEach(agente => {
+        agentes.forEach(
+            agente => {
 
-            const declaracionesAgente =
-                declaraciones.filter(
-                    declaracion =>
-                        declaracion.personaje.nombre ===
-                        agente.nombre
-                );
-
-            const tarjeta =
-                Tarjeta.agente(agente);
-
-
-            // Botón de declaraciones
-
-            const botonMensajes =
-                tarjeta.querySelector(".btn-mensajes");
-
-            if (botonMensajes) {
-
-                botonMensajes.addEventListener(
-                    "click",
-                    evento => {
-
-                        evento.stopPropagation();
-
-                        new Mensajes().mostrar(
-                            agente,
-                            declaracionesAgente
-                        );
-
-                    }
-                );
-
-            }
+                const declaracionesAgente =
+                    declaraciones.filter(
+                        declaracion =>
+                            declaracion.personaje.nombre ===
+                            agente.nombre
+                    );
 
 
-            // Botón de información
-
-            const botonInformacion =
-                tarjeta.querySelector(".btn-informacion");
-
-            if (botonInformacion) {
-
-                botonInformacion.addEventListener(
-                    "click",
-                    evento => {
-
-                        evento.stopPropagation();
-
-                        this.abrirModal(
-                            agente,
-                            declaracionesAgente
-                        );
-
-                    }
-                );
-
-            }
-
-
-            // Seleccionar posible culpable
-
-            tarjeta.addEventListener(
-                "click",
-                () => {
-
-                    this.abrirModalConfirmacion(
+                const tarjeta =
+                    Tarjeta.agente(
                         agente
                     );
 
+
+                // ==========================================
+                // BOTÓN DE DECLARACIONES
+                // ==========================================
+
+                const botonMensajes =
+                    tarjeta.querySelector(
+                        ".btn-mensajes"
+                    );
+
+
+                if (botonMensajes) {
+
+                    botonMensajes.addEventListener(
+                        "click",
+                        evento => {
+
+                            evento.stopPropagation();
+
+                            new Mensajes().mostrar(
+                                agente,
+                                declaracionesAgente
+                            );
+
+                        }
+                    );
+
                 }
-            );
 
 
-            this.divAgentes.appendChild(
-                tarjeta
-            );
+                // ==========================================
+                // BOTÓN DE INFORMACIÓN
+                // ==========================================
 
-        });
+                const botonInformacion =
+                    tarjeta.querySelector(
+                        ".btn-informacion"
+                    );
+
+
+                if (botonInformacion) {
+
+                    botonInformacion.addEventListener(
+                        "click",
+                        evento => {
+
+                            evento.stopPropagation();
+
+                            this.abrirModal(
+                                agente,
+                                declaracionesAgente
+                            );
+
+                        }
+                    );
+
+                }
+
+
+                // ==========================================
+                // SELECCIONAR POSIBLE CULPABLE
+                // ==========================================
+
+                tarjeta.addEventListener(
+                    "click",
+                    () => {
+
+                        this.abrirModalConfirmacion(
+                            agente
+                        );
+
+                    }
+                );
+
+
+                this.divAgentes.appendChild(
+                    tarjeta
+                );
+
+            }
+        );
 
     }
 
@@ -158,7 +190,10 @@ export default class Tablero {
     // MODAL DE INFORMACIÓN
     // ======================================================
 
-    abrirModal(agente, declaraciones) {
+    abrirModal(
+        agente,
+        declaraciones
+    ) {
 
         this.cerrarModal();
 
@@ -170,32 +205,46 @@ export default class Tablero {
             )
         );
 
+
         const modal =
-            document.querySelector(".modal-overlay");
+            document.querySelector(
+                ".modal-overlay"
+            );
+
 
         if (!modal)
             return;
 
+
         const botonCerrar =
-            modal.querySelector(".modal-cerrar");
+            modal.querySelector(
+                ".modal-cerrar"
+            );
+
 
         const botonCerrarGrande =
-            modal.querySelector(".modal-cerrar-grande");
+            modal.querySelector(
+                ".modal-cerrar-grande"
+            );
+
 
         if (botonCerrar) {
 
             botonCerrar.addEventListener(
                 "click",
-                () => this.cerrarModal()
+                () =>
+                    this.cerrarModal()
             );
 
         }
+
 
         if (botonCerrarGrande) {
 
             botonCerrarGrande.addEventListener(
                 "click",
-                () => this.cerrarModal()
+                () =>
+                    this.cerrarModal()
             );
 
         }
@@ -206,10 +255,15 @@ export default class Tablero {
     cerrarModal() {
 
         const modal =
-            document.querySelector(".modal-overlay");
+            document.querySelector(
+                ".modal-overlay"
+            );
+
 
         if (modal) {
+
             modal.remove();
+
         }
 
     }
@@ -219,27 +273,33 @@ export default class Tablero {
     // MODAL DE CONFIRMACIÓN
     // ======================================================
 
-    abrirModalConfirmacion(agente) {
+    abrirModalConfirmacion(
+        agente
+    ) {
 
         this.cerrarModalConfirmacion();
 
         this.agenteSeleccionado =
             agente;
 
+
         const modal =
             ModalConfirmacion.mostrar(
                 agente
             );
+
 
         const botonCerrar =
             modal.querySelector(
                 ".modal-confirmacion-cerrar"
             );
 
+
         const botonCancelar =
             modal.querySelector(
                 ".btn-cancelar-culpable"
             );
+
 
         const botonConfirmar =
             modal.querySelector(
@@ -251,7 +311,8 @@ export default class Tablero {
 
             botonCerrar.addEventListener(
                 "click",
-                () => this.cancelarSeleccionCulpable()
+                () =>
+                    this.cancelarSeleccionCulpable()
             );
 
         }
@@ -261,7 +322,8 @@ export default class Tablero {
 
             botonCancelar.addEventListener(
                 "click",
-                () => this.cancelarSeleccionCulpable()
+                () =>
+                    this.cancelarSeleccionCulpable()
             );
 
         }
@@ -271,7 +333,8 @@ export default class Tablero {
 
             botonConfirmar.addEventListener(
                 "click",
-                () => this.confirmarSeleccionCulpable()
+                () =>
+                    this.confirmarSeleccionCulpable()
             );
 
         }
@@ -294,13 +357,17 @@ export default class Tablero {
         if (!this.agenteSeleccionado)
             return;
 
+
         const agente =
             this.agenteSeleccionado;
+
 
         this.agenteSeleccionado =
             null;
 
+
         this.cerrarModalConfirmacion();
+
 
         this.juego.verificarCulpable(
             agente
@@ -316,8 +383,11 @@ export default class Tablero {
                 ".modal-confirmacion"
             );
 
+
         if (modal) {
+
             modal.remove();
+
         }
 
     }
@@ -327,12 +397,18 @@ export default class Tablero {
     // CASO
     // ======================================================
 
-    mostrarCaso(caso) {
+    mostrarCaso(
+        caso
+    ) {
 
-        this.divCaso.innerHTML = "";
+        this.divCaso.innerHTML =
+            "";
+
 
         this.divCaso.appendChild(
-            Tarjeta.caso(caso)
+            Tarjeta.caso(
+                caso
+            )
         );
 
     }
@@ -342,12 +418,17 @@ export default class Tablero {
     // DECLARACIONES
     // ======================================================
 
-    mostrarDeclaraciones(declaraciones) {
+    mostrarDeclaraciones(
+        declaraciones
+    ) {
 
         if (!this.divDeclaraciones)
             return;
 
-        this.divDeclaraciones.innerHTML = "";
+
+        this.divDeclaraciones.innerHTML =
+            "";
+
 
         declaraciones.forEach(
             declaracion => {
@@ -368,18 +449,26 @@ export default class Tablero {
     // RESULTADO TEMPORAL
     // ======================================================
 
-    mostrarResultado(resultado) {
+    mostrarResultado(
+        resultado
+    ) {
 
-        this.divResultado.innerHTML = "";
+        this.divResultado.innerHTML =
+            "";
+
 
         this.divResultado.appendChild(
-            Tarjeta.resultado(resultado)
+            Tarjeta.resultado(
+                resultado
+            )
         );
 
     }
 
 
-    mostrarConocimientos(conocimientos) {
+    mostrarConocimientos(
+        conocimientos
+    ) {
 
         conocimientos.forEach(
             conocimiento => {
@@ -400,20 +489,38 @@ export default class Tablero {
     // PROGRESO
     // ======================================================
 
-    mostrarProgreso(capitulo, caso) {
+    mostrarProgreso(
+        capitulo,
+        caso
+    ) {
 
-        let nodos = "";
+        let nodos =
+            "";
 
-        for (let i = 1; i <= 10; i++) {
 
-            let estado = "";
+        for (
+            let i = 1;
+            i <= 10;
+            i++
+        ) {
+
+            let estado =
+                "";
+
 
             if (i < caso) {
-                estado = "completado";
+
+                estado =
+                    "completado";
+
             }
             else if (i === caso) {
-                estado = "activo";
+
+                estado =
+                    "activo";
+
             }
+
 
             nodos += `
 
@@ -431,6 +538,7 @@ export default class Tablero {
 
         }
 
+
         this.divProgreso.innerHTML = `
 
             <div class="progreso-nodos">
@@ -443,17 +551,27 @@ export default class Tablero {
 
 
     // ======================================================
-    // NARRATIVA
+    // NARRATIVA DEL CAPÍTULO
     // ======================================================
 
-    mostrarNarrativa(capitulo, caso) {
+    mostrarNarrativa(
+        capitulo,
+        caso
+    ) {
 
-        if (!capitulo || !caso)
+        if (
+            !capitulo ||
+            !caso
+        ) {
+
             return;
 
+        }
 
-        // El título del capítulo se muestra únicamente
-        // en #titulo-capitulo.
+
+        // ==================================================
+        // TÍTULO DEL CAPÍTULO
+        // ==================================================
 
         if (this.tituloCapitulo) {
 
@@ -463,46 +581,72 @@ export default class Tablero {
         }
 
 
-        // Dentro de #caso solamente aparece
-        // la información del caso actual.
+        // ==================================================
+        // INFORMACIÓN NARRATIVA
+        // --------------------------------------------------
+        // Estructura visual:
+        //
+        // 1. ARCHIVO DE MISIÓN
+        //
+        // 2. EVENTO DETECTADO
+        //    ANÁLISIS NEXUS
+        //
+        // 3. REGISTRO DE EVENTOS
+        //
+        // El evento y el análisis comparten
+        // el mismo panel central.
+        // ==================================================
 
         this.divCaso.innerHTML = `
 
-            <div class="narrativa-caso">
+            <div class="narrativa-bloque archivo-mision">
 
-                <h2>
+                <h3>
+                    ARCHIVO DE MISIÓN
+                </h3>
+
+                <p>
+                    ${capitulo.descripcion}
+                </p>
+
+            </div>
+
+
+            <div class="narrativa-bloque evento-detectado">
+
+                <h3>
+                    EVENTO DETECTADO
+                </h3>
+
+                <p>
                     ${caso.titulo}
-                </h2>
+                </p>
 
-                <div class="narrativa-bloque">
+            </div>
 
-                    <h3>ESCENA</h3>
 
-                    <p>
-                        ${caso.escena}
-                    </p>
+            <div class="narrativa-bloque analisis-nexus">
 
-                </div>
+                <h3>
+                    ANÁLISIS NEXUS
+                </h3>
 
-                <div class="narrativa-bloque">
+                <p>
+                    ${caso.conexion}
+                </p>
 
-                    <h3>OBJETIVO</h3>
+            </div>
 
-                    <p>
-                        ${caso.objetivo}
-                    </p>
 
-                </div>
+            <div class="narrativa-bloque registro-eventos">
 
-                <div class="narrativa-bloque">
+                <h3>
+                    REGISTRO DE EVENTOS
+                </h3>
 
-                    <h3>CONEXIÓN</h3>
-
-                    <p>
-                        ${caso.conexion}
-                    </p>
-
-                </div>
+                <p>
+                    ${caso.escena}
+                </p>
 
             </div>
 
@@ -515,21 +659,39 @@ export default class Tablero {
     // ERRORES
     // ======================================================
 
-    mostrarErrores(errores) {
+    mostrarErrores(
+        errores
+    ) {
 
         if (!errores.length)
             return;
 
+
         this.divResultado.appendChild(
-            Tarjeta.errores(errores)
+            Tarjeta.errores(
+                errores
+            )
         );
 
     }
 
-        aplicarFondoCapitulo(capitulo) {
 
-        if (!capitulo?.background)
+    // ======================================================
+    // FONDO DEL CAPÍTULO
+    // ======================================================
+
+    aplicarFondoCapitulo(
+        capitulo
+    ) {
+
+        if (
+            !capitulo?.background
+        ) {
+
             return;
+
+        }
+
 
         document.body.style.backgroundImage =
             `url("${capitulo.background}")`;
