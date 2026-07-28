@@ -263,10 +263,19 @@ export default class Tablero {
 
         contenedorNexus.appendChild(botonNexus);
 
+       const contenedorProgreso = document.createElement("div");
+        contenedorProgreso.id = "contenedor-progreso";
+
+        contenedorProgreso.append(
+            this.tituloCapitulo,
+            this.divProgreso
+        );
+
         menusNarrativos.append(
             contenedorCapitulo,
             contenedorEvento,
-            contenedorNexus
+            contenedorNexus,
+            contenedorProgreso
         );
 
         this.divCaso.parentElement.insertBefore(

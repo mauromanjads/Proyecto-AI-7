@@ -12,14 +12,15 @@
 
 
 /* ==========================================================
-   CONTENEDOR DE LOS TRES BOTONES
+   CONTENEDOR DE LOS TRES BOTONES + PROGRESO
    ========================================================== */
 
 #menus-narrativos {
     width: 100%;
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
     gap: 14px;
     margin: 0 0 10px;
     position: relative;
@@ -35,10 +36,50 @@
 #capitulo-narrativo,
 #registro-eventos,
 #analisis-nexus {
-    position: relative;
-    width: 180px;
-    height: 180px;
+    position: relative;   
     flex: 0 0 180px;
+    box-sizing: border-box;
+}
+
+
+/* ==========================================================
+   CONTENEDOR DEL TÍTULO Y PROGRESO
+   ----------------------------------------------------------
+   El título queda encima de la barra.
+   ========================================================== */
+
+#contenedor-progreso {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    box-sizing: border-box;
+    transform: scale(.9);
+}
+
+
+/* ==========================================================
+   TÍTULO DEL CAPÍTULO
+   ========================================================== */
+
+#titulo-capitulo {
+    width: 100%;
+    margin: 0;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+
+/* ==========================================================
+   CONTENEDOR DE LA BARRA DE PROGRESO
+   ========================================================== */
+
+#progreso {
+    width: 100%;
+    min-width: 0;
     box-sizing: border-box;
 }
 
@@ -95,8 +136,8 @@
 .registro-eventos-toggle {
     position: relative;
 
-    width: 180px;
-    height: 180px;
+    width: 140px;
+    height: 140px;
 
     display: flex;
     align-items: center;
@@ -155,8 +196,6 @@
 
 /* ==========================================================
    LÍNEA DE ESCANEO
-   ----------------------------------------------------------
-   Se activa una sola vez cuando aparece cada módulo.
    ========================================================== */
 
 .registro-eventos-toggle::after {
@@ -398,9 +437,6 @@
 
 /* ==========================================================
    EFECTO ESPECIAL NEXUS
-   ----------------------------------------------------------
-   Al pasar el mouse, el módulo NEXUS genera una onda
-   luminosa que nace desde el icono.
    ========================================================== */
 
 #analisis-nexus .registro-eventos-icono::after {
@@ -450,79 +486,87 @@
 
 
 /* ==========================================================
-   TABLET
+   TABLET / IPAD
    ========================================================== */
 
-@media (max-width: 700px) {
+@media (max-width: 1024px) {
 
     #menus-narrativos {
-        gap: 10px;
+        gap: 8px;
+        flex-wrap: wrap;
     }
 
     #capitulo-narrativo,
     #registro-eventos,
     #analisis-nexus {
-        width: 150px;
-        height: 150px;
-        flex: 0 0 150px;
+        width: 90px;
+        height: 130px;
+        flex: 0 0 90px;
     }
 
     .registro-eventos-toggle {
-        width: 150px;
-        height: 150px;
-        padding: 16px;
-        gap: 8px;
+        width: 90px;
+        height: 90px;
+        padding: 10px;
+        gap: 5px;
         border-radius: 50%;
     }
 
     .registro-eventos-icono {
-        width: 44px;
-        height: 44px;
-        font-size: 28px;
+        width: 34px;
+        height: 34px;
+        font-size: 21px;
     }
 
     .registro-eventos-toggle h3 {
-        font-size: 10px;
-        letter-spacing: 1px;
+        font-size: 8px;
+        letter-spacing: .7px;
+    }
+
+    #contenedor-progreso {
+        width: 100%;
+        flex: 1 0 100%;
+        order: 4;
     }
 }
 
 
 /* ==========================================================
-   CELULARES PEQUEÑOS
+   CELULARES PEQUEÑOS / IPHONE
    ========================================================== */
 
 @media (max-width: 450px) {
 
     #menus-narrativos {
-        gap: 6px;
+        gap: 4px;
+        flex-wrap: wrap;
     }
 
     #capitulo-narrativo,
     #registro-eventos,
     #analisis-nexus {
-        width: 120px;
-        height: 120px;
-        flex: 0 0 120px;
+        width: 78px;
+        height: 110px;
+        flex: 0 0 78px;
     }
 
     .registro-eventos-toggle {
-        width: 120px;
-        height: 120px;
-        padding: 12px;
-        gap: 6px;
+        width: 78px;
+        height: 78px;
+        padding: 8px;
+        gap: 4px;
         border-radius: 50%;
     }
 
     .registro-eventos-icono {
-        width: 36px;
-        height: 36px;
-        font-size: 22px;
+        width: 28px;
+        height: 28px;
+        font-size: 17px;
     }
 
     .registro-eventos-toggle h3 {
-        font-size: 8px;
-        letter-spacing: .8px;
+        font-size: 7px;
+        letter-spacing: .5px;
     }
 }
 
