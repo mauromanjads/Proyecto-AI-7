@@ -338,7 +338,10 @@ export default class Tablero {
     aplicarFondoCapitulo(capitulo) {
         if (!capitulo?.background) return;
 
-        document.body.style.backgroundImage =
+         this.divAgentes.style.backgroundImage =
             `url("${capitulo.background}")`;
+
+        document.body.style.backgroundImage =
+            `url("assets/img/fondo.jpg")`;
     }
 }
