@@ -9,7 +9,8 @@
 
 import Juego from "./juego.js";
 import Prologo from "./ui/Prologo.js";
-
+import TableroAgentes from "./ui/TableroAgentes.js";
+import PointerGlobal from "./ui/PointerGlobal.js";
 
 // ==========================================================
 // MODO DE PRUEBA
@@ -72,6 +73,14 @@ if (MODO_PRUEBA) {
     // Iniciar juego
     // ------------------------------------------------------
 
+    const pointer = new PointerGlobal();
+
+    pointer.iniciar();
+
+     const tableroAgentes = new TableroAgentes();
+     tableroAgentes.iniciar();
+
+
     const juego = new Juego();
 
     juego.iniciar();
@@ -113,6 +122,13 @@ if (MODO_PRUEBA) {
             // ----------------------------------------------
             // Crear juego
             // ----------------------------------------------
+       
+            const pointer = new PointerGlobal();
+            pointer.iniciar();
+
+            const tableroAgentes = new TableroAgentes();
+            tableroAgentes.iniciar();
+
 
             const juego =
                 new Juego();

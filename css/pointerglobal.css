@@ -1,0 +1,456 @@
+/**
+ * ==========================================================
+ * AI-7
+ * Archivo: pointer-global.css
+ * ----------------------------------------------------------
+ * Pointer holográfico global.
+ *
+ * Estados:
+ * - Normal
+ * - Hover
+ * - Presionado
+ * ==========================================================
+ */
+
+
+/* ==========================================================
+   OCULTAR CURSOR NATIVO
+   ----------------------------------------------------------
+   Se aplica únicamente sobre elementos que utilizan
+   data-pointer.
+   ========================================================== */
+
+[data-pointer],
+[data-pointer] * {
+
+    cursor:
+        none !important;
+
+}
+
+
+/* ==========================================================
+   POINTER GLOBAL
+   ========================================================== */
+
+#pointer-global {
+
+    position: fixed;
+
+    left: 0;
+
+    top: 0;
+
+    width: 100px;
+
+    height: 100px;
+
+    z-index: 999999;
+
+    pointer-events: none;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transform:
+
+        translate(
+            -18%,
+            -18%
+        )
+
+        rotate(-10deg)
+
+        scale(.65);
+
+    transition:
+
+        opacity
+        .15s
+        ease,
+
+        visibility
+        .15s
+        ease,
+
+        transform
+        .18s
+        cubic-bezier(
+            .2,
+            .8,
+            .3,
+            1
+        );
+
+}
+
+
+/* ==========================================================
+   POINTER VISIBLE
+   ========================================================== */
+
+#pointer-global.pointer-visible {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    transform:
+
+        translate(
+            -18%,
+            -18%
+        )
+
+        rotate(-8deg)
+
+        scale(1);
+
+}
+
+
+/* ==========================================================
+   ICONO DE LA MANO
+   ========================================================== */
+
+.pointer-global-icono {
+
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 78px;
+
+    line-height: 1;
+
+    user-select: none;
+
+    filter:
+
+        drop-shadow(
+            0 6px 5px
+            rgba(0,0,0,.75)
+        )
+
+        drop-shadow(
+            0 0 8px
+            rgba(125,211,252,1)
+        )
+
+        drop-shadow(
+            0 0 20px
+            rgba(56,189,248,.85)
+        )
+
+        drop-shadow(
+            0 0 40px
+            rgba(56,189,248,.45)
+        );
+
+}
+
+
+/* ==========================================================
+   AURA
+   ========================================================== */
+
+.pointer-global-aura {
+
+    position: absolute;
+
+    left: 50%;
+
+    top: 50%;
+
+    width: 90px;
+
+    height: 90px;
+
+    border-radius: 50%;
+
+    transform:
+
+        translate(
+            -50%,
+            -50%
+        );
+
+    background:
+
+        radial-gradient(
+            circle,
+            rgba(125,211,252,.35)
+            0%,
+
+            rgba(56,189,248,.15)
+            35%,
+
+            rgba(56,189,248,.05)
+            55%,
+
+            transparent
+            72%
+        );
+
+    box-shadow:
+
+        0 0 15px
+        rgba(56,189,248,.5),
+
+        0 0 35px
+        rgba(56,189,248,.3);
+
+    opacity: .65;
+
+    animation:
+
+        pointerAura
+        1.6s
+        ease-in-out
+        infinite;
+
+}
+
+
+/* ==========================================================
+   POINTER SOBRE ELEMENTO INTERACTIVO
+   ========================================================== */
+
+#pointer-global.pointer-sobre-elemento {
+
+    transform:
+
+        translate(
+            -18%,
+            -18%
+        )
+
+        rotate(-5deg)
+
+        scale(1.08);
+
+}
+
+
+/* ==========================================================
+   MANO SOBRE ELEMENTO
+   ========================================================== */
+
+#pointer-global.pointer-sobre-elemento
+.pointer-global-icono {
+
+    filter:
+
+        drop-shadow(
+            0 6px 5px
+            rgba(0,0,0,.8)
+        )
+
+        drop-shadow(
+            0 0 10px
+            rgba(125,211,252,1)
+        )
+
+        drop-shadow(
+            0 0 22px
+            rgba(56,189,248,.95)
+        )
+
+        drop-shadow(
+            0 0 40px
+            rgba(56,189,248,.55)
+        );
+
+}
+
+
+/* ==========================================================
+   ELEMENTO EN HOVER
+   ========================================================== */
+
+[data-pointer].pointer-hover {
+
+    filter:
+
+        drop-shadow(
+            0 0 8px
+            rgba(56,189,248,.45)
+        );
+
+}
+
+
+/* ==========================================================
+   POINTER PRESIONADO
+   ========================================================== */
+
+#pointer-global.pointer-presionado {
+
+    transform:
+
+        translate(
+            -18%,
+            -18%
+        )
+
+        rotate(0deg)
+
+        scale(.88);
+
+}
+
+
+/* ==========================================================
+   CAMBIO VISUAL AL PRESIONAR
+   ========================================================== */
+
+#pointer-global.pointer-presionado
+.pointer-global-icono {
+
+    filter:
+
+        drop-shadow(
+            0 7px 5px
+            rgba(0,0,0,.85)
+        )
+
+        drop-shadow(
+            0 0 10px
+            rgba(250,204,21,1)
+        )
+
+        drop-shadow(
+            0 0 22px
+            rgba(250,204,21,.9)
+        )
+
+        drop-shadow(
+            0 0 40px
+            rgba(250,204,21,.5)
+        );
+
+}
+
+
+/* ==========================================================
+   AURA AL PRESIONAR
+   ========================================================== */
+
+#pointer-global.pointer-presionado
+.pointer-global-aura {
+
+    background:
+
+        radial-gradient(
+            circle,
+            rgba(250,204,21,.4)
+            0%,
+
+            rgba(250,204,21,.15)
+            40%,
+
+            transparent
+            72%
+        );
+
+    box-shadow:
+
+        0 0 20px
+        rgba(250,204,21,.8),
+
+        0 0 45px
+        rgba(250,204,21,.45);
+
+}
+
+
+/* ==========================================================
+   ELEMENTO PRESIONADO
+   ========================================================== */
+
+[data-pointer].pointer-pressed {
+
+    transform:
+        translateY(3px);
+
+}
+
+
+/* ==========================================================
+   ANIMACIÓN DEL AURA
+   ========================================================== */
+
+@keyframes pointerAura {
+
+    0%,
+    100% {
+
+        transform:
+
+            translate(
+                -50%,
+                -50%
+            )
+
+            scale(.95);
+
+        opacity: .5;
+
+    }
+
+    50% {
+
+        transform:
+
+            translate(
+                -50%,
+                -50%
+            )
+
+            scale(1.25);
+
+        opacity: 1;
+
+    }
+
+}
+
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media (max-width: 600px) {
+
+    #pointer-global {
+
+        width: 80px;
+
+        height: 80px;
+
+    }
+
+
+    .pointer-global-icono {
+
+        font-size: 62px;
+
+    }
+
+
+    .pointer-global-aura {
+
+        width: 75px;
+
+        height: 75px;
+
+    }
+
+}
