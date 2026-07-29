@@ -206,6 +206,7 @@ export default class Tablero {
 
         const botonCapitulo = document.createElement("button");
         botonCapitulo.type = "button";
+        botonCapitulo.dataset.pointer = "";
         botonCapitulo.className = "registro-eventos-toggle";
         botonCapitulo.innerHTML = `<div class="registro-eventos-icono">◈</div><h3>CAPÍTULO ${this.juego.capituloActual + 1}</h3><span class="registro-eventos-flecha">▾</span>`;
 
@@ -227,6 +228,7 @@ export default class Tablero {
 
         const botonEvento = document.createElement("button");
         botonEvento.type = "button";
+        botonEvento.dataset.pointer = "";
         botonEvento.className = "registro-eventos-toggle";
         botonEvento.innerHTML = `<div class="registro-eventos-icono">◈</div><h3>EVENTO #${numeroCaso}</h3><span class="registro-eventos-flecha">▾</span>`;
 
@@ -248,6 +250,7 @@ export default class Tablero {
 
         const botonNexus = document.createElement("button");
         botonNexus.type = "button";
+        botonNexus.dataset.pointer = "";
         botonNexus.className = "registro-eventos-toggle";
         botonNexus.innerHTML = `<div class="registro-eventos-icono">⌬</div><h3>ANÁLISIS NEXUS</h3><span class="registro-eventos-flecha">▾</span>`;
 

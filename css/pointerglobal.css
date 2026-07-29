@@ -20,11 +20,11 @@
    data-pointer.
    ========================================================== */
 
-[data-pointer],
-[data-pointer] * {
+html,
+body,
+body * {
 
-    cursor:
-        none !important;
+    cursor: none !important;
 
 }
 
