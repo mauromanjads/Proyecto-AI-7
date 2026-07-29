@@ -19,7 +19,8 @@
  * - Renderizar personajes.
  * - Renderizar plataformas / hexágonos.
  * - Gestionar interacción con agentes.
- * - Gestionar agentes activos.
+ * - Gestionar UN SOLO agente activo.
+ * - Gestionar menú radial transparente del agente.
  *
  * RED:
  * - La lógica de tubos está delegada a Tubos.js.
@@ -37,6 +38,12 @@ export default class TableroAgentes {
         this.tablero = null;
 
         this.tubos = null;
+
+        this.agenteActivo = null;
+
+        this.tarjetaActiva = null;
+
+        this.modalAgente = null;
 
         this.agentes = [
 
@@ -90,9 +97,6 @@ export default class TableroAgentes {
             }
 
         ];
-
-        this.agentesActivos =
-            new Set();
 
     }
 
@@ -148,17 +152,7 @@ export default class TableroAgentes {
 
             <div class="nexus-tablero">
 
-                <!-- ==========================================
-                     RED DE TUBOS
-                     Tubos.js controla su contenido.
-                     ========================================== -->
-
                 <div class="nexus-red"></div>
-
-
-                <!-- ==========================================
-                     AGENTES
-                     ========================================== -->
 
                 <div class="nexus-agentes">
 
@@ -170,12 +164,110 @@ export default class TableroAgentes {
                     ).join("")}
 
                 </div>
-              
+
+                <div
+                    class="nexus-modal-agente"
+                    aria-hidden="true"
+                >
+
+                    <button
+                        class="nexus-accion nexus-accion-interrogar"
+                        type="button"
+                        aria-label="Interrogar"
+                        data-accion="interrogar"
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+                            <circle
+                                cx="11"
+                                cy="11"
+                                r="6"
+                            ></circle>
+                            <path
+                                d="M16 16l5 5"
+                            ></path>
+                        </svg>
+                    </button>
+
+                    <button
+                        class="nexus-accion nexus-accion-perfil"
+                        type="button"
+                        aria-label="Perfil"
+                        data-accion="perfil"
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+                            <circle
+                                cx="12"
+                                cy="8"
+                                r="4"
+                            ></circle>
+                            <path
+                                d="M4 21c.8-4.2 3.4-6 8-6s7.2 1.8 8 6"
+                            ></path>
+                        </svg>
+                    </button>
+
+                    <button
+                        class="nexus-accion nexus-accion-culpable"
+                        type="button"
+                        aria-label="Culpable"
+                        data-accion="culpable"
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="8"
+                            ></circle>
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="3"
+                            ></circle>
+                            <path
+                                d="M12 2v3M12 19v3M2 12h3M19 12h3"
+                            ></path>
+                        </svg>
+                    </button>
+
+                    <button
+                        class="nexus-accion nexus-accion-cancelar"
+                        type="button"
+                        aria-label="Cancelar"
+                        data-accion="cancelar"
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+                            <path
+                                d="M6 6l12 12M18 6L6 18"
+                            ></path>
+                        </svg>
+                    </button>
+
+                </div>
+
+            </div>
+
         `;
 
         this.tablero =
             this.contenedor.querySelector(
                 ".nexus-tablero"
+            );
+
+        this.modalAgente =
+            this.tablero.querySelector(
+                ".nexus-modal-agente"
             );
 
         this.configurarInteracciones();
@@ -205,10 +297,6 @@ export default class TableroAgentes {
                 aria-pressed="false"
             >
 
-                <!-- ======================================
-                     PERSONAJE
-                     ====================================== -->
-
                 <div class="tablero-agente-personaje">
 
                     <img
@@ -218,11 +306,6 @@ export default class TableroAgentes {
                     >
 
                 </div>
-
-
-                <!-- ======================================
-                     BASE / HEXÁGONO
-                     ====================================== -->
 
                 <div class="tablero-agente-base">
 
@@ -309,52 +392,49 @@ export default class TableroAgentes {
         tarjetas.forEach(
             tarjeta => {
 
-                const alternar =
+                const activar =
                     () => {
 
                         const codigo =
                             tarjeta.dataset.agente;
 
+                        /*
+                         * SOLO UN AGENTE ACTIVO.
+                         *
+                         * Si ya existe uno activo,
+                         * ningún otro puede activarse.
+                         */
+
                         if (
-                            this.agentesActivos.has(
-                                codigo
-                            )
+                            this.agenteActivo &&
+                            this.agenteActivo !== codigo
                         ) {
 
-                            this.desactivarAgente(
-                                tarjeta,
-                                codigo
-                            );
-
-                        } else {
-
-                            this.activarAgente(
-                                tarjeta,
-                                codigo
-                            );
+                            return;
 
                         }
+
+                        if (
+                            this.agenteActivo === codigo
+                        ) {
+
+                            return;
+
+                        }
+
+                        this.activarAgente(
+                            tarjeta,
+                            codigo
+                        );
 
                     };
 
 
-                /*
-                 * ==========================================
-                 * CLICK
-                 * ==========================================
-                 */
-
                 tarjeta.addEventListener(
                     "click",
-                    alternar
+                    activar
                 );
 
-
-                /*
-                 * ==========================================
-                 * TECLADO
-                 * ==========================================
-                 */
 
                 tarjeta.addEventListener(
                     "keydown",
@@ -367,9 +447,43 @@ export default class TableroAgentes {
 
                             evento.preventDefault();
 
-                            alternar();
+                            activar();
 
                         }
+
+                    }
+                );
+
+            }
+        );
+
+
+        /*
+         * ==================================================
+         * ACCIONES DEL MENÚ
+         * ==================================================
+         */
+
+        const acciones =
+            this.modalAgente.querySelectorAll(
+                ".nexus-accion"
+            );
+
+        acciones.forEach(
+            accion => {
+
+                accion.addEventListener(
+                    "click",
+                    evento => {
+
+                        evento.stopPropagation();
+
+                        const tipo =
+                            accion.dataset.accion;
+
+                        this.ejecutarAccion(
+                            tipo
+                        );
 
                     }
                 );
@@ -390,19 +504,25 @@ export default class TableroAgentes {
     ) {
 
         /*
-         * ==========================================
-         * GUARDAR AGENTE ACTIVO
-         * ==========================================
+         * SEGURIDAD:
+         * Nunca permitir dos agentes activos.
          */
 
-        this.agentesActivos.add(
-            codigo
-        );
+        if (this.agenteActivo) {
+
+            return;
+
+        }
+
+
+        this.agenteActivo = codigo;
+
+        this.tarjetaActiva = tarjeta;
 
 
         /*
          * ==========================================
-         * ACTIVAR ESTADO VISUAL DEL AGENTE
+         * ESTADO VISUAL
          * ==========================================
          */
 
@@ -423,7 +543,7 @@ export default class TableroAgentes {
 
         /*
          * ==========================================
-         * ACTIVAR RED DE TUBOS
+         * RED NEXUS
          * ==========================================
          */
 
@@ -435,6 +555,136 @@ export default class TableroAgentes {
 
         }
 
+
+        /*
+         * ==========================================
+         * ABRIR MENÚ RADIAL
+         * ==========================================
+         */
+
+        this.mostrarMenuAgente(
+            tarjeta
+        );
+
+    }
+
+
+    /* ======================================================
+       MOSTRAR MENÚ
+       ====================================================== */
+
+    mostrarMenuAgente(
+        tarjeta
+    ) {
+
+        if (!this.modalAgente) {
+
+            return;
+
+        }
+
+
+        /*
+         * Posicionar el menú sobre el agente.
+         */
+
+        const x =
+            tarjeta.offsetLeft +
+            tarjeta.offsetWidth / 2;
+
+        const y =
+            tarjeta.offsetTop +
+            105;
+
+
+        this.modalAgente.style.left =
+            `${x}px`;
+
+        this.modalAgente.style.top =
+            `${y}px`;
+
+
+        this.modalAgente.classList.remove(
+            "menu-cerrando"
+        );
+
+
+        /*
+         * Forzar reinicio de animación.
+         */
+
+        void this.modalAgente.offsetWidth;
+
+
+        this.modalAgente.classList.add(
+            "menu-visible"
+        );
+
+        this.modalAgente.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
+    }
+
+
+    /* ======================================================
+       EJECUTAR ACCIÓN
+       ====================================================== */
+
+    ejecutarAccion(
+        tipo
+    ) {
+
+        if (
+            !this.agenteActivo
+        ) {
+
+            return;
+
+        }
+
+
+        switch (tipo) {
+
+            case "interrogar":
+
+                /*
+                 * Aquí se conectará posteriormente
+                 * con la lógica de interrogación.
+                 */
+
+                break;
+
+
+            case "perfil":
+
+                /*
+                 * Aquí se conectará posteriormente
+                 * con el perfil del agente.
+                 */
+
+                break;
+
+
+            case "culpable":
+
+                /*
+                 * Aquí se conectará posteriormente
+                 * con la selección de culpable.
+                 */
+
+                break;
+
+
+            case "cancelar":
+
+                this.desactivarAgente();
+
+                break;
+
+        }
+
     }
 
 
@@ -442,25 +692,37 @@ export default class TableroAgentes {
        DESACTIVAR AGENTE
        ====================================================== */
 
-    desactivarAgente(
-        tarjeta,
-        codigo
-    ) {
+    desactivarAgente() {
+
+        if (
+            !this.tarjetaActiva ||
+            !this.agenteActivo
+        ) {
+
+            return;
+
+        }
+
+
+        const tarjeta =
+            this.tarjetaActiva;
+
+        const codigo =
+            this.agenteActivo;
+
 
         /*
          * ==========================================
-         * ELIMINAR AGENTE ACTIVO
+         * CERRAR MENÚ
          * ==========================================
          */
 
-        this.agentesActivos.delete(
-            codigo
-        );
+        this.ocultarMenuAgente();
 
 
         /*
          * ==========================================
-         * DESACTIVAR ESTADO VISUAL DEL AGENTE
+         * DESACTIVAR ESTADO VISUAL
          * ==========================================
          */
 
@@ -481,7 +743,7 @@ export default class TableroAgentes {
 
         /*
          * ==========================================
-         * DESACTIVAR RED DE TUBOS
+         * RED NEXUS
          * ==========================================
          */
 
@@ -492,6 +754,46 @@ export default class TableroAgentes {
             );
 
         }
+
+
+        /*
+         * ==========================================
+         * LIMPIAR ESTADO
+         * ==========================================
+         */
+
+        this.agenteActivo = null;
+
+        this.tarjetaActiva = null;
+
+    }
+
+
+    /* ======================================================
+       OCULTAR MENÚ
+       ====================================================== */
+
+    ocultarMenuAgente() {
+
+        if (!this.modalAgente) {
+
+            return;
+
+        }
+
+
+        this.modalAgente.classList.remove(
+            "menu-visible"
+        );
+
+        this.modalAgente.classList.add(
+            "menu-cerrando"
+        );
+
+        this.modalAgente.setAttribute(
+            "aria-hidden",
+            "true"
+        );
 
     }
 
