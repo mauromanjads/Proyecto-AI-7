@@ -14,20 +14,19 @@
  * - VEGA
  * - ZERO
  *
- * RED:
- * - Tubo madre horizontal.
- * - Tubos verticales independientes.
- * - Cada tubo se conecta directamente con su plataforma.
- * - Cada tubo tiene su propio ID.
+ * RESPONSABILIDAD:
+ * - Renderizar agentes.
+ * - Renderizar personajes.
+ * - Renderizar plataformas / hexágonos.
+ * - Gestionar interacción con agentes.
+ * - Gestionar agentes activos.
  *
- * INTERACCIÓN:
- * - Click activa/desactiva agente.
- * - Múltiples agentes pueden estar activos.
- * - Tubo individual se ilumina.
- * - Conector individual se ilumina.
- * - Segmento del tubo madre se ilumina.
+ * RED:
+ * - La lógica de tubos está delegada a Tubos.js.
  * ==========================================================
  */
+
+import Tubos from "./Tubos.js";
 
 export default class TableroAgentes {
 
@@ -36,6 +35,8 @@ export default class TableroAgentes {
         this.contenedor = null;
 
         this.tablero = null;
+
+        this.tubos = null;
 
         this.agentes = [
 
@@ -93,9 +94,6 @@ export default class TableroAgentes {
         this.agentesActivos =
             new Set();
 
-        this.resizeObserver =
-            null;
-
     }
 
 
@@ -122,15 +120,20 @@ export default class TableroAgentes {
 
         this.renderizar();
 
-        this.configurarRedimensionamiento();
 
-        requestAnimationFrame(
-            () => {
+        /*
+         * ==================================================
+         * INICIAR RED DE TUBOS
+         * ==================================================
+         */
 
-                this.actualizarTubos();
+        this.tubos =
+            new Tubos(
+                this.tablero,
+                this.agentes
+            );
 
-            }
-        );
+        this.tubos.iniciar();
 
     }
 
@@ -145,86 +148,12 @@ export default class TableroAgentes {
 
             <div class="nexus-tablero">
 
-                <div class="nexus-red">
+                <!-- ==========================================
+                     RED DE TUBOS
+                     Tubos.js controla su contenido.
+                     ========================================== -->
 
-                    <svg
-                        class="nexus-red-svg"
-                        viewBox="0 0 1200 700"
-                        preserveAspectRatio="none"
-                        aria-hidden="true"
-                    >
-
-                        <!-- ==================================
-                             TUBO MADRE APAGADO
-                             ================================== -->
-
-                        <path
-                            id="nexus-tubo-madre"
-                            class="nexus-tubo-madre"
-                            d="M 0 350 L 1200 350"
-                        ></path>
-
-
-                        <!-- ==================================
-                             TUBO MADRE ACTIVO
-                             Segmentos individuales
-                             ================================== -->
-
-                        ${this.agentes.map(
-                            agente => `
-
-                                <path
-                                    id="nexus-madre-${agente.codigo.toLowerCase()}"
-                                    class="nexus-madre-segmento"
-                                    data-madre="${agente.codigo}"
-                                    d="M 0 350 L 0 350"
-                                ></path>
-
-                            `
-                        ).join("")}
-
-
-                        <!-- ==================================
-                             TUBOS VERTICALES
-                             Cada uno es independiente.
-                             ================================== -->
-
-                        ${this.agentes.map(
-                            agente => `
-
-                                <path
-                                    id="nexus-tubo-${agente.codigo.toLowerCase()}"
-                                    class="nexus-tubo"
-                                    data-tubo="${agente.codigo}"
-                                    d="M 0 0 L 0 0"
-                                ></path>
-
-                            `
-                        ).join("")}
-
-
-                        <!-- ==================================
-                             CONECTORES
-                             ================================== -->
-
-                        ${this.agentes.map(
-                            agente => `
-
-                                <circle
-                                    id="nexus-conector-${agente.codigo.toLowerCase()}"
-                                    class="nexus-conector"
-                                    data-conector="${agente.codigo}"
-                                    cx="0"
-                                    cy="350"
-                                    r="9"
-                                ></circle>
-
-                            `
-                        ).join("")}
-
-                    </svg>
-
-                </div>
+                <div class="nexus-red"></div>
 
 
                 <!-- ==========================================
@@ -241,24 +170,7 @@ export default class TableroAgentes {
                     ).join("")}
 
                 </div>
-
-
-                <!-- ==========================================
-                     NÚCLEO
-                     ========================================== -->
-
-                <div class="nexus-nucleo">
-
-                    <div class="nexus-nucleo-anillo"></div>
-
-                    <span class="nexus-nucleo-centro">
-                        NEXUS
-                    </span>
-
-                </div>
-
-            </div>
-
+              
         `;
 
         this.tablero =
@@ -275,7 +187,9 @@ export default class TableroAgentes {
        CREAR AGENTE
        ====================================================== */
 
-    crearAgente(agente) {
+    crearAgente(
+        agente
+    ) {
 
         return `
 
@@ -285,7 +199,6 @@ export default class TableroAgentes {
                     agente-${agente.posicion}
                 "
                 data-agente="${agente.codigo}"
-                data-tubo="${agente.codigo}"
                 role="button"
                 tabindex="0"
                 aria-label="Activar ${agente.nombre}"
@@ -425,11 +338,23 @@ export default class TableroAgentes {
                     };
 
 
+                /*
+                 * ==========================================
+                 * CLICK
+                 * ==========================================
+                 */
+
                 tarjeta.addEventListener(
                     "click",
                     alternar
                 );
 
+
+                /*
+                 * ==========================================
+                 * TECLADO
+                 * ==========================================
+                 */
 
                 tarjeta.addEventListener(
                     "keydown",
@@ -464,9 +389,22 @@ export default class TableroAgentes {
         codigo
     ) {
 
+        /*
+         * ==========================================
+         * GUARDAR AGENTE ACTIVO
+         * ==========================================
+         */
+
         this.agentesActivos.add(
             codigo
         );
+
+
+        /*
+         * ==========================================
+         * ACTIVAR ESTADO VISUAL DEL AGENTE
+         * ==========================================
+         */
 
         tarjeta.classList.add(
             "agente-activo"
@@ -476,49 +414,23 @@ export default class TableroAgentes {
             "agente-presionado"
         );
 
+
         tarjeta.setAttribute(
             "aria-pressed",
             "true"
         );
 
 
-        const tubo =
-            this.tablero.querySelector(
-                `[data-tubo="${codigo}"]`
-            );
+        /*
+         * ==========================================
+         * ACTIVAR RED DE TUBOS
+         * ==========================================
+         */
 
-        if (tubo) {
+        if (this.tubos) {
 
-            tubo.classList.add(
-                "tubo-activo"
-            );
-
-        }
-
-
-        const conector =
-            this.tablero.querySelector(
-                `[data-conector="${codigo}"]`
-            );
-
-        if (conector) {
-
-            conector.classList.add(
-                "conector-activo"
-            );
-
-        }
-
-
-        const madre =
-            this.tablero.querySelector(
-                `[data-madre="${codigo}"]`
-            );
-
-        if (madre) {
-
-            madre.classList.add(
-                "madre-segmento-activo"
+            this.tubos.activar(
+                codigo
             );
 
         }
@@ -535,9 +447,22 @@ export default class TableroAgentes {
         codigo
     ) {
 
+        /*
+         * ==========================================
+         * ELIMINAR AGENTE ACTIVO
+         * ==========================================
+         */
+
         this.agentesActivos.delete(
             codigo
         );
+
+
+        /*
+         * ==========================================
+         * DESACTIVAR ESTADO VISUAL DEL AGENTE
+         * ==========================================
+         */
 
         tarjeta.classList.remove(
             "agente-activo"
@@ -547,334 +472,26 @@ export default class TableroAgentes {
             "agente-presionado"
         );
 
+
         tarjeta.setAttribute(
             "aria-pressed",
             "false"
         );
 
 
-        const tubo =
-            this.tablero.querySelector(
-                `[data-tubo="${codigo}"]`
-            );
+        /*
+         * ==========================================
+         * DESACTIVAR RED DE TUBOS
+         * ==========================================
+         */
 
-        if (tubo) {
+        if (this.tubos) {
 
-            tubo.classList.remove(
-                "tubo-activo"
-            );
-
-        }
-
-
-        const conector =
-            this.tablero.querySelector(
-                `[data-conector="${codigo}"]`
-            );
-
-        if (conector) {
-
-            conector.classList.remove(
-                "conector-activo"
+            this.tubos.desactivar(
+                codigo
             );
 
         }
-
-
-        const madre =
-            this.tablero.querySelector(
-                `[data-madre="${codigo}"]`
-            );
-
-        if (madre) {
-
-            madre.classList.remove(
-                "madre-segmento-activo"
-            );
-
-        }
-
-    }
-
-
-    /* ======================================================
-       ACTUALIZAR TUBOS
-       ------------------------------------------------------
-       Calcula la posición REAL de cada plataforma.
-
-       Esto evita que los tubos queden flotando o separados.
-       ====================================================== */
-
-    actualizarTubos() {
-
-        if (!this.tablero) {
-
-            return;
-
-        }
-
-        const tableroRect =
-            this.tablero.getBoundingClientRect();
-
-
-        const madreY =
-            this.tablero.clientHeight / 2;
-
-
-        const svg =
-            this.tablero.querySelector(
-                ".nexus-red-svg"
-            );
-
-
-        if (!svg) {
-
-            return;
-
-        }
-
-
-        this.agentes.forEach(
-            agente => {
-
-                const tarjeta =
-                    this.tablero.querySelector(
-                        `[data-agente="${agente.codigo}"]`
-                    );
-
-
-                if (!tarjeta) {
-
-                    return;
-
-                }
-
-
-                const base =
-                    tarjeta.querySelector(
-                        ".tablero-agente-base"
-                    );
-
-
-                if (!base) {
-
-                    return;
-
-                }
-
-
-                const baseRect =
-                    base.getBoundingClientRect();
-
-
-                /*
-                 * =========================================
-                 * CENTRO HORIZONTAL DE LA PLATAFORMA
-                 * =========================================
-                 */
-
-                const x =
-                    (
-                        baseRect.left +
-                        baseRect.width / 2 -
-                        tableroRect.left
-                    )
-                    *
-                    (
-                        1200 /
-                        tableroRect.width
-                    );
-
-
-                /*
-                 * =========================================
-                 * BORDE DE LA PLATAFORMA
-                 * =========================================
-                 *
-                 * Para agentes superiores:
-                 * el tubo termina en la parte inferior.
-                 *
-                 * Para agentes inferiores:
-                 * el tubo empieza en la parte superior.
-                 * =========================================
-                 */
-
-                let y;
-
-
-                if (
-                    agente.posicion ===
-                    "arriba"
-                ) {
-
-                    y =
-                        (
-                            baseRect.bottom -
-                            tableroRect.top
-                        )
-                        *
-                        (
-                            700 /
-                            tableroRect.height
-                        );
-
-                } else {
-
-                    y =
-                        (
-                            baseRect.top -
-                            tableroRect.top
-                        )
-                        *
-                        (
-                            700 /
-                            tableroRect.height
-                        );
-
-                }
-
-
-                const tubo =
-                    this.tablero.querySelector(
-                        `#nexus-tubo-${agente.codigo.toLowerCase()}`
-                    );
-
-
-                if (tubo) {
-
-                    if (
-                        agente.posicion ===
-                        "arriba"
-                    ) {
-
-                        tubo.setAttribute(
-                            "d",
-                            `
-                                M ${x} ${y}
-                                L ${x} ${madreY}
-                            `
-                        );
-
-                    } else {
-
-                        tubo.setAttribute(
-                            "d",
-                            `
-                                M ${x} ${madreY}
-                                L ${x} ${y}
-                            `
-                        );
-
-                    }
-
-                }
-
-
-                /*
-                 * =========================================
-                 * CONECTOR
-                 * =========================================
-                 */
-
-                const conector =
-                    this.tablero.querySelector(
-                        `#nexus-conector-${agente.codigo.toLowerCase()}`
-                    );
-
-
-                if (conector) {
-
-                    conector.setAttribute(
-                        "cx",
-                        x
-                    );
-
-                    conector.setAttribute(
-                        "cy",
-                        madreY
-                    );
-
-                }
-
-
-                /*
-                 * =========================================
-                 * SEGMENTO DEL TUBO MADRE
-                 * =========================================
-                 */
-
-                const madre =
-                    this.tablero.querySelector(
-                        `#nexus-madre-${agente.codigo.toLowerCase()}`
-                    );
-
-
-                if (madre) {
-
-                    madre.setAttribute(
-                        "d",
-                        `
-                            M ${x} ${madreY}
-                            L ${x} ${madreY}
-                        `
-                    );
-
-                }
-
-            }
-        );
-
-    }
-
-
-    /* ======================================================
-       RESPONSIVE
-       ====================================================== */
-
-    configurarRedimensionamiento() {
-
-        if (
-            typeof ResizeObserver !==
-            "undefined"
-        ) {
-
-            this.resizeObserver =
-                new ResizeObserver(
-                    () => {
-
-                        requestAnimationFrame(
-                            () => {
-
-                                this.actualizarTubos();
-
-                            }
-                        );
-
-                    }
-                );
-
-
-            this.resizeObserver.observe(
-                this.tablero
-            );
-
-        }
-
-
-        window.addEventListener(
-            "resize",
-            () => {
-
-                requestAnimationFrame(
-                    () => {
-
-                        this.actualizarTubos();
-
-                    }
-                );
-
-            }
-        );
 
     }
 
