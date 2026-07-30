@@ -28,8 +28,7 @@ export default class Modal {
                     <button
                         class="modal-cerrar"
                         type="button"
-                        aria-label="Cerrar"
-                    >
+                        aria-label="Cerrar">
                         ×
                     </button>
 
@@ -51,8 +50,7 @@ export default class Modal {
 
                             <div
                                 class="modal-agente-codigo"
-                                style="background:${agente.color}"
-                            >
+                                style="background:${agente.color}">
                                 ${agente.codigo}
                             </div>
 
@@ -70,6 +68,10 @@ export default class Modal {
 
                     <div class="modal-agente-descripcion">
 
+                        <div class="modal-agente-etiqueta">
+                            PERFIL DEL AGENTE
+                        </div>
+
                         <p>
                             ${agente.descripcion}
                         </p>
@@ -80,7 +82,7 @@ export default class Modal {
 
                         <div class="fila">
 
-                            <span>📏 Altura</span>
+                            <span>📏 ALTURA</span>
 
                             <strong>
                                 ${agente.altura} cm
@@ -92,8 +94,7 @@ export default class Modal {
 
                     <button
                         class="modal-cerrar-grande"
-                        type="button"
-                    >
+                        type="button">
                         CERRAR
                     </button>
 
@@ -102,7 +103,6 @@ export default class Modal {
             </div>
 
         `;
-
     }
 
     /* ======================================================
@@ -124,8 +124,7 @@ export default class Modal {
                     <button
                         class="modal-narrativo-cerrar"
                         type="button"
-                        aria-label="Cerrar"
-                    >
+                        aria-label="Cerrar">
                         ×
                     </button>
 
@@ -151,8 +150,7 @@ export default class Modal {
 
                     <button
                         class="modal-narrativo-cerrar-grande"
-                        type="button"
-                    >
+                        type="button">
                         CERRAR
                     </button>
 
@@ -161,7 +159,5 @@ export default class Modal {
             </div>
 
         `;
-
     }
-
 }
