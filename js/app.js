@@ -12,7 +12,7 @@ import Prologo from "./ui/Prologo.js";
 import TableroAgentes from "./ui/TableroAgentes.js";
 import PointerGlobal from "./ui/PointerGlobal.js";
 
-const MODO_PRUEBA = true;
+const MODO_PRUEBA = false;
 
 const pantallaPrologo =
     document.getElementById("pantalla-prologo");
