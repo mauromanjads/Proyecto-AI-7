@@ -31,7 +31,7 @@ export default class Tablero {
     mostrarAgentes(agentes, declaraciones) {
 
         if (this.tableroAgentes) {
-            this.tableroAgentes.cargarAgentes(agentes);
+            this.tableroAgentes.cargarAgentes(agentes,declaraciones);
         }
 
         this.divAgentes.innerHTML = "";

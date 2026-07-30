@@ -8,19 +8,18 @@
  * RESPONSABILIDAD:
  * - Cargar los agentes desde el catálogo oficial.
  * - Recibir los agentes reales del caso lógico.
+ * - Recibir las declaraciones del caso lógico.
  * - Renderizar agentes.
  * - Renderizar personajes.
  * - Renderizar plataformas / hexágonos.
  * - Gestionar interacción con agentes.
  * - Gestionar UN SOLO agente activo.
  * - Gestionar menú radial transparente del agente.
- *
- * RED:
- * - La lógica de tubos está delegada a Tubos.js.
  * ==========================================================
  */
 
 import Tubos from "./Tubos.js";
+import Mensajes from "./Mensajes.js";
 import { PERSONAJES } from "../datos/personajes.js";
 
 export default class TableroAgentes {
@@ -39,22 +38,12 @@ export default class TableroAgentes {
 
         this.modalAgente = null;
 
+        this.declaraciones = [];
+
         /*
          * ==================================================
          * CATÁLOGO OFICIAL
          * ==================================================
-         *
-         * Aquí NO se queman los agentes.
-         *
-         * PERSONAJES es la fuente oficial.
-         *
-         * Al iniciar mostramos el catálogo completo.
-         * Cuando Juego genere un caso, Tablero llamará:
-         *
-         * cargarAgentes(agentes)
-         *
-         * y esta lista será reemplazada por los agentes
-         * reales del caso.
          */
 
         this.agentes =
@@ -123,13 +112,6 @@ export default class TableroAgentes {
 
         this.renderizar();
 
-
-        /*
-         * ==================================================
-         * INICIAR RED DE TUBOS
-         * ==================================================
-         */
-
         this.iniciarTubos();
 
     }
@@ -140,11 +122,13 @@ export default class TableroAgentes {
        ====================================================== */
 
     cargarAgentes(
-        agentes
+        agentes,
+        declaraciones = []
     ) {
 
         /*
-         * El caso lógico es ahora la fuente de agentes.
+         * El caso lógico es ahora
+         * la fuente de agentes.
          */
 
         if (
@@ -155,6 +139,17 @@ export default class TableroAgentes {
             return;
 
         }
+
+
+        /*
+         * Guardar las declaraciones
+         * correspondientes al caso actual.
+         */
+
+        this.declaraciones =
+            Array.isArray(declaraciones)
+                ? declaraciones
+                : [];
 
 
         /*
@@ -211,13 +206,6 @@ export default class TableroAgentes {
        ====================================================== */
 
     iniciarTubos() {
-
-        /*
-         * Si ya existe una red anterior,
-         * simplemente reemplazamos la referencia.
-         *
-         * El tablero ya fue reconstruido antes de llegar aquí.
-         */
 
         this.tubos =
             new Tubos(
@@ -352,18 +340,15 @@ export default class TableroAgentes {
 
         `;
 
-
         this.tablero =
             this.contenedor.querySelector(
                 ".nexus-tablero"
             );
 
-
         this.modalAgente =
             this.tablero.querySelector(
                 ".nexus-modal-agente"
             );
-
 
         this.configurarInteracciones();
 
@@ -484,7 +469,6 @@ export default class TableroAgentes {
                 ".tablero-agente"
             );
 
-
         tarjetas.forEach(
             tarjeta => {
 
@@ -493,7 +477,6 @@ export default class TableroAgentes {
 
                         const codigo =
                             tarjeta.dataset.agente;
-
 
                         if (
                             this.agenteActivo &&
@@ -504,7 +487,6 @@ export default class TableroAgentes {
 
                         }
 
-
                         if (
                             this.agenteActivo === codigo
                         ) {
@@ -513,7 +495,6 @@ export default class TableroAgentes {
 
                         }
 
-
                         this.activarAgente(
                             tarjeta,
                             codigo
@@ -521,12 +502,10 @@ export default class TableroAgentes {
 
                     };
 
-
                 tarjeta.addEventListener(
                     "click",
                     activar
                 );
-
 
                 tarjeta.addEventListener(
                     "keydown",
@@ -549,12 +528,10 @@ export default class TableroAgentes {
             }
         );
 
-
         const acciones =
             this.modalAgente.querySelectorAll(
                 ".nexus-accion"
             );
-
 
         acciones.forEach(
             accion => {
@@ -565,10 +542,8 @@ export default class TableroAgentes {
 
                         evento.stopPropagation();
 
-
                         const tipo =
                             accion.dataset.accion;
-
 
                         this.ejecutarAccion(
                             tipo
@@ -600,30 +575,24 @@ export default class TableroAgentes {
 
         }
 
-
         this.agenteActivo =
             codigo;
 
-
         this.tarjetaActiva =
             tarjeta;
-
 
         tarjeta.classList.add(
             "agente-activo"
         );
 
-
         tarjeta.classList.add(
             "agente-presionado"
         );
-
 
         tarjeta.setAttribute(
             "aria-pressed",
             "true"
         );
-
 
         if (this.tubos) {
 
@@ -632,7 +601,6 @@ export default class TableroAgentes {
             );
 
         }
-
 
         this.mostrarMenuAgente(
             tarjeta
@@ -657,37 +625,29 @@ export default class TableroAgentes {
 
         }
 
-
         const x =
             tarjeta.offsetLeft +
             tarjeta.offsetWidth / 2;
-
 
         const y =
             tarjeta.offsetTop +
             105;
 
-
         this.modalAgente.style.left =
             `${x}px`;
 
-
         this.modalAgente.style.top =
             `${y}px`;
-
 
         this.modalAgente.classList.remove(
             "menu-cerrando"
         );
 
-
         void this.modalAgente.offsetWidth;
-
 
         this.modalAgente.classList.add(
             "menu-visible"
         );
-
 
         this.modalAgente.setAttribute(
             "aria-hidden",
@@ -713,12 +673,13 @@ export default class TableroAgentes {
 
         }
 
-
         switch (
             tipo
         ) {
 
             case "interrogar":
+
+                this.interrogarAgente();
 
                 break;
 
@@ -745,6 +706,60 @@ export default class TableroAgentes {
 
 
     /* ======================================================
+       INTERROGAR AGENTE
+       ====================================================== */
+
+    interrogarAgente() {
+
+        const agente =
+            this.agentes.find(
+                elemento =>
+                    elemento.codigo ===
+                    this.agenteActivo
+            );
+
+        if (!agente) {
+
+            return;
+
+        }
+
+
+        const declaracion =
+            this.declaraciones.find(
+                elemento =>
+                    elemento.personaje.nombre ===
+                    agente.nombre
+            );
+
+        if (!declaracion) {
+
+            console.warn(
+                `No se encontró declaración para ${agente.nombre}`
+            );
+
+            return;
+
+        }
+
+
+        /*
+         * Mensajes.js ya tiene el modal
+         * preparado para mostrar declaraciones.
+         *
+         * Como cada agente tiene una sola,
+         * enviamos únicamente esa declaración.
+         */
+
+        new Mensajes().mostrar(
+            agente,
+            [declaracion]
+        );
+
+    }
+
+
+    /* ======================================================
        DESACTIVAR AGENTE
        ====================================================== */
 
@@ -759,33 +774,26 @@ export default class TableroAgentes {
 
         }
 
-
         const tarjeta =
             this.tarjetaActiva;
-
 
         const codigo =
             this.agenteActivo;
 
-
         this.ocultarMenuAgente();
-
 
         tarjeta.classList.remove(
             "agente-activo"
         );
 
-
         tarjeta.classList.remove(
             "agente-presionado"
         );
-
 
         tarjeta.setAttribute(
             "aria-pressed",
             "false"
         );
-
 
         if (this.tubos) {
 
@@ -795,10 +803,8 @@ export default class TableroAgentes {
 
         }
 
-
         this.agenteActivo =
             null;
-
 
         this.tarjetaActiva =
             null;
@@ -820,16 +826,13 @@ export default class TableroAgentes {
 
         }
 
-
         this.modalAgente.classList.remove(
             "menu-visible"
         );
 
-
         this.modalAgente.classList.add(
             "menu-cerrando"
         );
-
 
         this.modalAgente.setAttribute(
             "aria-hidden",
