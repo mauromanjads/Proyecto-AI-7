@@ -27,7 +27,6 @@
     position: absolute;
 
     width: 260px;
-
     height: 260px;
 
     z-index: 50;
@@ -64,11 +63,9 @@
     position: absolute;
 
     left: 50%;
-
     top: 50%;
 
     width: 100px;
-
     height: 100px;
 
     padding: 0;
@@ -76,7 +73,6 @@
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
     border:
@@ -181,14 +177,6 @@
 
 /* ==========================================================
    POSICIONES RADIALES
-   ----------------------------------------------------------
-   El punto de referencia es exactamente:
-   
-       left: 50%
-       top: 50%
-   
-   Esto permite que el centro del menú coincida con
-   el eje del agente / tubo vertical.
    ========================================================== */
 
 
@@ -410,7 +398,6 @@
 
     }
 
-
     45% {
 
         opacity:
@@ -427,7 +414,6 @@
 
     }
 
-
     70% {
 
         transform:
@@ -440,7 +426,6 @@
             scale(.96);
 
     }
-
 
     100% {
 
@@ -482,7 +467,6 @@
             scale(1);
 
     }
-
 
     100% {
 
@@ -545,8 +529,6 @@
 
 /* ==========================================================
    CANCELAR
-   ----------------------------------------------------------
-   Botón diferente para representar cierre.
    ========================================================== */
 
 .nexus-accion-cancelar {
@@ -615,20 +597,12 @@
 
 /* ==========================================================
    RESPONSIVE
+   ----------------------------------------------------------
+   SOLO TABLET Y MÓVIL.
+   ESCRITORIO NO SE TOCA.
    ========================================================== */
 
 @media (max-width: 900px) {
-
-    .nexus-modal-agente {
-
-        width:
-            210px;
-
-        height:
-            210px;
-
-    }
-
 
     .nexus-accion {
 
@@ -640,7 +614,6 @@
 
     }
 
-
     .nexus-accion svg {
 
         width:
@@ -651,39 +624,35 @@
 
     }
 
-
     .nexus-accion-interrogar {
 
         --x:
             0px;
 
         --y:
-            -79px;
+            -72px;
 
     }
-
 
     .nexus-accion-perfil {
 
         --x:
-            -79px;
+            -58px;
 
         --y:
-            40px;
+            34px;
 
     }
-
 
     .nexus-accion-culpable {
 
         --x:
-            79px;
+            58px;
 
         --y:
-            40px;
+            34px;
 
     }
-
 
     .nexus-accion-cancelar {
 
@@ -691,7 +660,7 @@
             0px;
 
         --y:
-            97px;
+            30px;
 
     }
 
@@ -704,27 +673,15 @@
 
 @media (max-width: 700px) {
 
-    .nexus-modal-agente {
-
-        width:
-            195px;
-
-        height:
-            195px;
-
-    }
-
-
     .nexus-accion {
 
         width:
-            46px;
+            44px;
 
         height:
-            46px;
+            44px;
 
     }
-
 
     .nexus-accion svg {
 
@@ -736,39 +693,35 @@
 
     }
 
-
     .nexus-accion-interrogar {
 
         --x:
             0px;
 
         --y:
-            -73px;
+            -65px;
 
     }
-
 
     .nexus-accion-perfil {
 
         --x:
-            -69px;
+            -52px;
 
         --y:
-            37px;
+            30px;
 
     }
-
 
     .nexus-accion-culpable {
 
         --x:
-            69px;
+            52px;
 
         --y:
-            37px;
+            30px;
 
     }
-
 
     .nexus-accion-cancelar {
 
@@ -776,7 +729,108 @@
             0px;
 
         --y:
-            88px;
+             50px;
+
+    }
+
+}
+
+
+/* ==========================================================
+   RESPONSIVE
+   ----------------------------------------------------------
+   SOLO POSICIÓN X / Y DE LOS ICONOS.
+   ESCRITORIO NO SE TOCA.
+   ========================================================== */
+
+@media (max-width: 900px) {
+
+    .nexus-accion-interrogar {
+
+        --x:
+            0px;
+
+        --y:
+            -90px;
+
+    }
+
+    .nexus-accion-perfil {
+
+        --x:
+            -62px;
+
+        --y:
+            20px;
+
+    }
+
+    .nexus-accion-culpable {
+
+        --x:
+            62px;
+
+        --y:
+            20px;
+
+    }
+
+    .nexus-accion-cancelar {
+
+        --x:
+            0px;
+
+        --y:
+            30px;
+
+    }
+
+}
+
+
+/* ==========================================================
+   MÓVIL
+   ========================================================== */
+
+@media (max-width: 700px) {
+
+    .nexus-accion-interrogar {
+
+        --x:
+            0px;
+
+        --y:
+            -82px;
+
+    }
+
+    .nexus-accion-perfil {
+
+        --x:
+            -55px;
+
+        --y:
+            18px;
+
+    }
+
+    .nexus-accion-culpable {
+
+        --x:
+            55px;
+
+        --y:
+            18px;
+
+    }
+
+    .nexus-accion-cancelar {
+
+        --x:
+            0px;
+
+        --y:
+            50px;
 
     }
 
@@ -789,71 +843,35 @@
 
 @media (max-width: 420px) {
 
-    .nexus-modal-agente {
-
-        width:
-            180px;
-
-        height:
-            180px;
-
-    }
-
-
-    .nexus-accion {
-
-        width:
-            43px;
-
-        height:
-            43px;
-
-    }
-
-
-    .nexus-accion svg {
-
-        width:
-            20px;
-
-        height:
-            20px;
-
-    }
-
-
     .nexus-accion-interrogar {
 
         --x:
             0px;
 
         --y:
-            -68px;
+            -76px;
 
     }
-
 
     .nexus-accion-perfil {
 
         --x:
-            -64px;
+            -32px;
 
         --y:
-            34px;
+            -18px;
 
     }
-
 
     .nexus-accion-culpable {
 
         --x:
-            64px;
+            42px;
 
         --y:
-            34px;
+            -18px;
 
     }
-
 
     .nexus-accion-cancelar {
 
@@ -861,7 +879,7 @@
             0px;
 
         --y:
-            82px;
+            30px;
 
     }
 

@@ -33,9 +33,7 @@ if (MODO_PRUEBA) {
         pantallaJuego.classList.add("juego-visible");
     }
 
-    const pointer = new PointerGlobal();
-    pointer.iniciar();
-
+  
     const tableroAgentes = new TableroAgentes();
     tableroAgentes.iniciar();
 

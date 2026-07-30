@@ -60,9 +60,12 @@ export default class Tablero {
 
             this.tableroAgentes.tableroPrincipal =
                 this;
-
+            
+            //TEMPORALMENTE PARA DISEÑO
+           
             this.tableroAgentes.cargarAgentes(
-                agentes,
+                //agentes,
+                PERSONAJES,
                 declaraciones
             );
 
