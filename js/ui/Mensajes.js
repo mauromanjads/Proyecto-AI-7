@@ -3,106 +3,70 @@
  * AI-7
  * Archivo: Mensajes.js
  * ----------------------------------------------------------
- * Modal para mostrar las declaraciones de un personaje.
+ * Modal para mostrar la declaración de un personaje.
  * ==========================================================
  */
 
 export default class Mensajes {
 
     constructor() {
-
         this.modal = null;
-
     }
 
     // ======================================================
-    // Mostrar declaraciones
+    // Mostrar declaración
     // ======================================================
 
     mostrar(agente, declaraciones = []) {
 
-          
         this.cerrar();
-       
 
         this.modal = document.createElement("div");
 
         this.modal.className = "modal-mensajes";
 
+        const declaracion =
+            declaraciones.length > 0
+                ? declaraciones[0].obtenerTexto()
+                : "Este personaje no tiene declaraciones.";
+
         this.modal.innerHTML = `
 
             <div class="modal-mensajes-contenido">
 
-                <div class="modal-mensajes-header">
+                <button
+                    class="modal-mensajes-cerrar"
+                    type="button">
+                    ×
+                </button>
 
-                    <h2>
-                        💬 ${agente.nombre} DICE QUE
-                    </h2>
-
-                    <button
-                        class="modal-mensajes-cerrar"
-                        type="button">
-                        ✕
-                    </button>
-
+                <div class="modal-mensajes-titulo">
+                    DECLARACIÓN
                 </div>
 
-                <div class="mensajes-lista">
-
-                   ${
-                                    declaraciones.length > 0
-                                    ?
-                                    declaraciones.map(
-                                        declaracion => {
-                                        
-                                            return `
-
-                                                <div class="mensaje-globo">
-
-                                                   ${declaracion.obtenerTexto()}
-
-                                                </div>
-
-                                            `;
-
-                                        }
-                                    ).join("")
-                                    :
-                                    `
-
-                        <p class="sin-mensajes">
-
-                            Este personaje no tiene
-                            declaraciones.
-
-                        </p>
-
-                    `
-                }
-
+                <div class="modal-mensajes-agente">
+                    ${agente.nombre}
                 </div>
 
-                <div class="modal-mensajes-footer">
+                <div class="modal-mensajes-linea"></div>
 
-                    <button
-                        class="btn-cerrar-mensajes"
-                        type="button">
-
-                        CERRAR
-
-                    </button>
-
+                <div class="modal-mensajes-declaracion">
+                    ${declaracion}
                 </div>
+
+                <button
+                    class="btn-cerrar-mensajes"
+                    type="button">
+                    CERRAR
+                </button>
 
             </div>
 
         `;
 
         document.body.appendChild(this.modal);
-        
 
         this.configurarEventos();
-
     }
 
     // ======================================================
@@ -130,24 +94,6 @@ export default class Mensajes {
             "click",
             () => this.cerrar()
         );
-
-        // Cerrar al hacer clic fuera del contenido
-
-        this.modal.addEventListener(
-            "click",
-            (evento) => {
-
-                if (
-                    evento.target === this.modal
-                ) {
-
-                    this.cerrar();
-
-                }
-
-            }
-        );
-
     }
 
     // ======================================================
@@ -161,9 +107,6 @@ export default class Mensajes {
             this.modal.remove();
 
             this.modal = null;
-
         }
-
     }
-
 }
