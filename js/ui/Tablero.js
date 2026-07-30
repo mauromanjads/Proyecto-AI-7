@@ -6,6 +6,7 @@ import Mensajes from "./Mensajes.js";
 export default class Tablero {
     constructor(juego) {
         this.juego = juego;
+        this.tableroAgentes = null;
         this.divProgreso = document.getElementById("progreso");
         this.tituloCapitulo = document.getElementById("titulo-capitulo");
         this.divAgentes = document.getElementById("agentes");
@@ -28,6 +29,11 @@ export default class Tablero {
     }
 
     mostrarAgentes(agentes, declaraciones) {
+
+        if (this.tableroAgentes) {
+            this.tableroAgentes.cargarAgentes(agentes);
+        }
+
         this.divAgentes.innerHTML = "";
 
         agentes.forEach(agente => {
@@ -266,7 +272,7 @@ export default class Tablero {
 
         contenedorNexus.appendChild(botonNexus);
 
-       const contenedorProgreso = document.createElement("div");
+        const contenedorProgreso = document.createElement("div");
         contenedorProgreso.id = "contenedor-progreso";
 
         contenedorProgreso.append(
@@ -341,7 +347,7 @@ export default class Tablero {
     aplicarFondoCapitulo(capitulo) {
         if (!capitulo?.background) return;
 
-         this.divAgentes.style.backgroundImage =
+        this.divAgentes.style.backgroundImage =
             `url("${capitulo.background}")`;
 
         document.body.style.backgroundImage =

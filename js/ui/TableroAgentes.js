@@ -5,16 +5,9 @@
  * ----------------------------------------------------------
  * TABLERO NEXUS
  *
- * 7 AGENTES:
- * - ATLAS
- * - NOVA
- * - ORION
- * - ECHO
- * - TITAN
- * - VEGA
- * - ZERO
- *
  * RESPONSABILIDAD:
+ * - Cargar los agentes desde el catálogo oficial.
+ * - Recibir los agentes reales del caso lógico.
  * - Renderizar agentes.
  * - Renderizar personajes.
  * - Renderizar plataformas / hexágonos.
@@ -28,6 +21,7 @@
  */
 
 import Tubos from "./Tubos.js";
+import { PERSONAJES } from "../datos/personajes.js";
 
 export default class TableroAgentes {
 
@@ -45,58 +39,63 @@ export default class TableroAgentes {
 
         this.modalAgente = null;
 
-        this.agentes = [
+        /*
+         * ==================================================
+         * CATÁLOGO OFICIAL
+         * ==================================================
+         *
+         * Aquí NO se queman los agentes.
+         *
+         * PERSONAJES es la fuente oficial.
+         *
+         * Al iniciar mostramos el catálogo completo.
+         * Cuando Juego genere un caso, Tablero llamará:
+         *
+         * cargarAgentes(agentes)
+         *
+         * y esta lista será reemplazada por los agentes
+         * reales del caso.
+         */
 
-            {
-                codigo: "AI-01",
-                nombre: "ATLAS",
-                avatar: "atlas_avt.png",
-                posicion: "arriba"
-            },
+        this.agentes =
+            this.prepararAgentes(
+                PERSONAJES
+            );
 
-            {
-                codigo: "AI-02",
-                nombre: "NOVA",
-                avatar: "nova_avt.png",
-                posicion: "arriba"
-            },
+    }
 
-            {
-                codigo: "AI-03",
-                nombre: "ORION",
-                avatar: "orion_avt.png",
-                posicion: "arriba"
-            },
 
-            {
-                codigo: "AI-04",
-                nombre: "ECHO",
-                avatar: "echo_avt.png",
-                posicion: "arriba"
-            },
+    /* ======================================================
+       PREPARAR AGENTES
+       ====================================================== */
 
-            {
-                codigo: "AI-05",
-                nombre: "TITAN",
-                avatar: "titan_avt.png",
-                posicion: "abajo"
-            },
+    prepararAgentes(
+        agentes
+    ) {
 
-            {
-                codigo: "AI-06",
-                nombre: "VEGA",
-                avatar: "vega_avt.png",
-                posicion: "abajo"
-            },
+        if (
+            !Array.isArray(agentes)
+        ) {
 
-            {
-                codigo: "AI-07",
-                nombre: "ZERO",
-                avatar: "zero_avt.png",
-                posicion: "abajo"
-            }
+            return [];
 
-        ];
+        }
+
+        return agentes.map(
+            agente => ({
+
+                ...agente,
+
+                posicion:
+                    agente.posicion ??
+                    (
+                        agente.id <= 4
+                            ? "arriba"
+                            : "abajo"
+                    )
+
+            })
+        );
 
     }
 
@@ -129,6 +128,95 @@ export default class TableroAgentes {
          * ==================================================
          * INICIAR RED DE TUBOS
          * ==================================================
+         */
+
+        this.iniciarTubos();
+
+    }
+
+
+    /* ======================================================
+       CARGAR AGENTES DEL CASO
+       ====================================================== */
+
+    cargarAgentes(
+        agentes
+    ) {
+
+        /*
+         * El caso lógico es ahora la fuente de agentes.
+         */
+
+        if (
+            !Array.isArray(agentes) ||
+            agentes.length === 0
+        ) {
+
+            return;
+
+        }
+
+
+        /*
+         * Preparar los personajes recibidos.
+         */
+
+        this.agentes =
+            this.prepararAgentes(
+                agentes
+            );
+
+
+        /*
+         * Limpiar cualquier estado anterior.
+         */
+
+        this.agenteActivo = null;
+
+        this.tarjetaActiva = null;
+
+
+        /*
+         * Si el tablero todavía no existe,
+         * no intentamos renderizar.
+         */
+
+        if (!this.contenedor) {
+
+            return;
+
+        }
+
+
+        /*
+         * Renderizar nuevamente NEXUS
+         * con los agentes del caso actual.
+         */
+
+        this.renderizar();
+
+
+        /*
+         * Crear nuevamente la red
+         * con los agentes actuales.
+         */
+
+        this.iniciarTubos();
+
+    }
+
+
+    /* ======================================================
+       INICIAR TUBOS
+       ====================================================== */
+
+    iniciarTubos() {
+
+        /*
+         * Si ya existe una red anterior,
+         * simplemente reemplazamos la referencia.
+         *
+         * El tablero ya fue reconstruido antes de llegar aquí.
          */
 
         this.tubos =
@@ -185,6 +273,7 @@ export default class TableroAgentes {
                                 cy="11"
                                 r="6"
                             ></circle>
+
                             <path
                                 d="M16 16l5 5"
                             ></path>
@@ -206,6 +295,7 @@ export default class TableroAgentes {
                                 cy="8"
                                 r="4"
                             ></circle>
+
                             <path
                                 d="M4 21c.8-4.2 3.4-6 8-6s7.2 1.8 8 6"
                             ></path>
@@ -227,11 +317,13 @@ export default class TableroAgentes {
                                 cy="12"
                                 r="8"
                             ></circle>
+
                             <circle
                                 cx="12"
                                 cy="12"
                                 r="3"
                             ></circle>
+
                             <path
                                 d="M12 2v3M12 19v3M2 12h3M19 12h3"
                             ></path>
@@ -260,15 +352,18 @@ export default class TableroAgentes {
 
         `;
 
+
         this.tablero =
             this.contenedor.querySelector(
                 ".nexus-tablero"
             );
 
+
         this.modalAgente =
             this.tablero.querySelector(
                 ".nexus-modal-agente"
             );
+
 
         this.configurarInteracciones();
 
@@ -389,6 +484,7 @@ export default class TableroAgentes {
                 ".tablero-agente"
             );
 
+
         tarjetas.forEach(
             tarjeta => {
 
@@ -398,12 +494,6 @@ export default class TableroAgentes {
                         const codigo =
                             tarjeta.dataset.agente;
 
-                        /*
-                         * SOLO UN AGENTE ACTIVO.
-                         *
-                         * Si ya existe uno activo,
-                         * ningún otro puede activarse.
-                         */
 
                         if (
                             this.agenteActivo &&
@@ -414,6 +504,7 @@ export default class TableroAgentes {
 
                         }
 
+
                         if (
                             this.agenteActivo === codigo
                         ) {
@@ -421,6 +512,7 @@ export default class TableroAgentes {
                             return;
 
                         }
+
 
                         this.activarAgente(
                             tarjeta,
@@ -458,16 +550,11 @@ export default class TableroAgentes {
         );
 
 
-        /*
-         * ==================================================
-         * ACCIONES DEL MENÚ
-         * ==================================================
-         */
-
         const acciones =
             this.modalAgente.querySelectorAll(
                 ".nexus-accion"
             );
+
 
         acciones.forEach(
             accion => {
@@ -478,8 +565,10 @@ export default class TableroAgentes {
 
                         evento.stopPropagation();
 
+
                         const tipo =
                             accion.dataset.accion;
+
 
                         this.ejecutarAccion(
                             tipo
@@ -503,32 +592,27 @@ export default class TableroAgentes {
         codigo
     ) {
 
-        /*
-         * SEGURIDAD:
-         * Nunca permitir dos agentes activos.
-         */
-
-        if (this.agenteActivo) {
+        if (
+            this.agenteActivo
+        ) {
 
             return;
 
         }
 
 
-        this.agenteActivo = codigo;
+        this.agenteActivo =
+            codigo;
 
-        this.tarjetaActiva = tarjeta;
 
+        this.tarjetaActiva =
+            tarjeta;
 
-        /*
-         * ==========================================
-         * ESTADO VISUAL
-         * ==========================================
-         */
 
         tarjeta.classList.add(
             "agente-activo"
         );
+
 
         tarjeta.classList.add(
             "agente-presionado"
@@ -541,12 +625,6 @@ export default class TableroAgentes {
         );
 
 
-        /*
-         * ==========================================
-         * RED NEXUS
-         * ==========================================
-         */
-
         if (this.tubos) {
 
             this.tubos.activar(
@@ -555,12 +633,6 @@ export default class TableroAgentes {
 
         }
 
-
-        /*
-         * ==========================================
-         * ABRIR MENÚ RADIAL
-         * ==========================================
-         */
 
         this.mostrarMenuAgente(
             tarjeta
@@ -577,20 +649,19 @@ export default class TableroAgentes {
         tarjeta
     ) {
 
-        if (!this.modalAgente) {
+        if (
+            !this.modalAgente
+        ) {
 
             return;
 
         }
 
 
-        /*
-         * Posicionar el menú sobre el agente.
-         */
-
         const x =
             tarjeta.offsetLeft +
             tarjeta.offsetWidth / 2;
+
 
         const y =
             tarjeta.offsetTop +
@@ -599,6 +670,7 @@ export default class TableroAgentes {
 
         this.modalAgente.style.left =
             `${x}px`;
+
 
         this.modalAgente.style.top =
             `${y}px`;
@@ -609,16 +681,13 @@ export default class TableroAgentes {
         );
 
 
-        /*
-         * Forzar reinicio de animación.
-         */
-
         void this.modalAgente.offsetWidth;
 
 
         this.modalAgente.classList.add(
             "menu-visible"
         );
+
 
         this.modalAgente.setAttribute(
             "aria-hidden",
@@ -645,34 +714,21 @@ export default class TableroAgentes {
         }
 
 
-        switch (tipo) {
+        switch (
+            tipo
+        ) {
 
             case "interrogar":
-
-                /*
-                 * Aquí se conectará posteriormente
-                 * con la lógica de interrogación.
-                 */
 
                 break;
 
 
             case "perfil":
 
-                /*
-                 * Aquí se conectará posteriormente
-                 * con el perfil del agente.
-                 */
-
                 break;
 
 
             case "culpable":
-
-                /*
-                 * Aquí se conectará posteriormente
-                 * con la selección de culpable.
-                 */
 
                 break;
 
@@ -707,28 +763,18 @@ export default class TableroAgentes {
         const tarjeta =
             this.tarjetaActiva;
 
+
         const codigo =
             this.agenteActivo;
 
 
-        /*
-         * ==========================================
-         * CERRAR MENÚ
-         * ==========================================
-         */
-
         this.ocultarMenuAgente();
 
-
-        /*
-         * ==========================================
-         * DESACTIVAR ESTADO VISUAL
-         * ==========================================
-         */
 
         tarjeta.classList.remove(
             "agente-activo"
         );
+
 
         tarjeta.classList.remove(
             "agente-presionado"
@@ -741,12 +787,6 @@ export default class TableroAgentes {
         );
 
 
-        /*
-         * ==========================================
-         * RED NEXUS
-         * ==========================================
-         */
-
         if (this.tubos) {
 
             this.tubos.desactivar(
@@ -756,15 +796,12 @@ export default class TableroAgentes {
         }
 
 
-        /*
-         * ==========================================
-         * LIMPIAR ESTADO
-         * ==========================================
-         */
+        this.agenteActivo =
+            null;
 
-        this.agenteActivo = null;
 
-        this.tarjetaActiva = null;
+        this.tarjetaActiva =
+            null;
 
     }
 
@@ -775,7 +812,9 @@ export default class TableroAgentes {
 
     ocultarMenuAgente() {
 
-        if (!this.modalAgente) {
+        if (
+            !this.modalAgente
+        ) {
 
             return;
 
@@ -786,9 +825,11 @@ export default class TableroAgentes {
             "menu-visible"
         );
 
+
         this.modalAgente.classList.add(
             "menu-cerrando"
         );
+
 
         this.modalAgente.setAttribute(
             "aria-hidden",
