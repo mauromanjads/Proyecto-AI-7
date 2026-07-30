@@ -1,0 +1,328 @@
+/* ==========================================================
+   AI-7
+   MODAL NARRATIVO
+   PERGAMINO
+   ========================================================== */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(0,0,0,.78);
+    backdrop-filter: blur(5px);
+}
+
+
+/* ==========================================================
+   PERGAMINO
+   ========================================================== */
+
+.modal-narrativo {
+    position: relative;
+
+    width: min(700px,90vw);
+
+    padding: 58px 65px 45px;
+
+    box-sizing: border-box;
+
+    color: #3b2918;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            #f0d9a0 0%,
+            #e5c889 70%,
+            #d0a963 100%
+        );
+
+    border-radius:
+        50px 50px 45px 45px /
+        24px 24px 20px 20px;
+
+    border:
+        2px solid #98703b;
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.7),
+        inset 0 0 35px rgba(91,55,20,.18);
+
+    animation:
+        pergamino-aparece .4s ease;
+}
+
+
+/* ==========================================================
+   ROLLO SUPERIOR
+   ========================================================== */
+
+.modal-narrativo::before {
+    content: "";
+
+    position: absolute;
+
+    top: -18px;
+    left: -10px;
+    right: -10px;
+
+    height: 38px;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #70471e,
+            #b9894b 25%,
+            #edcf91 55%,
+            #a8773b 80%,
+            #68431d
+        );
+
+    border:
+        1px solid #6d481f;
+
+    box-shadow:
+        0 5px 10px rgba(60,35,10,.45);
+}
+
+
+/* ==========================================================
+   ROLLO INFERIOR
+   ========================================================== */
+
+.modal-narrativo::after {
+    content: "";
+
+    position: absolute;
+
+    bottom: -18px;
+    left: -10px;
+    right: -10px;
+
+    height: 38px;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #68431d,
+            #a8773b 25%,
+            #edcf91 55%,
+            #b9894b 80%,
+            #70471e
+        );
+
+    border:
+        1px solid #6d481f;
+
+    box-shadow:
+        0 -4px 10px rgba(60,35,10,.35);
+}
+
+
+/* ==========================================================
+   CABECERA
+   ========================================================== */
+
+.modal-narrativo-header {
+    position: relative;
+
+    margin-bottom: 30px;
+    padding-bottom: 18px;
+
+    text-align: center;
+
+    border-bottom:
+        2px solid rgba(90,55,20,.3);
+}
+
+.modal-narrativo-header h2 {
+    margin: 0;
+
+    color: #392513;
+
+    font-size: clamp(28px,5vw,40px);
+
+    font-weight: 900;
+
+    letter-spacing: 3px;
+
+    text-transform: uppercase;
+}
+
+
+/* ==========================================================
+   CONTENIDO
+   ========================================================== */
+
+.modal-narrativo-contenido {
+    position: relative;
+
+    text-align: center;
+}
+
+.modal-narrativo-contenido h3 {
+    margin: 0 0 22px;
+
+    color: #573b1d;
+
+    font-size: clamp(24px,4vw,32px);
+
+    font-weight: 800;
+}
+
+.modal-narrativo-contenido p {
+    margin: 0;
+
+    color: #49351f;
+
+    font-size: 23px;
+
+    line-height: 1.7;
+
+    text-align: left;
+}
+
+
+/* ==========================================================
+   BOTÓN X
+   ========================================================== */
+
+.modal-narrativo-cerrar {
+    position: absolute;
+
+    top: 20px;
+    right: 28px;
+
+    z-index: 5;
+
+    width: 38px;
+    height: 38px;
+
+    border: 1px solid rgba(75,45,18,.35);
+
+    border-radius: 50%;
+
+    background: rgba(80,45,15,.08);
+
+    color: #573719;
+
+    font-size: 23px;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+.modal-narrativo-cerrar:hover {
+    background: rgba(80,45,15,.18);
+    transform: rotate(90deg);
+}
+
+
+/* ==========================================================
+   BOTÓN CERRAR
+   ========================================================== */
+
+.modal-narrativo-cerrar-grande {
+    display: block;
+
+    margin: 32px auto 0;
+
+    padding: 14px 44px;
+
+    border:
+        1px solid #785326;
+
+    border-radius: 5px;
+
+    background: #6f4b24;
+
+    color: #f3dfb0;
+
+    font-size: 17px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 4px 10px rgba(60,35,10,.3);
+
+    transition: .2s ease;
+}
+
+.modal-narrativo-cerrar-grande:hover {
+    background: #543719;
+
+    transform:
+        translateY(-2px);
+}
+
+
+/* ==========================================================
+   ANIMACIÓN
+   ========================================================== */
+
+@keyframes pergamino-aparece {
+
+    from {
+        opacity: 0;
+
+        transform:
+            scale(.92)
+            rotate(-1deg);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            scale(1)
+            rotate(0);
+    }
+}
+
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media (max-width:600px) {
+
+    .modal-overlay {
+        padding: 15px;
+    }
+
+    .modal-narrativo {
+        width: 88vw;
+
+        padding: 52px 38px 40px;
+    }
+
+    .modal-narrativo-contenido p {
+        font-size: 20px;
+        line-height: 1.6;
+    }
+
+    .modal-narrativo-header h2 {
+        font-size: 26px;
+    }
+
+    .modal-narrativo::before,
+    .modal-narrativo::after {
+        left: -6px;
+        right: -6px;
+    }
+}
