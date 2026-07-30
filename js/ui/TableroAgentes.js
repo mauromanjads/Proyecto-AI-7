@@ -34,6 +34,7 @@ export default class TableroAgentes {
         this.tarjetaActiva = null;
         this.modalAgente = null;
         this.declaraciones = [];
+        this.tableroPrincipal = null;
 
         /*
          * ==================================================
@@ -669,6 +670,8 @@ export default class TableroAgentes {
 
             case "culpable":
 
+                this.seleccionarCulpable();
+
                 break;
 
             case "cancelar":
@@ -717,10 +720,6 @@ export default class TableroAgentes {
 
         }
 
-        /*
-         * Cada agente tiene una sola declaración.
-         */
-
         new Mensajes().mostrar(
             agente,
             [declaracion]
@@ -746,11 +745,6 @@ export default class TableroAgentes {
             return;
 
         }
-
-        /*
-         * Si existe otro modal de perfil,
-         * lo eliminamos antes de crear el nuevo.
-         */
 
         document.querySelector(
             ".modal-overlay"
@@ -800,6 +794,47 @@ export default class TableroAgentes {
                 "click",
                 cerrar
             );
+
+        }
+
+    }
+
+    /* ======================================================
+       SELECCIONAR CULPABLE
+       ====================================================== */
+
+    seleccionarCulpable() {
+
+        const agente =
+            this.agentes.find(
+                elemento =>
+                    elemento.codigo ===
+                    this.agenteActivo
+            );
+
+        if (!agente) {
+
+            return;
+
+        }
+
+        /*
+         * La lógica de confirmación pertenece
+         * al Tablero principal.
+         *
+         * No duplicamos aquí la lógica del modal.
+         */
+
+        if (
+            this.tableroPrincipal &&
+            typeof this.tableroPrincipal
+                .abrirModalConfirmacion === "function"
+        ) {
+
+            this.tableroPrincipal
+                .abrirModalConfirmacion(
+                    agente
+                );
 
         }
 
