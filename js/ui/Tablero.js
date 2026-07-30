@@ -58,12 +58,6 @@ export default class Tablero {
 
         if (this.tableroAgentes) {
 
-            /*
-             * El Tablero principal queda disponible
-             * para que NEXUS pueda reutilizar la
-             * misma lógica de culpable.
-             */
-
             this.tableroAgentes.tableroPrincipal =
                 this;
 
@@ -73,87 +67,6 @@ export default class Tablero {
             );
 
         }
-
-        this.divAgentes.innerHTML = "";
-
-        agentes.forEach(
-            agente => {
-
-                const declaracionesAgente =
-                    declaraciones.filter(
-                        declaracion =>
-                            declaracion.personaje.nombre ===
-                            agente.nombre
-                    );
-
-                const tarjeta =
-                    Tarjeta.agente(
-                        agente
-                    );
-
-                const botonMensajes =
-                    tarjeta.querySelector(
-                        ".btn-mensajes"
-                    );
-
-                const botonInformacion =
-                    tarjeta.querySelector(
-                        ".btn-informacion"
-                    );
-
-                if (botonMensajes) {
-
-                    botonMensajes.addEventListener(
-                        "click",
-                        evento => {
-
-                            evento.stopPropagation();
-
-                            new Mensajes().mostrar(
-                                agente,
-                                declaracionesAgente
-                            );
-
-                        }
-                    );
-
-                }
-
-                if (botonInformacion) {
-
-                    botonInformacion.addEventListener(
-                        "click",
-                        evento => {
-
-                            evento.stopPropagation();
-
-                            this.abrirModal(
-                                agente,
-                                declaracionesAgente
-                            );
-
-                        }
-                    );
-
-                }
-
-                tarjeta.addEventListener(
-                    "click",
-                    () => {
-
-                        this.abrirModalConfirmacion(
-                            agente
-                        );
-
-                    }
-                );
-
-                this.divAgentes.appendChild(
-                    tarjeta
-                );
-
-            }
-        );
 
     }
 
