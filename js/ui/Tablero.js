@@ -1,5 +1,5 @@
 import Tarjeta from "./Tarjeta.js";
-import Modal from "./Modal.js";
+import Modal from "./ModalPerfil.js";
 import ModalConfirmacion from "./ModalConfirmacion.js";
 import Mensajes from "./Mensajes.js";
 

@@ -20,7 +20,7 @@
 
 import Tubos from "./Tubos.js";
 import Mensajes from "./Mensajes.js";
-import Modal from "./Modal.js";
+import Modal from "./ModalPerfil.js";
 import { PERSONAJES } from "../datos/personajes.js";
 
 export default class TableroAgentes {
