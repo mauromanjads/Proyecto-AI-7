@@ -1281,7 +1281,7 @@
     .agente-arriba
     .tablero-agente-personaje {
 
-        top: 0;
+        top: 12px;
 
     }
 
@@ -1289,7 +1289,7 @@
     .agente-abajo
     .tablero-agente-personaje {
 
-        bottom: 40px;
+        bottom: 30px;
 
     }
 

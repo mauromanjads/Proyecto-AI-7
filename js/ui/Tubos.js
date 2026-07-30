@@ -10,40 +10,38 @@
  * - Conectores.
  * - Torre NEXUS.
  * - Activación por agente.
+ * - Responsive para tablet y móvil.
+ *
+ * ESCRITORIO:
+ * - Mantiene las coordenadas originales.
+ *
+ * TABLET / MÓVIL:
+ * - Distribución 3 / 1 / 3.
+ * - AI-04 queda en el centro.
+ * - NEXUS queda a la derecha.
+ * - Tubos verticales terminan en el hexágono.
+ * - AI-04 utiliza una ruta independiente.
  *
  * ==========================================================
  */
 
 export default class Tubos {
 
-    constructor(
-        tablero,
-        agentes
-    ) {
+    constructor(tablero, agentes) {
 
-        this.tablero =
-            tablero;
+        this.tablero = tablero;
+        this.agentes = agentes;
 
-        this.agentes =
-            agentes;
+        this.red = null;
+        this.svg = null;
 
-        this.red =
-            null;
+        this.tubos = new Map();
+        this.conectores = new Map();
 
-        this.svg =
-            null;
+        this.tuboMadre = null;
+        this.torre = null;
 
-        this.tubos =
-            new Map();
-
-        this.conectores =
-            new Map();
-
-        this.tuboMadre =
-            null;
-
-        this.torre =
-            null;
+        this.resizeHandler = null;
 
     }
 
@@ -64,12 +62,10 @@ export default class Tubos {
 
         }
 
-
         this.red =
             this.tablero.querySelector(
                 ".nexus-red"
             );
-
 
         if (!this.red) {
 
@@ -81,8 +77,15 @@ export default class Tubos {
 
         }
 
-
         this.crearRed();
+
+        this.resizeHandler =
+            () => this.adaptarResponsive();
+
+        window.addEventListener(
+            "resize",
+            this.resizeHandler
+        );
 
     }
 
@@ -140,7 +143,6 @@ export default class Tubos {
 
                 <!-- ======================================
                      TORRE NEXUS
-                     ESQUELETO
                      ====================================== -->
 
                 ${this.generarTorre()}
@@ -184,26 +186,20 @@ export default class Tubos {
 
         this.registrarTubos();
 
+        this.adaptarResponsive();
+
     }
 
 
     /* ======================================================
        GENERAR TORRE NEXUS
-       ------------------------------------------------------
-       ESQUELETO INICIAL
        ====================================================== */
 
     generarTorre() {
 
         return `
 
-            <g
-                class="nexus-torre"
-            >
-
-                <!-- ==================================
-                     CUERPO PRINCIPAL
-                     ================================== -->
+            <g class="nexus-torre">
 
                 <rect
                     class="nexus-torre-cuerpo"
@@ -214,11 +210,6 @@ export default class Tubos {
                     rx="18"
                 />
 
-
-                <!-- ==================================
-                     NÚCLEO CENTRAL
-                     ================================== -->
-
                 <rect
                     class="nexus-torre-nucleo"
                     x="1005"
@@ -228,22 +219,12 @@ export default class Tubos {
                     rx="12"
                 />
 
-
-                <!-- ==================================
-                     CONEXIÓN DEL TUBO MADRE
-                     ================================== -->
-
                 <circle
                     class="nexus-torre-conexion"
                     cx="980"
                     cy="350"
                     r="12"
                 />
-
-
-                <!-- ==================================
-                     LÍNEA CENTRAL DEL NÚCLEO
-                     ================================== -->
 
                 <line
                     class="nexus-torre-linea"
@@ -253,11 +234,6 @@ export default class Tubos {
                     y2="350"
                 />
 
-
-                <!-- ==================================
-                     DETALLE SUPERIOR
-                     ================================== -->
-
                 <line
                     class="nexus-torre-detalle"
                     x1="1010"
@@ -265,11 +241,6 @@ export default class Tubos {
                     x2="1110"
                     y2="220"
                 />
-
-
-                <!-- ==================================
-                     DETALLE INFERIOR
-                     ================================== -->
 
                 <line
                     class="nexus-torre-detalle"
@@ -288,15 +259,15 @@ export default class Tubos {
 
     /* ======================================================
        GENERAR TUBOS INDIVIDUALES
+       ------------------------------------------------------
+       COORDENADAS ORIGINALES DE ESCRITORIO.
        ====================================================== */
 
     generarTubos() {
 
         return `
 
-            <!-- ==========================================
-                 ATLAS
-                 ========================================== -->
+            <!-- ATLAS -->
 
             <path
                 class="nexus-tubo"
@@ -308,9 +279,7 @@ export default class Tubos {
             />
 
 
-            <!-- ==========================================
-                 NOVA
-                 ========================================== -->
+            <!-- NOVA -->
 
             <path
                 class="nexus-tubo"
@@ -322,9 +291,7 @@ export default class Tubos {
             />
 
 
-            <!-- ==========================================
-                 ORION
-                 ========================================== -->
+            <!-- ORION -->
 
             <path
                 class="nexus-tubo"
@@ -336,12 +303,10 @@ export default class Tubos {
             />
 
 
-            <!-- ==========================================
-                 ECHO
-                 ========================================== -->
+            <!-- ECHO -->
 
             <path
-                class="nexus-tubo"
+                class="nexus-tubo nexus-tubo-central"
                 data-tubo="AI-04"
                 d="
                     M 737 125
@@ -350,9 +315,7 @@ export default class Tubos {
             />
 
 
-            <!-- ==========================================
-                 TITAN
-                 ========================================== -->
+            <!-- TITAN -->
 
             <path
                 class="nexus-tubo"
@@ -364,9 +327,7 @@ export default class Tubos {
             />
 
 
-            <!-- ==========================================
-                 VEGA
-                 ========================================== -->
+            <!-- VEGA -->
 
             <path
                 class="nexus-tubo"
@@ -378,9 +339,7 @@ export default class Tubos {
             />
 
 
-            <!-- ==========================================
-                 ZERO
-                 ========================================== -->
+            <!-- ZERO -->
 
             <path
                 class="nexus-tubo"
@@ -412,7 +371,6 @@ export default class Tubos {
                 r="9"
             />
 
-
             <circle
                 class="nexus-conector"
                 data-conector="AI-02"
@@ -420,7 +378,6 @@ export default class Tubos {
                 cy="350"
                 r="9"
             />
-
 
             <circle
                 class="nexus-conector"
@@ -430,15 +387,13 @@ export default class Tubos {
                 r="9"
             />
 
-
             <circle
-                class="nexus-conector"
+                class="nexus-conector nexus-conector-central"
                 data-conector="AI-04"
                 cx="737"
                 cy="350"
-                r="9"
+                r="7"
             />
-
 
             <circle
                 class="nexus-conector"
@@ -448,7 +403,6 @@ export default class Tubos {
                 r="9"
             />
 
-
             <circle
                 class="nexus-conector"
                 data-conector="AI-06"
@@ -456,7 +410,6 @@ export default class Tubos {
                 cy="350"
                 r="9"
             />
-
 
             <circle
                 class="nexus-conector"
@@ -478,7 +431,6 @@ export default class Tubos {
     registrarTubos() {
 
         this.tubos.clear();
-
         this.conectores.clear();
 
 
@@ -517,28 +469,556 @@ export default class Tubos {
 
 
     /* ======================================================
+       RESPONSIVE
+       ------------------------------------------------------
+       SOLO TABLET / MÓVIL.
+       ESCRITORIO NO SE TOCA.
+       ====================================================== */
+
+    adaptarResponsive() {
+
+        if (!this.svg || !this.tablero) {
+            return;
+        }
+
+
+        /* ==================================================
+           ESCRITORIO
+           ================================================== */
+
+        if (window.innerWidth > 900) {
+
+            this.restaurarEscritorio();
+
+            return;
+
+        }
+
+
+        const tableroRect =
+            this.tablero.getBoundingClientRect();
+
+
+        if (
+            tableroRect.width === 0 ||
+            tableroRect.height === 0
+        ) {
+
+            return;
+
+        }
+
+
+        const escalaX =
+            1200 /
+            tableroRect.width;
+
+
+        const escalaY =
+            700 /
+            tableroRect.height;
+
+
+        /* ==================================================
+           OBTENER POSICIÓN DEL HEXÁGONO
+           ================================================== */
+
+        const obtenerPosicionHexagono =
+            codigo => {
+
+                const agente =
+                    this.tablero.querySelector(
+                        `.tablero-agente[data-agente="${codigo}"]`
+                    );
+
+
+                if (!agente) {
+                    return null;
+                }
+
+
+                const base =
+                    agente.querySelector(
+                        ".tablero-agente-base"
+                    );
+
+
+                if (!base) {
+                    return null;
+                }
+
+
+                const rect =
+                    base.getBoundingClientRect();
+
+
+                return {
+
+                    x:
+                        (
+                            rect.left -
+                            tableroRect.left +
+                            rect.width / 2
+                        ) *
+                        escalaX,
+
+                    y:
+                        (
+                            rect.top -
+                            tableroRect.top +
+                            rect.height / 2
+                        ) *
+                        escalaY
+
+                };
+
+            };
+
+
+        /* ==================================================
+           POSICIONES
+           ================================================== */
+
+        const posiciones =
+            new Map();
+
+
+        [
+            "AI-01",
+            "AI-02",
+            "AI-03",
+            "AI-04",
+            "AI-05",
+            "AI-06",
+            "AI-07"
+        ].forEach(
+            codigo => {
+
+                const posicion =
+                    obtenerPosicionHexagono(
+                        codigo
+                    );
+
+
+                if (posicion) {
+
+                    posiciones.set(
+                        codigo,
+                        posicion
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* ==================================================
+           AGENTES SUPERIORES
+           --------------------------------------------------
+           TERMINAN EN EL HEXÁGONO.
+           ================================================== */
+
+        [
+            "AI-01",
+            "AI-02",
+            "AI-03"
+        ].forEach(
+            codigo => {
+
+                const posicion =
+                    posiciones.get(codigo);
+
+
+                const tubo =
+                    this.tubos.get(codigo);
+
+
+                const conector =
+                    this.conectores.get(codigo);
+
+
+                if (!posicion) {
+                    return;
+                }
+
+
+                if (tubo) {
+
+                    tubo.setAttribute(
+                        "d",
+                        `
+                            M ${posicion.x} ${posicion.y}
+                            L ${posicion.x} 350
+                        `
+                    );
+
+                }
+
+
+                if (conector) {
+
+                    conector.setAttribute(
+                        "cx",
+                        posicion.x
+                    );
+
+                    conector.setAttribute(
+                        "cy",
+                        350
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* ==================================================
+           AGENTES INFERIORES
+           --------------------------------------------------
+           TERMINAN EN EL HEXÁGONO.
+           ================================================== */
+
+        [
+            "AI-05",
+            "AI-06",
+            "AI-07"
+        ].forEach(
+            codigo => {
+
+                const posicion =
+                    posiciones.get(codigo);
+
+
+                const tubo =
+                    this.tubos.get(codigo);
+
+
+                const conector =
+                    this.conectores.get(codigo);
+
+
+                if (!posicion) {
+                    return;
+                }
+
+
+                if (tubo) {
+
+                    tubo.setAttribute(
+                        "d",
+                        `
+                            M ${posicion.x} ${posicion.y}
+                            L ${posicion.x} 350
+                        `
+                    );
+
+                }
+
+
+                if (conector) {
+
+                    conector.setAttribute(
+                        "cx",
+                        posicion.x
+                    );
+
+                    conector.setAttribute(
+                        "cy",
+                        350
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* ==================================================
+           AI-04 — RUTA INDEPENDIENTE
+           --------------------------------------------------
+           AI-04 NO SE MONTA SOBRE EL TUBO MADRE.
+           --------------------------------------------------
+           RUTA:
+
+                 HEXÁGONO
+                     |
+                     |
+                     +--------+
+                              |
+                              |
+                              +------ NEXUS
+           ================================================== */
+
+        const posicionCentral =
+            posiciones.get("AI-04");
+
+
+        const tuboCentral =
+            this.tubos.get("AI-04");
+
+
+        const conectorCentral =
+            this.conectores.get("AI-04");
+
+
+        if (
+            posicionCentral &&
+            tuboCentral
+        ) {
+
+            /*
+             * Punto intermedio vertical.
+             *
+             * Se separa del tubo madre para que
+             * visualmente no se fusione con él.
+             */
+
+            const separacionVertical =
+                55;
+
+
+            const yRuta =
+                350 +
+                separacionVertical;
+
+
+            /*
+             * Punto horizontal antes de entrar
+             * al NEXUS.
+             */
+
+            const xEntrada =
+                900;
+
+
+            tuboCentral.setAttribute(
+                "d",
+                `
+                    M ${posicionCentral.x} ${posicionCentral.y}
+                    L ${posicionCentral.x} ${yRuta}
+                    L ${xEntrada} ${yRuta}
+                    L ${xEntrada} 350
+                    L 980 350
+                `
+            );
+
+        }
+
+
+        if (conectorCentral) {
+
+            conectorCentral.setAttribute(
+                "cx",
+                posicionCentral
+                    ? posicionCentral.x
+                    : 737
+            );
+
+
+            /*
+             * El conector queda en el hexágono,
+             * no sobre el tubo madre.
+             */
+
+            conectorCentral.setAttribute(
+                "cy",
+                posicionCentral
+                    ? posicionCentral.y
+                    : 350
+            );
+
+        }
+
+
+        /* ==================================================
+           TUBO MADRE
+           --------------------------------------------------
+           AI-04 YA NO FORMA PARTE DE ESTA LÍNEA.
+           ================================================== */
+
+        if (this.tuboMadre) {
+
+            const xs =
+                [
+                    "AI-01",
+                    "AI-02",
+                    "AI-03",
+                    "AI-05",
+                    "AI-06",
+                    "AI-07"
+                ]
+                .map(
+                    codigo => {
+
+                        const posicion =
+                            posiciones.get(
+                                codigo
+                            );
+
+                        return posicion
+                            ? posicion.x
+                            : null;
+
+                    }
+                )
+                .filter(
+                    x =>
+                        x !== null
+                );
+
+
+            const minimoX =
+                xs.length
+                    ? Math.min(...xs)
+                    : 125;
+
+
+            this.tuboMadre.setAttribute(
+                "d",
+                `
+                    M ${minimoX} 350
+                    L 980 350
+                `
+            );
+
+        }
+
+    }
+
+
+    /* ======================================================
+       RESTAURAR ESCRITORIO
+       ------------------------------------------------------
+       COORDENADAS ORIGINALES.
+       ====================================================== */
+
+    restaurarEscritorio() {
+
+        const posiciones = {
+
+            "AI-01": {
+                x: 125,
+                arriba: true
+            },
+
+            "AI-02": {
+                x: 329,
+                arriba: true
+            },
+
+            "AI-03": {
+                x: 533,
+                arriba: true
+            },
+
+            "AI-04": {
+                x: 737,
+                arriba: true
+            },
+
+            "AI-05": {
+                x: 329,
+                arriba: false
+            },
+
+            "AI-06": {
+                x: 533,
+                arriba: false
+            },
+
+            "AI-07": {
+                x: 737,
+                arriba: false
+            }
+
+        };
+
+
+        Object.entries(
+            posiciones
+        ).forEach(
+            (
+                [
+                    codigo,
+                    posicion
+                ]
+            ) => {
+
+                const tubo =
+                    this.tubos.get(codigo);
+
+
+                const conector =
+                    this.conectores.get(codigo);
+
+
+                if (tubo) {
+
+                    const yInicial =
+                        posicion.arriba
+                            ? 125
+                            : 575;
+
+
+                    tubo.setAttribute(
+                        "d",
+                        `
+                            M ${posicion.x} ${yInicial}
+                            L ${posicion.x} 350
+                        `
+                    );
+
+                }
+
+
+                if (conector) {
+
+                    conector.setAttribute(
+                        "cx",
+                        posicion.x
+                    );
+
+                    conector.setAttribute(
+                        "cy",
+                        350
+                    );
+
+                }
+
+            }
+        );
+
+
+        if (this.tuboMadre) {
+
+            this.tuboMadre.setAttribute(
+                "d",
+                `
+                    M 125 350
+                    L 980 350
+                `
+            );
+
+        }
+
+    }
+
+
+    /* ======================================================
        ACTIVAR AGENTE
        ====================================================== */
 
-    activar(
-        codigo
-    ) {
+    activar(codigo) {
 
         const tubo =
-            this.tubos.get(
-                codigo
-            );
+            this.tubos.get(codigo);
 
 
         const conector =
-            this.conectores.get(
-                codigo
-            );
+            this.conectores.get(codigo);
 
-
-        /* ==============================================
-           TUBO INDIVIDUAL
-           ============================================== */
 
         if (tubo) {
 
@@ -549,10 +1029,6 @@ export default class Tubos {
         }
 
 
-        /* ==============================================
-           CONECTOR
-           ============================================== */
-
         if (conector) {
 
             conector.classList.add(
@@ -562,10 +1038,6 @@ export default class Tubos {
         }
 
 
-        /* ==============================================
-           TUBO MADRE COMPLETO
-           ============================================== */
-
         if (this.tuboMadre) {
 
             this.tuboMadre.classList.add(
@@ -573,6 +1045,7 @@ export default class Tubos {
             );
 
         }
+
 
         if (this.torre) {
 
@@ -589,25 +1062,15 @@ export default class Tubos {
        DESACTIVAR AGENTE
        ====================================================== */
 
-    desactivar(
-        codigo
-    ) {
+    desactivar(codigo) {
 
         const tubo =
-            this.tubos.get(
-                codigo
-            );
+            this.tubos.get(codigo);
 
 
         const conector =
-            this.conectores.get(
-                codigo
-            );
+            this.conectores.get(codigo);
 
-
-        /* ==============================================
-           TUBO INDIVIDUAL
-           ============================================== */
 
         if (tubo) {
 
@@ -616,6 +1079,7 @@ export default class Tubos {
             );
 
         }
+
 
         if (this.torre) {
 
@@ -626,10 +1090,6 @@ export default class Tubos {
         }
 
 
-        /* ==============================================
-           CONECTOR
-           ============================================== */
-
         if (conector) {
 
             conector.classList.remove(
@@ -639,19 +1099,11 @@ export default class Tubos {
         }
 
 
-        /* ==============================================
-           COMPROBAR AGENTES ACTIVOS
-           ============================================== */
-
         const quedanActivos =
             this.svg.querySelector(
                 ".nexus-tubo.tubo-activo"
             );
 
-
-        /* ==============================================
-           SI NO QUEDA NINGÚN AGENTE ACTIVO
-           ============================================== */
 
         if (!quedanActivos) {
 
