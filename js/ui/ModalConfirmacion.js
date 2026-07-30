@@ -11,82 +11,44 @@ export default class ModalConfirmacion {
 
     static mostrar(agente) {
 
-        const modal =
-            document.createElement("div");
+        const modal = document.createElement("div");
 
-        modal.className =
-            "modal-confirmacion";
-
+        modal.className = "modal-confirmacion";
 
         modal.innerHTML = `
 
             <div class="modal-confirmacion-contenido">
 
-                <button
-                    type="button"
-                    class="modal-confirmacion-cerrar"
-                    aria-label="Cerrar"
-                >
-                    ×
-                </button>
-
-
-                <div class="modal-confirmacion-icono">
-
-                    🕵️
-
+                <div class="modal-confirmacion-alerta">
+                    ⚠️
                 </div>
 
+                <div class="modal-confirmacion-etiqueta">
+                    DECISIÓN CRÍTICA
+                </div>
+
+                <div class="modal-confirmacion-linea"></div>
 
                 <h2>
-
-                    ¿Seleccionar culpable?
-
+                    ¿ACUSAR A?
                 </h2>
 
-
-                <p>
-
-                    Has seleccionado a:
-
-                </p>
-
-
-                <h3>
-
+                <div class="modal-confirmacion-agente">
                     ${agente.nombre}
-
-                </h3>
-
-
-                <p class="modal-confirmacion-texto">
-
-                    ¿Estás seguro de que quieres
-                    seleccionar a este personaje
-                    como culpable?
-
-                </p>
-
+                </div>
 
                 <div class="modal-confirmacion-botones">
 
                     <button
                         type="button"
-                        class="btn-confirmar-culpable"
-                    >
-
-                        ✅ Confirmar
-
+                        class="btn-confirmar-culpable">
+                        ACUSAR CULPABLE
                     </button>
-
 
                     <button
                         type="button"
-                        class="btn-cancelar-culpable"
-                    >
-
-                        ❌ Cancelar
-
+                        class="btn-cancelar-culpable">
+                        VOLVER
                     </button>
 
                 </div>
@@ -95,14 +57,8 @@ export default class ModalConfirmacion {
 
         `;
 
-
-        document.body.appendChild(
-            modal
-        );
-
+        document.body.appendChild(modal);
 
         return modal;
-
     }
-
 }

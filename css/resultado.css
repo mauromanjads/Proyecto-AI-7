@@ -1,5 +1,6 @@
 /* ==========================================================
-   MODAL RESULTADO
+   AI-7
+   MODAL DE VEREDICTO
    ========================================================== */
 
 .modal-resultado {
@@ -16,10 +17,13 @@
     padding: 20px;
 
     background:
-        rgba(0, 0, 0, .78);
+        rgba(1, 5, 10, .86);
 
     backdrop-filter:
-        blur(6px);
+        blur(9px);
+
+    animation:
+        resultado-aparecer .3s ease;
 }
 
 
@@ -31,150 +35,201 @@
 
     position: relative;
 
-    width: 420px;
-    max-width: 90vw;
+    width: min(520px, 92vw);
 
-    padding: 35px 30px 30px;
+    padding: 42px 45px 36px;
 
     box-sizing: border-box;
 
-    border-radius: 24px;
+    text-align: center;
 
     background:
         linear-gradient(
             145deg,
             #0a2535,
-            #031018
+            #031018 65%,
+            #02090e
         );
 
-    border:
-        1px solid rgba(56, 189, 248, .45);
+    color: #ffffff;
 
-    color: white;
-
-    text-align: center;
+    clip-path:
+        polygon(
+            32px 0,
+            calc(100% - 32px) 0,
+            100% 32px,
+            100% calc(100% - 32px),
+            calc(100% - 32px) 100%,
+            32px 100%,
+            0 calc(100% - 32px),
+            0 32px
+        );
 
     box-shadow:
-        0 20px 60px rgba(0, 0, 0, .65),
-        0 0 35px rgba(56, 189, 248, .12);
+        0 30px 80px rgba(0, 0, 0, .75),
+        0 0 45px rgba(56, 189, 248, .08);
+
+    animation:
+        resultado-entrada .4s ease;
 }
 
 
 /* ==========================================================
-   HEADER
+   BORDE
    ========================================================== */
 
-.modal-resultado-header {
+.modal-resultado-contenido::before {
 
-    position:
-        relative;
+    content: "";
 
-    display:
-        flex;
+    position: absolute;
+    inset: 0;
 
-    align-items:
-        center;
+    pointer-events: none;
 
-    justify-content:
-        center;
+    clip-path:
+        polygon(
+            32px 0,
+            calc(100% - 32px) 0,
+            100% 32px,
+            100% calc(100% - 32px),
+            calc(100% - 32px) 100%,
+            32px 100%,
+            0 calc(100% - 32px),
+            0 32px
+        );
 
-    min-height:
-        45px;
-}
-
-
-.modal-resultado-header h2 {
-
-    margin:
-        0;
-
-    font-size:
-        27px;
-
-    letter-spacing:
-        2px;
-
-    color:
-        #6ee7b7;
-
-    text-shadow:
-        0 0 15px rgba(52, 211, 153, .35);
+    box-shadow:
+        inset 0 0 0 1px rgba(103, 232, 249, .35);
 }
 
 
 /* ==========================================================
-   BOTÓN CERRAR
+   DETALLE SUPERIOR
    ========================================================== */
 
-.modal-resultado-cerrar {
+.modal-resultado-contenido::after {
 
-    position:
-        absolute;
+    content: "";
 
-    top:
-        50%;
+    position: absolute;
 
-    right:
-        0;
+    top: 0;
+    left: 80px;
 
-    width:
-        38px;
-
-    height:
-        38px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    padding:
-        0;
-
-    border:
-        1px solid rgba(103, 232, 249, .30);
-
-    border-radius:
-        50%;
+    width: 140px;
+    height: 2px;
 
     background:
-        rgba(56, 189, 248, .08);
+        #67e8f9;
+
+    box-shadow:
+        0 0 14px rgba(103, 232, 249, .65);
+}
+
+
+/* ==========================================================
+   ICONO
+   ========================================================== */
+
+.modal-resultado-icono {
+
+    width: 68px;
+    height: 68px;
+
+    margin: 0 auto 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border:
+        1px solid rgba(103, 232, 249, .35);
+
+    border-radius: 50%;
+
+    background:
+        rgba(56, 189, 248, .06);
 
     color:
         #67e8f9;
 
     font-size:
-        20px;
+        38px;
 
-    line-height:
-        1;
+    font-weight:
+        700;
 
-    cursor:
-        pointer;
-
-    transform:
-        translateY(-50%);
-
-    transition:
-        .25s ease;
+    box-shadow:
+        0 0 25px rgba(56, 189, 248, .08);
 }
 
 
-.modal-resultado-cerrar:hover {
+/* ==========================================================
+   ETIQUETA
+   ========================================================== */
+
+.modal-resultado-etiqueta {
+
+    color:
+        #67e8f9;
+
+    font-size:
+        12px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        4px;
+}
+
+
+/* ==========================================================
+   LÍNEA
+   ========================================================== */
+
+.modal-resultado-linea {
+
+    width:
+        70%;
+
+    height:
+        1px;
+
+    margin:
+        18px auto 24px;
 
     background:
-        rgba(56, 189, 248, .20);
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(103, 232, 249, .55),
+            transparent
+        );
+}
 
-    border-color:
-        rgba(103, 232, 249, .70);
 
-    transform:
-        translateY(-50%)
-        scale(1.08);
+/* ==========================================================
+   TÍTULO
+   ========================================================== */
+
+.modal-resultado-contenido h2 {
+
+    margin:
+        0;
+
+    color:
+        #6ee7b7;
+
+    font-size:
+        28px;
+
+    letter-spacing:
+        2px;
+
+    text-shadow:
+        0 0 18px rgba(52, 211, 153, .25);
 }
 
 
@@ -185,32 +240,16 @@
 .modal-resultado-mensaje {
 
     margin:
-        25px 0;
+        24px auto 28px;
 
-    padding:
-        18px;
-
-    border-radius:
-        14px;
-
-    background:
-        rgba(255, 255, 255, .03);
-
-    border:
-        1px solid rgba(255, 255, 255, .06);
-}
-
-
-.modal-resultado-mensaje p {
-
-    margin:
-        0;
+    max-width:
+        410px;
 
     color:
         #dbeafe;
 
     font-size:
-        23px;
+        21px;
 
     line-height:
         1.6;
@@ -218,27 +257,13 @@
 
 
 /* ==========================================================
-   FOOTER
-   ========================================================== */
-
-.modal-resultado-footer {
-
-    display:
-        flex;
-
-    justify-content:
-        center;
-}
-
-
-/* ==========================================================
-   BOTÓN CONTINUAR
+   CONTINUAR
    ========================================================== */
 
 .btn-continuar-resultado {
 
     min-width:
-        240px;
+        250px;
 
     min-height:
         58px;
@@ -250,7 +275,7 @@
         1px solid #38bdf8;
 
     border-radius:
-        30px;
+        4px;
 
     background:
         linear-gradient(
@@ -263,19 +288,19 @@
         #67e8f9;
 
     font-size:
-        17px;
+        15px;
 
     font-weight:
-        bold;
+        800;
 
     letter-spacing:
-        1px;
+        2px;
 
     cursor:
         pointer;
 
     box-shadow:
-        0 0 15px rgba(56, 189, 248, .08);
+        0 0 18px rgba(56, 189, 248, .08);
 
     transition:
         .25s ease;
@@ -288,7 +313,7 @@
         #164b63;
 
     box-shadow:
-        0 0 22px rgba(56, 189, 248, .2);
+        0 0 25px rgba(56, 189, 248, .2);
 
     transform:
         translateY(-2px);
@@ -302,23 +327,85 @@
 .modal-resultado.incorrecto
 .modal-resultado-contenido {
 
-    border-color:
-        rgba(248, 113, 113, .5);
+    background:
+        linear-gradient(
+            145deg,
+            #301719,
+            #160b0d 65%,
+            #090607
+        );
 
     box-shadow:
-        0 20px 60px rgba(0, 0, 0, .65),
-        0 0 35px rgba(248, 113, 113, .12);
+        0 30px 80px rgba(0, 0, 0, .75),
+        0 0 45px rgba(248, 113, 113, .1);
 }
 
 
 .modal-resultado.incorrecto
-.modal-resultado-header h2 {
+.modal-resultado-contenido::before {
+
+    box-shadow:
+        inset 0 0 0 1px rgba(248, 113, 113, .35);
+}
+
+
+.modal-resultado.incorrecto
+.modal-resultado-contenido::after {
+
+    background:
+        #f87171;
+
+    box-shadow:
+        0 0 14px rgba(248, 113, 113, .6);
+}
+
+
+.modal-resultado.incorrecto
+.modal-resultado-icono {
+
+    border-color:
+        rgba(248, 113, 113, .4);
+
+    background:
+        rgba(248, 113, 113, .06);
+
+    color:
+        #fca5a5;
+
+    box-shadow:
+        0 0 25px rgba(248, 113, 113, .08);
+}
+
+
+.modal-resultado.incorrecto
+.modal-resultado-etiqueta {
+
+    color:
+        #fca5a5;
+}
+
+
+.modal-resultado.incorrecto
+.modal-resultado-linea {
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(248, 113, 113, .55),
+            transparent
+        );
+}
+
+
+.modal-resultado.incorrecto
+.modal-resultado-contenido h2 {
 
     color:
         #fca5a5;
 
     text-shadow:
-        0 0 15px rgba(248, 113, 113, .35);
+        0 0 18px rgba(248, 113, 113, .25);
 }
 
 
@@ -330,6 +417,58 @@
 
     color:
         #fca5a5;
+
+    background:
+        linear-gradient(
+            145deg,
+            #3a1719,
+            #210d0f
+        );
+}
+
+
+.modal-resultado.incorrecto
+.btn-continuar-resultado:hover {
+
+    background:
+        #511d20;
+
+    box-shadow:
+        0 0 25px rgba(248, 113, 113, .18);
+}
+
+
+/* ==========================================================
+   ANIMACIONES
+   ========================================================== */
+
+@keyframes resultado-aparecer {
+
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+@keyframes resultado-entrada {
+
+    from {
+        opacity: 0;
+        transform:
+            scale(.9)
+            translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            scale(1)
+            translateY(0);
+    }
 }
 
 
@@ -342,23 +481,43 @@
     .modal-resultado-contenido {
 
         width:
-            100%;
+            94vw;
 
         padding:
-            30px 20px 25px;
+            36px 25px 30px;
     }
 
 
-    .modal-resultado-header h2 {
+    .modal-resultado-icono {
+
+        width:
+            58px;
+
+        height:
+            58px;
 
         font-size:
-            22px;
+            32px;
     }
 
 
-    .modal-resultado-mensaje p {
+    .modal-resultado-contenido h2 {
 
         font-size:
-            20px;
+            23px;
+    }
+
+
+    .modal-resultado-mensaje {
+
+        font-size:
+            19px;
+    }
+
+
+    .btn-continuar-resultado {
+
+        width:
+            100%;
     }
 }

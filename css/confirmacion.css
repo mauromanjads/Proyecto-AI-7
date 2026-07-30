@@ -1,219 +1,473 @@
 /* ==========================================================
    AI-7
-   Modal de confirmación de culpable
+   MODAL DE DECISIÓN DEL CULPABLE
    ========================================================== */
 
 .modal-confirmacion {
 
     position: fixed;
-
     inset: 0;
 
     z-index: 10000;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
     padding: 20px;
 
-    background: rgba(0, 0, 0, 0.75);
+    background:
+        rgba(2, 5, 10, .86);
 
+    backdrop-filter:
+        blur(9px);
+
+    animation:
+        confirmacion-aparecer .3s ease;
 }
 
+
+/* ==========================================================
+   CONTENEDOR
+   ========================================================== */
 
 .modal-confirmacion-contenido {
 
     position: relative;
 
-    width: min(420px, 100%);
+    width: min(430px, 92vw);
 
-    padding: 30px;
+    padding: 34px 40px 32px;
+
+    box-sizing: border-box;
 
     text-align: center;
 
-    background: #111827;
+    background:
+        linear-gradient(
+            160deg,
+            #1b1711,
+            #0d0e11 55%,
+            #08090c
+        );
 
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #ffffff;
 
-    border-radius: 20px;
+    clip-path:
+        polygon(
+            50% 0,
+            92% 9%,
+            100% 28%,
+            96% 86%,
+            82% 100%,
+            18% 100%,
+            4% 86%,
+            0 28%,
+            8% 9%
+        );
 
     box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.5);
-
-}
-
-
-.modal-confirmacion-cerrar {
-
-    position: absolute;
-
-    top: 12px;
-
-    right: 14px;
-
-    width: 38px;
-
-    height: 38px;
-
-    border: none;
-
-    border-radius: 50%;
-
-    background: transparent;
-
-    color: #ffffff;
-
-    font-size: 28px;
-
-    line-height: 1;
-
-    cursor: pointer;
-
-}
-
-
-.modal-confirmacion-cerrar:hover {
-
-    background: rgba(255, 255, 255, 0.1);
-
-}
-
-
-.modal-confirmacion-icono {
-
-    margin-bottom: 15px;
-
-    font-size: 48px;
-
-}
-
-
-.modal-confirmacion-contenido h2 {
-
-    margin: 0 0 15px;
-
-    color: #ffffff;
-
-}
-
-
-.modal-confirmacion-contenido p {
-
-    margin: 10px 0;
-
-    color: #d1d5db;
-
-}
-
-
-.modal-confirmacion-contenido h3 {
-
-    margin: 15px 0;
-
-    color: #60a5fa;
-
-    font-size: 28px;
-
-}
-
-
-.modal-confirmacion-texto {
-
-    margin-top: 20px !important;
-
-}
-
-
-.modal-confirmacion-botones {
-
-    display: flex;
-
-    gap: 12px;
-
-    justify-content: center;
-
-    margin-top: 28px;
-
-}
-
-
-.modal-confirmacion-botones button {
-
-    min-width: 130px;
-
-    padding: 12px 20px;
-
-    border: none;
-
-    border-radius: 10px;
-
-    font-size: 15px;
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition:
-        transform 0.2s ease,
-        opacity 0.2s ease;
-
-}
-
-
-.modal-confirmacion-botones button:hover {
-
-    transform: translateY(-2px);
-
-    opacity: 0.9;
-
-}
-
-
-.btn-confirmar-culpable {
-
-    background: #16a34a;
-
-    color: #ffffff;
-
-}
-
-
-.btn-cancelar-culpable {
-
-    background: #374151;
-
-    color: #ffffff;
-
+        0 30px 80px rgba(0, 0, 0, .75),
+        0 0 45px rgba(245, 158, 11, .08);
+
+    animation:
+        confirmacion-entrada .4s ease;
 }
 
 
 /* ==========================================================
-   Responsive
+   BORDE
+   ========================================================== */
+
+.modal-confirmacion-contenido::before {
+
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    pointer-events: none;
+
+    clip-path:
+        polygon(
+            50% 0,
+            92% 9%,
+            100% 28%,
+            96% 86%,
+            82% 100%,
+            18% 100%,
+            4% 86%,
+            0 28%,
+            8% 9%
+        );
+
+    box-shadow:
+        inset 0 0 0 1px rgba(245, 158, 11, .38);
+}
+
+
+/* ==========================================================
+   DETALLE SUPERIOR
+   ========================================================== */
+
+.modal-confirmacion-contenido::after {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 55px;
+
+    width: 100px;
+    height: 2px;
+
+    background:
+        #f87171;
+
+    box-shadow:
+        0 0 14px rgba(248, 113, 113, .6);
+}
+
+
+/* ==========================================================
+   ALERTA
+   ========================================================== */
+
+.modal-confirmacion-alerta {
+
+    width: 64px;
+    height: 64px;
+
+    margin: 0 auto 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 42px;
+
+    filter:
+        drop-shadow(
+            0 0 12px rgba(245, 158, 11, .35)
+        );
+
+    animation:
+        alerta-pulso 2s ease-in-out infinite;
+}
+
+
+/* ==========================================================
+   ETIQUETA
+   ========================================================== */
+
+.modal-confirmacion-etiqueta {
+
+    color:
+        #fbbf24;
+
+    font-size:
+        12px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        4px;
+}
+
+
+/* ==========================================================
+   LÍNEA
+   ========================================================== */
+
+.modal-confirmacion-linea {
+
+    width: 70%;
+
+    height: 1px;
+
+    margin: 16px auto 24px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(245, 158, 11, .65),
+            transparent
+        );
+}
+
+
+/* ==========================================================
+   PREGUNTA
+   ========================================================== */
+
+.modal-confirmacion-contenido h2 {
+
+    margin: 0;
+
+    color:
+        #e5e7eb;
+
+    font-size:
+        20px;
+
+    font-weight:
+        600;
+
+    letter-spacing:
+        3px;
+}
+
+
+/* ==========================================================
+   PERSONAJE
+   ========================================================== */
+
+.modal-confirmacion-agente {
+
+    margin:
+        14px 0 16px;
+
+    color:
+        #fbbf24;
+
+    font-size:
+        36px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        1px;
+
+    text-shadow:
+        0 0 20px rgba(245, 158, 11, .18);
+}
+
+
+/* ==========================================================
+   BOTONES
+   ========================================================== */
+
+.modal-confirmacion-botones {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+    margin-top:
+        28px;
+}
+
+
+/* ==========================================================
+   ACUSAR
+   ========================================================== */
+
+.btn-confirmar-culpable {
+
+    width:
+        min(280px, 100%);
+
+    padding:
+        14px 24px;
+
+    border:
+        1px solid #f59e0b;
+
+    border-radius:
+        4px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(245, 158, 11, .18),
+            rgba(180, 83, 9, .08)
+        );
+
+    color:
+        #fbbf24;
+
+    font-size:
+        13px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        2px;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 0 18px rgba(245, 158, 11, .05);
+
+    transition:
+        .25s ease;
+}
+
+
+.btn-confirmar-culpable:hover {
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(245, 158, 11, .28),
+            rgba(180, 83, 9, .14)
+        );
+
+    box-shadow:
+        0 0 25px rgba(245, 158, 11, .15);
+
+    transform:
+        translateY(-2px);
+}
+
+
+/* ==========================================================
+   VOLVER
+   ========================================================== */
+
+.btn-cancelar-culpable {
+
+    padding:
+        11px 26px;
+
+    border:
+        none;
+
+    background:
+        transparent;
+
+    color:
+        #6b7280;
+
+    font-size:
+        14px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        1.5px;
+
+    cursor:
+        pointer;
+
+    transition:
+        .25s ease;
+}
+
+
+.btn-cancelar-culpable:hover {
+
+    color:
+        #d1d5db;
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* ==========================================================
+   ANIMACIONES
+   ========================================================== */
+
+@keyframes confirmacion-aparecer {
+
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+@keyframes confirmacion-entrada {
+
+    from {
+        opacity: 0;
+        transform:
+            scale(.88)
+            translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            scale(1)
+            translateY(0);
+    }
+}
+
+
+@keyframes alerta-pulso {
+
+    0%,
+    100% {
+        transform:
+            scale(1);
+    }
+
+    50% {
+        transform:
+            scale(1.08);
+    }
+}
+
+
+/* ==========================================================
+   RESPONSIVE
    ========================================================== */
 
 @media (max-width: 480px) {
 
     .modal-confirmacion-contenido {
 
-        padding: 25px 20px;
+        width: 94vw;
 
+        padding:
+            30px 25px 28px;
     }
 
 
-    .modal-confirmacion-botones {
+    .modal-confirmacion-alerta {
 
-        flex-direction: column;
-
+        font-size:
+            36px;
     }
 
 
-    .modal-confirmacion-botones button {
+    .modal-confirmacion-agente {
 
-        width: 100%;
-
+        font-size:
+            30px;
     }
 
+
+    .modal-confirmacion-contenido h2 {
+
+        font-size:
+            18px;
+    }
+
+
+    .btn-confirmar-culpable {
+
+        width:
+            100%;
+    }
 }

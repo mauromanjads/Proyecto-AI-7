@@ -15,9 +15,7 @@ export default class ModalResultado {
         this.modal = null;
 
         this.accionContinuar = null;
-
     }
-
 
     // ======================================================
     // MOSTRAR RESULTADO
@@ -32,77 +30,61 @@ export default class ModalResultado {
 
         this.cerrar();
 
-
         this.accionContinuar =
             accionContinuar;
 
-
         this.modal =
-            document.createElement(
-                "div"
-            );
-
+            document.createElement("div");
 
         this.modal.className =
             `modal-resultado ${tipo}`;
-
 
         this.modal.innerHTML = `
 
             <div class="modal-resultado-contenido">
 
-                <div class="modal-resultado-header">
+                <div class="modal-resultado-icono">
 
-                    <h2>
-                        ${titulo}
-                    </h2>
-
-                    <button
-                        class="modal-resultado-cerrar"
-                        type="button">
-
-                        ✕
-
-                    </button>
+                    ${tipo === "correcto" ? "✓" : "✕"}
 
                 </div>
 
+                <div class="modal-resultado-etiqueta">
+
+                    VEREDICTO
+
+                </div>
+
+                <div class="modal-resultado-linea"></div>
+
+                <h2>
+                    ${titulo}
+                </h2>
 
                 <div class="modal-resultado-mensaje">
 
-                    <p>
-                        ${mensaje}
-                    </p>
+                    ${mensaje}
 
                 </div>
 
+                <button
+                    class="btn-continuar-resultado"
+                    type="button">
 
-                <div class="modal-resultado-footer">
+                    CONTINUAR
 
-                    <button
-                        class="btn-continuar-resultado"
-                        type="button">
-
-                        CONTINUAR
-
-                    </button>
-
-                </div>
+                </button>
 
             </div>
 
         `;
 
-
         document.body.appendChild(
             this.modal
         );
 
-
         this.configurarEventos();
-
     }
-
 
     // ======================================================
     // EVENTOS
@@ -110,31 +92,10 @@ export default class ModalResultado {
 
     configurarEventos() {
 
-        const btnCerrar =
-            this.modal.querySelector(
-                ".modal-resultado-cerrar"
-            );
-
-
         const btnContinuar =
             this.modal.querySelector(
                 ".btn-continuar-resultado"
             );
-
-
-        // ==================================================
-        // CERRAR CON X
-        // ==================================================
-
-        btnCerrar.addEventListener(
-            "click",
-            () => this.cerrar()
-        );
-
-
-        // ==================================================
-        // CONTINUAR
-        // ==================================================
 
         btnContinuar.addEventListener(
             "click",
@@ -143,42 +104,14 @@ export default class ModalResultado {
                 const accion =
                     this.accionContinuar;
 
-
                 this.cerrar();
 
-
                 if (accion) {
-
                     accion();
-
                 }
-
             }
         );
-
-
-        // ==================================================
-        // CERRAR AL HACER CLIC FUERA
-        // ==================================================
-
-        this.modal.addEventListener(
-            "click",
-            evento => {
-
-                if (
-                    evento.target ===
-                    this.modal
-                ) {
-
-                    this.cerrar();
-
-                }
-
-            }
-        );
-
     }
-
 
     // ======================================================
     // CERRAR MODAL
@@ -190,14 +123,9 @@ export default class ModalResultado {
 
             this.modal.remove();
 
-            this.modal =
-                null;
+            this.modal = null;
 
-            this.accionContinuar =
-                null;
-
+            this.accionContinuar = null;
         }
-
     }
-
 }
