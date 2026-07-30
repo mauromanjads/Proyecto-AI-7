@@ -13,7 +13,11 @@
 
 export default class Modal {
 
-    static agente(agente, declaraciones = []) {
+    /* ======================================================
+       MODAL DE PERFIL DEL AGENTE
+       ====================================================== */
+
+    static agente(agente) {
 
         return `
 
@@ -21,7 +25,11 @@ export default class Modal {
 
                 <div class="modal-agente">
 
-                    <button class="modal-cerrar" type="button">
+                    <button
+                        class="modal-cerrar"
+                        type="button"
+                        aria-label="Cerrar"
+                    >
                         ×
                     </button>
 
@@ -48,9 +56,13 @@ export default class Modal {
                                 ${agente.codigo}
                             </div>
 
-                            <h2>${agente.nombre}</h2>
+                            <h2>
+                                ${agente.nombre}
+                            </h2>
 
-                            <span>${agente.especialidad}</span>
+                            <span>
+                                ${agente.especialidad}
+                            </span>
 
                         </div>
 
@@ -61,24 +73,6 @@ export default class Modal {
                         <p>
                             ${agente.descripcion}
                         </p>
-
-                    </div>
-
-                    <div class="modal-agente-declaraciones">
-
-                        <h3>Declaraciones</h3>
-
-                        ${
-                            declaraciones.length > 0
-                            ?
-                            declaraciones.map(d => `
-                                <p>
-                                    "${d.obtenerTexto()}"
-                                </p>
-                            `).join("")
-                            :
-                            "<p>Este agente no tiene declaraciones.</p>"
-                        }
 
                     </div>
 
@@ -111,7 +105,15 @@ export default class Modal {
 
     }
 
-    static narrativo(titulo, contenidoTitulo, contenido) {
+    /* ======================================================
+       MODAL NARRATIVO
+       ====================================================== */
+
+    static narrativo(
+        titulo,
+        contenidoTitulo,
+        contenido
+    ) {
 
         return `
 
@@ -129,15 +131,21 @@ export default class Modal {
 
                     <div class="modal-narrativo-header">
 
-                        <h2>${titulo}</h2>
+                        <h2>
+                            ${titulo}
+                        </h2>
 
                     </div>
 
                     <div class="modal-narrativo-contenido">
 
-                        <h3>${contenidoTitulo}</h3>
+                        <h3>
+                            ${contenidoTitulo}
+                        </h3>
 
-                        <p>${contenido}</p>
+                        <p>
+                            ${contenido}
+                        </p>
 
                     </div>
 

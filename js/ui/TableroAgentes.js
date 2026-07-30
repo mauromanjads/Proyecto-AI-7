@@ -20,6 +20,7 @@
 
 import Tubos from "./Tubos.js";
 import Mensajes from "./Mensajes.js";
+import Modal from "./Modal.js";
 import { PERSONAJES } from "../datos/personajes.js";
 
 export default class TableroAgentes {
@@ -27,17 +28,11 @@ export default class TableroAgentes {
     constructor() {
 
         this.contenedor = null;
-
         this.tablero = null;
-
         this.tubos = null;
-
         this.agenteActivo = null;
-
         this.tarjetaActiva = null;
-
         this.modalAgente = null;
-
         this.declaraciones = [];
 
         /*
@@ -52,7 +47,6 @@ export default class TableroAgentes {
             );
 
     }
-
 
     /* ======================================================
        PREPARAR AGENTES
@@ -88,7 +82,6 @@ export default class TableroAgentes {
 
     }
 
-
     /* ======================================================
        INICIAR
        ====================================================== */
@@ -116,7 +109,6 @@ export default class TableroAgentes {
 
     }
 
-
     /* ======================================================
        CARGAR AGENTES DEL CASO
        ====================================================== */
@@ -140,7 +132,6 @@ export default class TableroAgentes {
 
         }
 
-
         /*
          * Guardar las declaraciones
          * correspondientes al caso actual.
@@ -151,7 +142,6 @@ export default class TableroAgentes {
                 ? declaraciones
                 : [];
 
-
         /*
          * Preparar los personajes recibidos.
          */
@@ -161,15 +151,12 @@ export default class TableroAgentes {
                 agentes
             );
 
-
         /*
          * Limpiar cualquier estado anterior.
          */
 
         this.agenteActivo = null;
-
         this.tarjetaActiva = null;
-
 
         /*
          * Si el tablero todavía no existe,
@@ -182,14 +169,12 @@ export default class TableroAgentes {
 
         }
 
-
         /*
          * Renderizar nuevamente NEXUS
          * con los agentes del caso actual.
          */
 
         this.renderizar();
-
 
         /*
          * Crear nuevamente la red
@@ -199,7 +184,6 @@ export default class TableroAgentes {
         this.iniciarTubos();
 
     }
-
 
     /* ======================================================
        INICIAR TUBOS
@@ -216,7 +200,6 @@ export default class TableroAgentes {
         this.tubos.iniciar();
 
     }
-
 
     /* ======================================================
        RENDERIZAR
@@ -354,7 +337,6 @@ export default class TableroAgentes {
 
     }
 
-
     /* ======================================================
        CREAR AGENTE
        ====================================================== */
@@ -457,7 +439,6 @@ export default class TableroAgentes {
 
     }
 
-
     /* ======================================================
        INTERACCIONES
        ====================================================== */
@@ -557,7 +538,6 @@ export default class TableroAgentes {
 
     }
 
-
     /* ======================================================
        ACTIVAR AGENTE
        ====================================================== */
@@ -608,7 +588,6 @@ export default class TableroAgentes {
 
     }
 
-
     /* ======================================================
        MOSTRAR MENÚ
        ====================================================== */
@@ -656,7 +635,6 @@ export default class TableroAgentes {
 
     }
 
-
     /* ======================================================
        EJECUTAR ACCIÓN
        ====================================================== */
@@ -683,16 +661,15 @@ export default class TableroAgentes {
 
                 break;
 
-
             case "perfil":
 
-                break;
+                this.mostrarPerfil();
 
+                break;
 
             case "culpable":
 
                 break;
-
 
             case "cancelar":
 
@@ -703,7 +680,6 @@ export default class TableroAgentes {
         }
 
     }
-
 
     /* ======================================================
        INTERROGAR AGENTE
@@ -724,7 +700,6 @@ export default class TableroAgentes {
 
         }
 
-
         const declaracion =
             this.declaraciones.find(
                 elemento =>
@@ -742,13 +717,8 @@ export default class TableroAgentes {
 
         }
 
-
         /*
-         * Mensajes.js ya tiene el modal
-         * preparado para mostrar declaraciones.
-         *
-         * Como cada agente tiene una sola,
-         * enviamos únicamente esa declaración.
+         * Cada agente tiene una sola declaración.
          */
 
         new Mensajes().mostrar(
@@ -758,6 +728,82 @@ export default class TableroAgentes {
 
     }
 
+    /* ======================================================
+       MOSTRAR PERFIL
+       ====================================================== */
+
+    mostrarPerfil() {
+
+        const agente =
+            this.agentes.find(
+                elemento =>
+                    elemento.codigo ===
+                    this.agenteActivo
+            );
+
+        if (!agente) {
+
+            return;
+
+        }
+
+        /*
+         * Si existe otro modal de perfil,
+         * lo eliminamos antes de crear el nuevo.
+         */
+
+        document.querySelector(
+            ".modal-overlay"
+        )?.remove();
+
+        document.body.insertAdjacentHTML(
+            "beforeend",
+            Modal.agente(agente)
+        );
+
+        const modal =
+            document.querySelector(
+                ".modal-overlay"
+            );
+
+        if (!modal) {
+
+            return;
+
+        }
+
+        const cerrar =
+            () => modal.remove();
+
+        const botonCerrar =
+            modal.querySelector(
+                ".modal-cerrar"
+            );
+
+        const botonCerrarGrande =
+            modal.querySelector(
+                ".modal-cerrar-grande"
+            );
+
+        if (botonCerrar) {
+
+            botonCerrar.addEventListener(
+                "click",
+                cerrar
+            );
+
+        }
+
+        if (botonCerrarGrande) {
+
+            botonCerrarGrande.addEventListener(
+                "click",
+                cerrar
+            );
+
+        }
+
+    }
 
     /* ======================================================
        DESACTIVAR AGENTE
@@ -810,7 +856,6 @@ export default class TableroAgentes {
             null;
 
     }
-
 
     /* ======================================================
        OCULTAR MENÚ
