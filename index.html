@@ -11,6 +11,11 @@
 
     <title>NEXUS</title>
 
+
+    <!-- ==================================================
+         ESTILOS
+         ================================================== -->
+
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/agentes.css">
     <link rel="stylesheet" href="css/modalperfil.css">
@@ -28,7 +33,9 @@
 
 </head>
 
+
 <body>
+
 
     <!-- ==================================================
          PRÓLOGO
@@ -52,18 +59,24 @@
 
                 </div>
 
+
                 <div class="prologo-navegacion">
 
                     <button
                         id="btn-prologo-atras"
                         type="button">
+
                         ATRÁS
+
                     </button>
+
 
                     <button
                         id="btn-prologo"
                         type="button">
+
                         CONTINUAR
+
                     </button>
 
                 </div>
@@ -81,7 +94,9 @@
 
     <div id="pantalla-juego">
 
+
         <header>
+
 
             <!-- ==================================================
                  IDENTIDAD DEL SISTEMA
@@ -103,15 +118,6 @@
 
             <!-- ==================================================
                  TÍTULO DINÁMICO DEL CAPÍTULO
-                 ==================================================
-
-                 El título se carga desde capitulo1.js,
-                 capitulo2.js, etc.
-
-                 Ejemplo:
-
-                 EL PRIMER INCIDENTE
-
                  ================================================== -->
 
             <h1 id="titulo-capitulo"></h1>
@@ -151,6 +157,7 @@
             <section class="panel">
 
                 <div id="tablero-agentes"></div>
+
                 <div id="agentes"></div>
 
             </section>
@@ -158,14 +165,6 @@
 
             <!-- ==================================================
                  RESULTADO
-                 ==================================================
-
-                 Se mantiene temporalmente.
-
-                 Más adelante se eliminará cuando terminemos
-                 el desarrollo y las respuestas ya no deban
-                 mostrarse visualmente.
-
                  ================================================== -->
 
             <section class="panel">
@@ -181,6 +180,24 @@
 
 
     <!-- ==================================================
+         IMPORT MAP
+         --------------------------------------------------
+         Permite utilizar Three.js desde los módulos
+         JavaScript instalados mediante npm.
+         ================================================== -->
+
+    <script type="importmap">
+
+    {
+        "imports": {
+            "three": "./node_modules/three/build/three.module.js"
+        }
+    }
+
+    </script>
+
+
+    <!-- ==================================================
          APLICACIÓN
          ================================================== -->
 
@@ -188,6 +205,7 @@
         type="module"
         src="js/app.js">
     </script>
+
 
 </body>
 

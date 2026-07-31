@@ -5,25 +5,19 @@
  * ----------------------------------------------------------
  * RED NEXUS
  *
+ * Tubos 3D mediante Three.js.
+ *
+ * - Tubos cilíndricos reales.
+ * - Pegados a los hexágonos.
  * - Tubo madre horizontal.
- * - Tubos verticales individuales.
- * - Conectores.
- * - Torre NEXUS.
+ * - Conectores 3D.
+ * - Torre NEXUS independiente.
  * - Activación por agente.
- * - Responsive para tablet y móvil.
- *
- * ESCRITORIO:
- * - Mantiene las coordenadas originales.
- *
- * TABLET / MÓVIL:
- * - Distribución 3 / 1 / 3.
- * - AI-04 queda en el centro.
- * - NEXUS queda a la derecha.
- * - Tubos verticales terminan en el hexágono.
- * - AI-04 utiliza una ruta independiente.
- *
+ * - Responsive escritorio / tablet / móvil.
  * ==========================================================
  */
+
+import * as THREE from "three";
 
 export default class Tubos {
 
@@ -33,15 +27,18 @@ export default class Tubos {
         this.agentes = agentes;
 
         this.red = null;
-        this.svg = null;
+
+        this.scene = null;
+        this.camera = null;
+        this.renderer = null;
 
         this.tubos = new Map();
         this.conectores = new Map();
 
         this.tuboMadre = null;
-        this.torre = null;
 
         this.resizeHandler = null;
+        this.animacion = null;
 
     }
 
@@ -77,431 +74,533 @@ export default class Tubos {
 
         }
 
-        this.crearRed();
+        this.crearEscena();
 
         this.resizeHandler =
-            () => this.adaptarResponsive();
+            () => this.actualizar();
 
         window.addEventListener(
             "resize",
             this.resizeHandler
         );
 
+        this.actualizar();
+
+        this.animar();
+
     }
 
 
     /* ======================================================
-       CREAR RED
+       ESCENA THREE.JS
        ====================================================== */
 
-    crearRed() {
+    crearEscena() {
 
-        this.red.innerHTML = `
+        this.red.innerHTML = "";
 
-            <svg
-                class="nexus-red-svg"
-                viewBox="0 0 1200 700"
-                preserveAspectRatio="none"
-                aria-hidden="true"
-            >
-
-                <defs>
-
-                    <filter
-                        id="nexusShadow"
-                        x="-100%"
-                        y="-100%"
-                        width="300%"
-                        height="300%"
-                    >
-
-                        <feDropShadow
-                            dx="0"
-                            dy="5"
-                            stdDeviation="5"
-                            flood-color="#000000"
-                            flood-opacity=".9"
-                        />
-
-                    </filter>
-
-                </defs>
+        this.scene =
+            new THREE.Scene();
 
 
-                <!-- ======================================
-                     TUBO MADRE
-                     ====================================== -->
+        /*
+         * IMPORTANTE:
+         *
+         * La cámara mantiene SIEMPRE el mismo
+         * sistema lógico de coordenadas:
+         *
+         * 1200 x 700
+         *
+         * No hacemos escala de la cámara
+         * según el tamaño del celular.
+         *
+         * El renderer se adapta al tamaño real.
+         */
 
-                <path
-                    class="nexus-tubo-madre"
-                    d="
-                        M 125 350
-                        L 980 350
-                    "
-                />
-
-
-                <!-- ======================================
-                     TORRE NEXUS
-                     ====================================== -->
-
-                ${this.generarTorre()}
-
-
-                <!-- ======================================
-                     TUBOS INDIVIDUALES
-                     ====================================== -->
-
-                ${this.generarTubos()}
-
-
-                <!-- ======================================
-                     CONECTORES
-                     ====================================== -->
-
-                ${this.generarConectores()}
-
-            </svg>
-
-        `;
-
-
-        this.svg =
-            this.red.querySelector(
-                ".nexus-red-svg"
+        this.camera =
+            new THREE.OrthographicCamera(
+                -600,
+                600,
+                350,
+                -350,
+                0.1,
+                2000
             );
 
+        this.camera.position.set(
+            0,
+            0,
+            1000
+        );
 
-        this.tuboMadre =
-            this.svg.querySelector(
-                ".nexus-tubo-madre"
+        this.camera.lookAt(
+            0,
+            0,
+            0
+        );
+
+
+        /* ==================================================
+           RENDERER
+           ================================================== */
+
+        this.renderer =
+            new THREE.WebGLRenderer({
+
+                alpha: true,
+
+                antialias: true,
+
+                powerPreference:
+                    "high-performance"
+
+            });
+
+
+        this.renderer.setPixelRatio(
+            Math.min(
+                window.devicePixelRatio || 1,
+                2
+            )
+        );
+
+
+        this.renderer.setClearColor(
+            0x000000,
+            0
+        );
+
+
+        this.red.appendChild(
+            this.renderer.domElement
+        );
+
+
+        /*
+         * El canvas ocupa exactamente
+         * el espacio de .nexus-red.
+         */
+
+        this.renderer.domElement.style.position =
+            "absolute";
+
+        this.renderer.domElement.style.inset =
+            "0";
+
+        this.renderer.domElement.style.width =
+            "100%";
+
+        this.renderer.domElement.style.height =
+            "100%";
+
+        this.renderer.domElement.style.display =
+            "block";
+
+        this.renderer.domElement.style.pointerEvents =
+            "none";
+
+
+        /* ==================================================
+           LUCES
+           ================================================== */
+
+        const ambiente =
+            new THREE.AmbientLight(
+                0xffffff,
+                1.5
             );
 
+        this.scene.add(
+            ambiente
+        );
 
-        this.torre =
-            this.svg.querySelector(
-                ".nexus-torre"
+
+        const luz =
+            new THREE.DirectionalLight(
+                0xffffff,
+                2.5
             );
 
+        luz.position.set(
+            -300,
+            500,
+            800
+        );
 
-        this.registrarTubos();
-
-        this.adaptarResponsive();
-
-    }
+        this.scene.add(
+            luz
+        );
 
 
-    /* ======================================================
-       GENERAR TORRE NEXUS
-       ====================================================== */
+        /*
+         * Segunda luz suave.
+         *
+         * Ayuda especialmente en móviles
+         * donde el tubo rojo puede perder
+         * volumen dependiendo del ángulo.
+         */
 
-    generarTorre() {
+        const luzRelleno =
+            new THREE.DirectionalLight(
+                0xff5555,
+                0.8
+            );
 
-        return `
+        luzRelleno.position.set(
+            400,
+            -300,
+            500
+        );
 
-            <g class="nexus-torre">
+        this.scene.add(
+            luzRelleno
+        );
 
-                <rect
-                    class="nexus-torre-cuerpo"
-                    x="980"
-                    y="170"
-                    width="160"
-                    height="360"
-                    rx="18"
-                />
 
-                <rect
-                    class="nexus-torre-nucleo"
-                    x="1005"
-                    y="310"
-                    width="110"
-                    height="80"
-                    rx="12"
-                />
-
-                <circle
-                    class="nexus-torre-conexion"
-                    cx="980"
-                    cy="350"
-                    r="12"
-                />
-
-                <line
-                    class="nexus-torre-linea"
-                    x1="980"
-                    y1="350"
-                    x2="1005"
-                    y2="350"
-                />
-
-                <line
-                    class="nexus-torre-detalle"
-                    x1="1010"
-                    y1="220"
-                    x2="1110"
-                    y2="220"
-                />
-
-                <line
-                    class="nexus-torre-detalle"
-                    x1="1010"
-                    y1="480"
-                    x2="1110"
-                    y2="480"
-                />
-
-            </g>
-
-        `;
+        this.crearTubos3D();
 
     }
 
 
     /* ======================================================
-       GENERAR TUBOS INDIVIDUALES
-       ------------------------------------------------------
-       COORDENADAS ORIGINALES DE ESCRITORIO.
+       CREAR TUBOS
        ====================================================== */
 
-    generarTubos() {
-
-        return `
-
-            <!-- ATLAS -->
-
-            <path
-                class="nexus-tubo"
-                data-tubo="AI-01"
-                d="
-                    M 125 125
-                    L 125 350
-                "
-            />
-
-
-            <!-- NOVA -->
-
-            <path
-                class="nexus-tubo"
-                data-tubo="AI-02"
-                d="
-                    M 329 125
-                    L 329 350
-                "
-            />
-
-
-            <!-- ORION -->
-
-            <path
-                class="nexus-tubo"
-                data-tubo="AI-03"
-                d="
-                    M 533 125
-                    L 533 350
-                "
-            />
-
-
-            <!-- ECHO -->
-
-            <path
-                class="nexus-tubo nexus-tubo-central"
-                data-tubo="AI-04"
-                d="
-                    M 737 125
-                    L 737 350
-                "
-            />
-
-
-            <!-- TITAN -->
-
-            <path
-                class="nexus-tubo"
-                data-tubo="AI-05"
-                d="
-                    M 329 575
-                    L 329 350
-                "
-            />
-
-
-            <!-- VEGA -->
-
-            <path
-                class="nexus-tubo"
-                data-tubo="AI-06"
-                d="
-                    M 533 575
-                    L 533 350
-                "
-            />
-
-
-            <!-- ZERO -->
-
-            <path
-                class="nexus-tubo"
-                data-tubo="AI-07"
-                d="
-                    M 737 575
-                    L 737 350
-                "
-            />
-
-        `;
-
-    }
-
-
-    /* ======================================================
-       GENERAR CONECTORES
-       ====================================================== */
-
-    generarConectores() {
-
-        return `
-
-            <circle
-                class="nexus-conector"
-                data-conector="AI-01"
-                cx="125"
-                cy="350"
-                r="9"
-            />
-
-            <circle
-                class="nexus-conector"
-                data-conector="AI-02"
-                cx="329"
-                cy="350"
-                r="9"
-            />
-
-            <circle
-                class="nexus-conector"
-                data-conector="AI-03"
-                cx="533"
-                cy="350"
-                r="9"
-            />
-
-            <circle
-                class="nexus-conector nexus-conector-central"
-                data-conector="AI-04"
-                cx="737"
-                cy="350"
-                r="7"
-            />
-
-            <circle
-                class="nexus-conector"
-                data-conector="AI-05"
-                cx="329"
-                cy="350"
-                r="9"
-            />
-
-            <circle
-                class="nexus-conector"
-                data-conector="AI-06"
-                cx="533"
-                cy="350"
-                r="9"
-            />
-
-            <circle
-                class="nexus-conector"
-                data-conector="AI-07"
-                cx="737"
-                cy="350"
-                r="9"
-            />
-
-        `;
-
-    }
-
-
-    /* ======================================================
-       REGISTRAR TUBOS
-       ====================================================== */
-
-    registrarTubos() {
+    crearTubos3D() {
 
         this.tubos.clear();
+
         this.conectores.clear();
 
 
-        this.svg
-            .querySelectorAll(
-                ".nexus-tubo[data-tubo]"
-            )
-            .forEach(
-                tubo => {
+        /* ==================================================
+           TUBO MADRE
+           ================================================== */
 
-                    this.tubos.set(
-                        tubo.dataset.tubo,
-                        tubo
-                    );
-
-                }
+        this.tuboMadre =
+            this.crearTubo(
+                125,
+                350,
+                980,
+                350,
+                18
             );
 
 
-        this.svg
-            .querySelectorAll(
-                ".nexus-conector[data-conector]"
-            )
-            .forEach(
-                conector => {
+        this.tuboMadre.userData.radio =
+            18;
 
-                    this.conectores.set(
-                        conector.dataset.conector,
-                        conector
+
+        /* ==================================================
+           POSICIONES LÓGICAS
+           ================================================== */
+
+        const posiciones = {
+
+            "AI-01": {
+                x: 125,
+                y: 125
+            },
+
+            "AI-02": {
+                x: 329,
+                y: 125
+            },
+
+            "AI-03": {
+                x: 533,
+                y: 125
+            },
+
+            "AI-04": {
+                x: 737,
+                y: 125
+            },
+
+            "AI-05": {
+                x: 329,
+                y: 575
+            },
+
+            "AI-06": {
+                x: 533,
+                y: 575
+            },
+
+            "AI-07": {
+                x: 737,
+                y: 575
+            }
+
+        };
+
+
+        Object.entries(
+            posiciones
+        ).forEach(
+            ([codigo, posicion]) => {
+
+                const arriba =
+                    posicion.y < 350;
+
+
+                const tubo =
+                    this.crearTubo(
+                        posicion.x,
+                        posicion.y,
+                        posicion.x,
+                        350,
+                        14
                     );
 
-                }
+
+                tubo.userData.codigo =
+                    codigo;
+
+                tubo.userData.radio =
+                    14;
+
+
+                tubo.userData.arriba =
+                    arriba;
+
+
+                this.tubos.set(
+                    codigo,
+                    tubo
+                );
+
+
+                const conector =
+                    this.crearConector(
+                        posicion.x,
+                        350
+                    );
+
+
+                conector.userData.codigo =
+                    codigo;
+
+
+                this.conectores.set(
+                    codigo,
+                    conector
+                );
+
+            }
+        );
+
+    }
+
+
+    /* ======================================================
+       CREAR CILINDRO
+       ====================================================== */
+
+    crearTubo(
+        x1,
+        y1,
+        x2,
+        y2,
+        radio
+    ) {
+
+        const inicio =
+            this.convertirCoordenada(
+                x1,
+                y1
             );
+
+
+        const fin =
+            this.convertirCoordenada(
+                x2,
+                y2
+            );
+
+
+        const direccion =
+            new THREE.Vector3()
+                .subVectors(
+                    fin,
+                    inicio
+                );
+
+
+        const longitud =
+            direccion.length();
+
+
+        const geometria =
+            new THREE.CylinderGeometry(
+                radio,
+                radio,
+                longitud,
+                24,
+                1,
+                false
+            );
+
+
+        const material =
+            new THREE.MeshStandardMaterial({
+
+                color:
+                    0x7f1d1d,
+
+                metalness:
+                    0.82,
+
+                roughness:
+                    0.30,
+
+                emissive:
+                    0x240000,
+
+                emissiveIntensity:
+                    0.35
+
+            });
+
+
+        const tubo =
+            new THREE.Mesh(
+                geometria,
+                material
+            );
+
+
+        const centro =
+            new THREE.Vector3()
+                .addVectors(
+                    inicio,
+                    fin
+                )
+                .multiplyScalar(
+                    0.5
+                );
+
+
+        tubo.position.copy(
+            centro
+        );
+
+
+        tubo.quaternion.setFromUnitVectors(
+            new THREE.Vector3(
+                0,
+                1,
+                0
+            ),
+            direccion.normalize()
+        );
+
+
+        this.scene.add(
+            tubo
+        );
+
+
+        return tubo;
+
+    }
+
+
+    /* ======================================================
+       CONECTOR
+       ====================================================== */
+
+    crearConector(
+        x,
+        y
+    ) {
+
+        const geometria =
+            new THREE.SphereGeometry(
+                10,
+                20,
+                20
+            );
+
+
+        const material =
+            new THREE.MeshStandardMaterial({
+
+                color:
+                    0xb91c1c,
+
+                metalness:
+                    0.9,
+
+                roughness:
+                    0.22,
+
+                emissive:
+                    0x330000,
+
+                emissiveIntensity:
+                    0.4
+
+            });
+
+
+        const conector =
+            new THREE.Mesh(
+                geometria,
+                material
+            );
+
+
+        const posicion =
+            this.convertirCoordenada(
+                x,
+                y
+            );
+
+
+        conector.position.copy(
+            posicion
+        );
+
+
+        this.scene.add(
+            conector
+        );
+
+
+        return conector;
+
+    }
+
+
+    /* ======================================================
+       CONVERTIR COORDENADAS
+       ====================================================== */
+
+    convertirCoordenada(
+        x,
+        y
+    ) {
+
+        return new THREE.Vector3(
+            x - 600,
+            350 - y,
+            0
+        );
 
     }
 
 
     /* ======================================================
        RESPONSIVE
-       ------------------------------------------------------
-       SOLO TABLET / MÓVIL.
-       ESCRITORIO NO SE TOCA.
        ====================================================== */
 
-    adaptarResponsive() {
-
-        if (!this.svg || !this.tablero) {
-            return;
-        }
-
-
-        /* ==================================================
-           ESCRITORIO
-           ================================================== */
-
-        if (window.innerWidth > 900) {
-
-            this.restaurarEscritorio();
-
-            return;
-
-        }
-
-
-        const tableroRect =
-            this.tablero.getBoundingClientRect();
-
+    actualizar() {
 
         if (
-            tableroRect.width === 0 ||
-            tableroRect.height === 0
+            !this.renderer ||
+            !this.red ||
+            !this.camera
         ) {
 
             return;
@@ -509,22 +608,115 @@ export default class Tubos {
         }
 
 
+        const ancho =
+            this.red.clientWidth;
+
+
+        const alto =
+            this.red.clientHeight;
+
+
+        if (
+            ancho <= 0 ||
+            alto <= 0
+        ) {
+
+            return;
+
+        }
+
+
+        /*
+         * El renderer sí se adapta
+         * al tamaño real del dispositivo.
+         */
+
+        this.renderer.setSize(
+            ancho,
+            alto,
+            false
+        );
+
+
+        /*
+         * LA CÁMARA NO SE ESCALA.
+         *
+         * Esto es lo importante para móvil.
+         *
+         * Siempre vemos el mismo espacio
+         * lógico de 1200 x 700.
+         */
+
+        this.camera.left =
+            -600;
+
+        this.camera.right =
+            600;
+
+        this.camera.top =
+            350;
+
+        this.camera.bottom =
+            -350;
+
+
+        this.camera.updateProjectionMatrix();
+
+
+        /*
+         * Volvemos a buscar los hexágonos
+         * reales.
+         */
+
+        this.ajustarAHexagonos();
+
+    }
+
+
+    /* ======================================================
+       PEGAR TUBOS A HEXÁGONOS
+       ====================================================== */
+
+    ajustarAHexagonos() {
+
+        if (!this.tablero) {
+
+            return;
+
+        }
+
+
+        const rectTablero =
+            this.tablero.getBoundingClientRect();
+
+
+        if (
+            rectTablero.width <= 0 ||
+            rectTablero.height <= 0
+        ) {
+
+            return;
+
+        }
+
+
+        /*
+         * El tablero lógico siempre representa
+         * 1200 x 700.
+         */
+
         const escalaX =
             1200 /
-            tableroRect.width;
+            rectTablero.width;
 
 
         const escalaY =
             700 /
-            tableroRect.height;
+            rectTablero.height;
 
 
-        /* ==================================================
-           OBTENER POSICIÓN DEL HEXÁGONO
-           ================================================== */
-
-        const obtenerPosicionHexagono =
-            codigo => {
+        this.tubos.forEach(
+            (tubo, codigo) => {
 
                 const agente =
                     this.tablero.querySelector(
@@ -533,7 +725,9 @@ export default class Tubos {
 
 
                 if (!agente) {
-                    return null;
+
+                    return;
+
                 }
 
 
@@ -544,7 +738,9 @@ export default class Tubos {
 
 
                 if (!base) {
-                    return null;
+
+                    return;
+
                 }
 
 
@@ -552,58 +748,62 @@ export default class Tubos {
                     base.getBoundingClientRect();
 
 
-                return {
+                /*
+                 * Centro real del hexágono.
+                 */
 
-                    x:
-                        (
-                            rect.left -
-                            tableroRect.left +
-                            rect.width / 2
-                        ) *
-                        escalaX,
-
-                    y:
-                        (
-                            rect.top -
-                            tableroRect.top +
-                            rect.height / 2
-                        ) *
-                        escalaY
-
-                };
-
-            };
+                const x =
+                    (
+                        rect.left -
+                        rectTablero.left +
+                        rect.width / 2
+                    ) *
+                    escalaX;
 
 
-        /* ==================================================
-           POSICIONES
-           ================================================== */
+                const y =
+                    (
+                        rect.top -
+                        rectTablero.top +
+                        rect.height / 2
+                    ) *
+                    escalaY;
 
-        const posiciones =
-            new Map();
+
+                /*
+                 * Todos los tubos llegan
+                 * exactamente al tubo madre.
+                 */
+
+                const extremoY =
+                    350;
 
 
-        [
-            "AI-01",
-            "AI-02",
-            "AI-03",
-            "AI-04",
-            "AI-05",
-            "AI-06",
-            "AI-07"
-        ].forEach(
-            codigo => {
+                this.reposicionarTubo(
+                    tubo,
+                    x,
+                    y,
+                    x,
+                    extremoY
+                );
 
-                const posicion =
-                    obtenerPosicionHexagono(
+
+                const conector =
+                    this.conectores.get(
                         codigo
                     );
 
 
-                if (posicion) {
+                if (conector) {
 
-                    posiciones.set(
-                        codigo,
+                    const posicion =
+                        this.convertirCoordenada(
+                            x,
+                            extremoY
+                        );
+
+
+                    conector.position.copy(
                         posicion
                     );
 
@@ -612,394 +812,225 @@ export default class Tubos {
             }
         );
 
-
-        /* ==================================================
-           AGENTES SUPERIORES
-           --------------------------------------------------
-           TERMINAN EN EL HEXÁGONO.
-           ================================================== */
-
-        [
-            "AI-01",
-            "AI-02",
-            "AI-03"
-        ].forEach(
-            codigo => {
-
-                const posicion =
-                    posiciones.get(codigo);
+    }
 
 
-                const tubo =
-                    this.tubos.get(codigo);
+    /* ======================================================
+       REPOSICIONAR TUBO
+       ====================================================== */
 
+    reposicionarTubo(
+        tubo,
+        x1,
+        y1,
+        x2,
+        y2
+    ) {
 
-                const conector =
-                    this.conectores.get(codigo);
-
-
-                if (!posicion) {
-                    return;
-                }
-
-
-                if (tubo) {
-
-                    tubo.setAttribute(
-                        "d",
-                        `
-                            M ${posicion.x} ${posicion.y}
-                            L ${posicion.x} 350
-                        `
-                    );
-
-                }
-
-
-                if (conector) {
-
-                    conector.setAttribute(
-                        "cx",
-                        posicion.x
-                    );
-
-                    conector.setAttribute(
-                        "cy",
-                        350
-                    );
-
-                }
-
-            }
-        );
-
-
-        /* ==================================================
-           AGENTES INFERIORES
-           --------------------------------------------------
-           TERMINAN EN EL HEXÁGONO.
-           ================================================== */
-
-        [
-            "AI-05",
-            "AI-06",
-            "AI-07"
-        ].forEach(
-            codigo => {
-
-                const posicion =
-                    posiciones.get(codigo);
-
-
-                const tubo =
-                    this.tubos.get(codigo);
-
-
-                const conector =
-                    this.conectores.get(codigo);
-
-
-                if (!posicion) {
-                    return;
-                }
-
-
-                if (tubo) {
-
-                    tubo.setAttribute(
-                        "d",
-                        `
-                            M ${posicion.x} ${posicion.y}
-                            L ${posicion.x} 350
-                        `
-                    );
-
-                }
-
-
-                if (conector) {
-
-                    conector.setAttribute(
-                        "cx",
-                        posicion.x
-                    );
-
-                    conector.setAttribute(
-                        "cy",
-                        350
-                    );
-
-                }
-
-            }
-        );
-
-
-        /* ==================================================
-           AI-04 — RUTA INDEPENDIENTE
-           --------------------------------------------------
-           AI-04 NO SE MONTA SOBRE EL TUBO MADRE.
-           --------------------------------------------------
-           RUTA:
-
-                 HEXÁGONO
-                     |
-                     |
-                     +--------+
-                              |
-                              |
-                              +------ NEXUS
-           ================================================== */
-
-        const posicionCentral =
-            posiciones.get("AI-04");
-
-
-        const tuboCentral =
-            this.tubos.get("AI-04");
-
-
-        const conectorCentral =
-            this.conectores.get("AI-04");
-
-
-        if (
-            posicionCentral &&
-            tuboCentral
-        ) {
-
-            /*
-             * Punto intermedio vertical.
-             *
-             * Se separa del tubo madre para que
-             * visualmente no se fusione con él.
-             */
-
-            const separacionVertical =
-                55;
-
-
-            const yRuta =
-                350 +
-                separacionVertical;
-
-
-            /*
-             * Punto horizontal antes de entrar
-             * al NEXUS.
-             */
-
-            const xEntrada =
-                900;
-
-
-            tuboCentral.setAttribute(
-                "d",
-                `
-                    M ${posicionCentral.x} ${posicionCentral.y}
-                    L ${posicionCentral.x} ${yRuta}
-                    L ${xEntrada} ${yRuta}
-                    L ${xEntrada} 350
-                    L 980 350
-                `
-            );
-
-        }
-
-
-        if (conectorCentral) {
-
-            conectorCentral.setAttribute(
-                "cx",
-                posicionCentral
-                    ? posicionCentral.x
-                    : 737
+        const inicio =
+            this.convertirCoordenada(
+                x1,
+                y1
             );
 
 
-            /*
-             * El conector queda en el hexágono,
-             * no sobre el tubo madre.
-             */
-
-            conectorCentral.setAttribute(
-                "cy",
-                posicionCentral
-                    ? posicionCentral.y
-                    : 350
+        const fin =
+            this.convertirCoordenada(
+                x2,
+                y2
             );
 
-        }
 
-
-        /* ==================================================
-           TUBO MADRE
-           --------------------------------------------------
-           AI-04 YA NO FORMA PARTE DE ESTA LÍNEA.
-           ================================================== */
-
-        if (this.tuboMadre) {
-
-            const xs =
-                [
-                    "AI-01",
-                    "AI-02",
-                    "AI-03",
-                    "AI-05",
-                    "AI-06",
-                    "AI-07"
-                ]
-                .map(
-                    codigo => {
-
-                        const posicion =
-                            posiciones.get(
-                                codigo
-                            );
-
-                        return posicion
-                            ? posicion.x
-                            : null;
-
-                    }
-                )
-                .filter(
-                    x =>
-                        x !== null
+        const direccion =
+            new THREE.Vector3()
+                .subVectors(
+                    fin,
+                    inicio
                 );
 
 
-            const minimoX =
-                xs.length
-                    ? Math.min(...xs)
-                    : 125;
+        const longitud =
+            direccion.length();
 
 
-            this.tuboMadre.setAttribute(
-                "d",
-                `
-                    M ${minimoX} 350
-                    L 980 350
-                `
+        const radio =
+            tubo.userData.radio ||
+            14;
+
+
+        /*
+         * Guardamos el material.
+         */
+
+        const material =
+            tubo.material;
+
+
+        /*
+         * Eliminamos la geometría anterior.
+         */
+
+        tubo.geometry.dispose();
+
+
+        /*
+         * Creamos la nueva geometría.
+         */
+
+        tubo.geometry =
+            new THREE.CylinderGeometry(
+                radio,
+                radio,
+                longitud,
+                24,
+                1,
+                false
             );
 
-        }
 
-    }
-
-
-    /* ======================================================
-       RESTAURAR ESCRITORIO
-       ------------------------------------------------------
-       COORDENADAS ORIGINALES.
-       ====================================================== */
-
-    restaurarEscritorio() {
-
-        const posiciones = {
-
-            "AI-01": {
-                x: 125,
-                arriba: true
-            },
-
-            "AI-02": {
-                x: 329,
-                arriba: true
-            },
-
-            "AI-03": {
-                x: 533,
-                arriba: true
-            },
-
-            "AI-04": {
-                x: 737,
-                arriba: true
-            },
-
-            "AI-05": {
-                x: 329,
-                arriba: false
-            },
-
-            "AI-06": {
-                x: 533,
-                arriba: false
-            },
-
-            "AI-07": {
-                x: 737,
-                arriba: false
-            }
-
-        };
+        tubo.material =
+            material;
 
 
-        Object.entries(
-            posiciones
-        ).forEach(
-            (
-                [
-                    codigo,
-                    posicion
-                ]
-            ) => {
+        /*
+         * Centro del tubo.
+         */
 
-                const tubo =
-                    this.tubos.get(codigo);
-
-
-                const conector =
-                    this.conectores.get(codigo);
+        tubo.position
+            .copy(
+                inicio
+            )
+            .add(
+                fin
+            )
+            .multiplyScalar(
+                0.5
+            );
 
 
-                if (tubo) {
+        /*
+         * Orientación.
+         */
 
-                    const yInicial =
-                        posicion.arriba
-                            ? 125
-                            : 575;
-
-
-                    tubo.setAttribute(
-                        "d",
-                        `
-                            M ${posicion.x} ${yInicial}
-                            L ${posicion.x} 350
-                        `
-                    );
-
-                }
-
-
-                if (conector) {
-
-                    conector.setAttribute(
-                        "cx",
-                        posicion.x
-                    );
-
-                    conector.setAttribute(
-                        "cy",
-                        350
-                    );
-
-                }
-
-            }
+        tubo.quaternion.setFromUnitVectors(
+            new THREE.Vector3(
+                0,
+                1,
+                0
+            ),
+            direccion.normalize()
         );
 
+    }
+
+
+    /* ======================================================
+       ANIMACIÓN
+       ====================================================== */
+
+    animar() {
+
+        this.animacion =
+            requestAnimationFrame(
+                () => this.animar()
+            );
+
+
+        if (
+            !this.renderer ||
+            !this.scene ||
+            !this.camera
+        ) {
+
+            return;
+
+        }
+
+
+        this.renderer.render(
+            this.scene,
+            this.camera
+        );
+
+    }
+
+
+    /* ======================================================
+       ACTIVAR
+       ====================================================== */
+
+    activar(
+        codigo
+    ) {
+
+        const tubo =
+            this.tubos.get(
+                codigo
+            );
+
+
+        const conector =
+            this.conectores.get(
+                codigo
+            );
+
+
+        /*
+         * TUBO ACTIVO
+         */
+
+        if (tubo) {
+
+            tubo.material.color.set(
+                0xff2020
+            );
+
+            tubo.material.emissive.set(
+                0x990000
+            );
+
+            tubo.material.emissiveIntensity =
+                1.8;
+
+        }
+
+
+        /*
+         * CONECTOR ACTIVO
+         */
+
+        if (conector) {
+
+            conector.material.color.set(
+                0xff4444
+            );
+
+            conector.material.emissive.set(
+                0xcc0000
+            );
+
+            conector.material.emissiveIntensity =
+                2;
+
+        }
+
+
+        /*
+         * TUBO MADRE ACTIVO
+         */
 
         if (this.tuboMadre) {
 
-            this.tuboMadre.setAttribute(
-                "d",
-                `
-                    M 125 350
-                    L 980 350
-                `
+            this.tuboMadre.material.color.set(
+                0xff2020
             );
+
+            this.tuboMadre.material.emissive.set(
+                0x990000
+            );
+
+            this.tuboMadre.material.emissiveIntensity =
+                1.6;
 
         }
 
@@ -1007,113 +1038,81 @@ export default class Tubos {
 
 
     /* ======================================================
-       ACTIVAR AGENTE
+       DESACTIVAR
        ====================================================== */
 
-    activar(codigo) {
+    desactivar(
+        codigo
+    ) {
 
         const tubo =
-            this.tubos.get(codigo);
+            this.tubos.get(
+                codigo
+            );
 
 
         const conector =
-            this.conectores.get(codigo);
+            this.conectores.get(
+                codigo
+            );
 
 
         if (tubo) {
 
-            tubo.classList.add(
-                "tubo-activo"
+            tubo.material.color.set(
+                0x7f1d1d
             );
+
+            tubo.material.emissive.set(
+                0x240000
+            );
+
+            tubo.material.emissiveIntensity =
+                0.35;
 
         }
 
 
         if (conector) {
 
-            conector.classList.add(
-                "conector-activo"
+            conector.material.color.set(
+                0xb91c1c
             );
 
-        }
-
-
-        if (this.tuboMadre) {
-
-            this.tuboMadre.classList.add(
-                "tubo-madre-activo"
+            conector.material.emissive.set(
+                0x330000
             );
 
-        }
-
-
-        if (this.torre) {
-
-            this.torre.classList.add(
-                "torre-activa"
-            );
-
-        }
-
-    }
-
-
-    /* ======================================================
-       DESACTIVAR AGENTE
-       ====================================================== */
-
-    desactivar(codigo) {
-
-        const tubo =
-            this.tubos.get(codigo);
-
-
-        const conector =
-            this.conectores.get(codigo);
-
-
-        if (tubo) {
-
-            tubo.classList.remove(
-                "tubo-activo"
-            );
-
-        }
-
-
-        if (this.torre) {
-
-            this.torre.classList.remove(
-                "torre-activa"
-            );
-
-        }
-
-
-        if (conector) {
-
-            conector.classList.remove(
-                "conector-activo"
-            );
+            conector.material.emissiveIntensity =
+                0.4;
 
         }
 
 
         const quedanActivos =
-            this.svg.querySelector(
-                ".nexus-tubo.tubo-activo"
-            );
-
-
-        if (!quedanActivos) {
-
-            if (this.tuboMadre) {
-
-                this.tuboMadre.classList.remove(
-                    "tubo-madre-activo"
+            [...this.tubos.values()]
+                .some(
+                    elemento =>
+                        elemento.material
+                            .emissiveIntensity > 1
                 );
 
-            }
+
+        if (
+            !quedanActivos &&
+            this.tuboMadre
+        ) {
+
+            this.tuboMadre.material.color.set(
+                0x7f1d1d
+            );
+
+            this.tuboMadre.material.emissive.set(
+                0x240000
+            );
+
+            this.tuboMadre.material.emissiveIntensity =
+                0.35;
 
         }
 
