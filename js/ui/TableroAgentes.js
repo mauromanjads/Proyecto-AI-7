@@ -4,23 +4,13 @@
  * Archivo: TableroAgentes.js
  * ----------------------------------------------------------
  * TABLERO NEXUS
- *
- * RESPONSABILIDAD:
- * - Cargar los agentes desde el catálogo oficial.
- * - Recibir los agentes reales del caso lógico.
- * - Recibir las declaraciones del caso lógico.
- * - Renderizar agentes.
- * - Renderizar personajes.
- * - Renderizar plataformas / hexágonos.
- * - Gestionar interacción con agentes.
- * - Gestionar UN SOLO agente activo.
- * - Gestionar menú radial transparente del agente.
  * ==========================================================
  */
 
 import Tubos from "./Tubos.js";
 import Mensajes from "./Mensajes.js";
 import Modal from "./ModalPerfil.js";
+import BaseHexagonal3D from "./BaseHexagonal3D.js";
 import { PERSONAJES } from "../datos/personajes.js";
 
 export default class TableroAgentes {
@@ -36,11 +26,7 @@ export default class TableroAgentes {
         this.declaraciones = [];
         this.tableroPrincipal = null;
 
-        /*
-         * ==================================================
-         * CATÁLOGO OFICIAL
-         * ==================================================
-         */
+        this.bases3D = [];
 
         this.agentes =
             this.prepararAgentes(
@@ -49,20 +35,10 @@ export default class TableroAgentes {
 
     }
 
-    /* ======================================================
-       PREPARAR AGENTES
-       ====================================================== */
+    prepararAgentes(agentes) {
 
-    prepararAgentes(
-        agentes
-    ) {
-
-        if (
-            !Array.isArray(agentes)
-        ) {
-
+        if (!Array.isArray(agentes)) {
             return [];
-
         }
 
         return agentes.map(
@@ -82,10 +58,6 @@ export default class TableroAgentes {
         );
 
     }
-
-    /* ======================================================
-       INICIAR
-       ====================================================== */
 
     iniciar() {
 
@@ -110,85 +82,40 @@ export default class TableroAgentes {
 
     }
 
-    /* ======================================================
-       CARGAR AGENTES DEL CASO
-       ====================================================== */
-
     cargarAgentes(
         agentes,
         declaraciones = []
     ) {
 
-        /*
-         * El caso lógico es ahora
-         * la fuente de agentes.
-         */
-
         if (
             !Array.isArray(agentes) ||
             agentes.length === 0
         ) {
-
             return;
-
         }
-
-        /*
-         * Guardar las declaraciones
-         * correspondientes al caso actual.
-         */
 
         this.declaraciones =
             Array.isArray(declaraciones)
                 ? declaraciones
                 : [];
 
-        /*
-         * Preparar los personajes recibidos.
-         */
-
         this.agentes =
             this.prepararAgentes(
                 agentes
             );
 
-        /*
-         * Limpiar cualquier estado anterior.
-         */
-
         this.agenteActivo = null;
         this.tarjetaActiva = null;
 
-        /*
-         * Si el tablero todavía no existe,
-         * no intentamos renderizar.
-         */
-
         if (!this.contenedor) {
-
             return;
-
         }
 
-        /*
-         * Renderizar nuevamente NEXUS
-         * con los agentes del caso actual.
-         */
-
         this.renderizar();
-
-        /*
-         * Crear nuevamente la red
-         * con los agentes actuales.
-         */
 
         this.iniciarTubos();
 
     }
-
-    /* ======================================================
-       INICIAR TUBOS
-       ====================================================== */
 
     iniciarTubos() {
 
@@ -202,11 +129,9 @@ export default class TableroAgentes {
 
     }
 
-    /* ======================================================
-       RENDERIZAR
-       ====================================================== */
-
     renderizar() {
+
+        this.limpiarBases3D();
 
         this.contenedor.innerHTML = `
 
@@ -236,19 +161,14 @@ export default class TableroAgentes {
                         aria-label="Interrogar"
                         data-accion="interrogar"
                     >
-                        <svg
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                        >
+                        <svg viewBox="0 0 24 24">
                             <circle
                                 cx="11"
                                 cy="11"
                                 r="6"
                             ></circle>
 
-                            <path
-                                d="M16 16l5 5"
-                            ></path>
+                            <path d="M16 16l5 5"></path>
                         </svg>
                     </button>
 
@@ -258,10 +178,7 @@ export default class TableroAgentes {
                         aria-label="Perfil"
                         data-accion="perfil"
                     >
-                        <svg
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                        >
+                        <svg viewBox="0 0 24 24">
                             <circle
                                 cx="12"
                                 cy="8"
@@ -280,10 +197,7 @@ export default class TableroAgentes {
                         aria-label="Culpable"
                         data-accion="culpable"
                     >
-                        <svg
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                        >
+                        <svg viewBox="0 0 24 24">
                             <circle
                                 cx="12"
                                 cy="12"
@@ -308,10 +222,7 @@ export default class TableroAgentes {
                         aria-label="Cancelar"
                         data-accion="cancelar"
                     >
-                        <svg
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                        >
+                        <svg viewBox="0 0 24 24">
                             <path
                                 d="M6 6l12 12M18 6L6 18"
                             ></path>
@@ -334,17 +245,13 @@ export default class TableroAgentes {
                 ".nexus-modal-agente"
             );
 
+        this.iniciarBases3D();
+
         this.configurarInteracciones();
 
     }
 
-    /* ======================================================
-       CREAR AGENTE
-       ====================================================== */
-
-    crearAgente(
-        agente
-    ) {
+    crearAgente(agente) {
 
         return `
 
@@ -375,58 +282,48 @@ export default class TableroAgentes {
                     <div class="tablero-agente-hex">
 
                         <div
-                            class="
-                                tablero-agente-hex-pared
-                            "
+                            class="tablero-agente-hex-pared"
                         ></div>
 
                         <div
-                            class="
-                                tablero-agente-hex-superficie
-                            "
+                            class="tablero-agente-hex-superficie"
+                        ></div>
+
+                        <div
+                            class="tablero-agente-etiqueta"
                         >
 
-                            <div
+                            <span
                                 class="
-                                    tablero-agente-etiqueta
+                                    tornillo
+                                    tornillo-arriba-izquierda
                                 "
-                            >
+                            ></span>
 
-                                <span
-                                    class="
-                                        tornillo
-                                        tornillo-arriba-izquierda
-                                    "
-                                ></span>
+                            <span
+                                class="
+                                    tornillo
+                                    tornillo-arriba-derecha
+                                "
+                            ></span>
 
-                                <span
-                                    class="
-                                        tornillo
-                                        tornillo-arriba-derecha
-                                    "
-                                ></span>
+                            <span
+                                class="
+                                    tornillo
+                                    tornillo-abajo-izquierda
+                                "
+                            ></span>
 
-                                <span
-                                    class="
-                                        tornillo
-                                        tornillo-abajo-izquierda
-                                    "
-                                ></span>
+                            <span
+                                class="
+                                    tornillo
+                                    tornillo-abajo-derecha
+                                "
+                            ></span>
 
-                                <span
-                                    class="
-                                        tornillo
-                                        tornillo-abajo-derecha
-                                    "
-                                ></span>
-
-                                <span
-                                    class="etiqueta-nombre"
-                                >
-                                    ${agente.nombre}
-                                </span>
-
-                            </div>
+                            <span class="etiqueta-nombre">
+                                ${agente.nombre}
+                            </span>
 
                         </div>
 
@@ -440,9 +337,59 @@ export default class TableroAgentes {
 
     }
 
-    /* ======================================================
-       INTERACCIONES
-       ====================================================== */
+    iniciarBases3D() {
+
+        this.bases3D = [];
+
+        const superficies =
+            this.tablero.querySelectorAll(
+                ".tablero-agente-hex-superficie"
+            );
+
+        superficies.forEach(
+            superficie => {
+
+                const base =
+                    new BaseHexagonal3D(
+                        superficie
+                    );
+
+                base.iniciar();
+
+                this.bases3D.push(
+                    base
+                );
+
+            }
+        );
+
+    }
+
+    limpiarBases3D() {
+
+        if (!this.bases3D) {
+            return;
+        }
+
+        this.bases3D.forEach(
+            base => {
+
+                if (
+                    base &&
+                    typeof base.destruir ===
+                    "function"
+                ) {
+
+                    base.destruir();
+
+                }
+
+            }
+        );
+
+        this.bases3D = [];
+
+    }
 
     configurarInteracciones() {
 
@@ -464,17 +411,13 @@ export default class TableroAgentes {
                             this.agenteActivo &&
                             this.agenteActivo !== codigo
                         ) {
-
                             return;
-
                         }
 
                         if (
                             this.agenteActivo === codigo
                         ) {
-
                             return;
-
                         }
 
                         this.activarAgente(
@@ -524,11 +467,8 @@ export default class TableroAgentes {
 
                         evento.stopPropagation();
 
-                        const tipo =
-                            accion.dataset.accion;
-
                         this.ejecutarAccion(
-                            tipo
+                            accion.dataset.accion
                         );
 
                     }
@@ -539,28 +479,17 @@ export default class TableroAgentes {
 
     }
 
-    /* ======================================================
-       ACTIVAR AGENTE
-       ====================================================== */
-
     activarAgente(
         tarjeta,
         codigo
     ) {
 
-        if (
-            this.agenteActivo
-        ) {
-
+        if (this.agenteActivo) {
             return;
-
         }
 
-        this.agenteActivo =
-            codigo;
-
-        this.tarjetaActiva =
-            tarjeta;
+        this.agenteActivo = codigo;
+        this.tarjetaActiva = tarjeta;
 
         tarjeta.classList.add(
             "agente-activo"
@@ -589,20 +518,10 @@ export default class TableroAgentes {
 
     }
 
-    /* ======================================================
-       MOSTRAR MENÚ
-       ====================================================== */
+    mostrarMenuAgente(tarjeta) {
 
-    mostrarMenuAgente(
-        tarjeta
-    ) {
-
-        if (
-            !this.modalAgente
-        ) {
-
+        if (!this.modalAgente) {
             return;
-
         }
 
         const x =
@@ -636,57 +555,33 @@ export default class TableroAgentes {
 
     }
 
-    /* ======================================================
-       EJECUTAR ACCIÓN
-       ====================================================== */
+    ejecutarAccion(tipo) {
 
-    ejecutarAccion(
-        tipo
-    ) {
-
-        if (
-            !this.agenteActivo
-        ) {
-
+        if (!this.agenteActivo) {
             return;
-
         }
 
-        switch (
-            tipo
-        ) {
+        switch (tipo) {
 
             case "interrogar":
-
                 this.interrogarAgente();
-
                 break;
 
             case "perfil":
-
                 this.mostrarPerfil();
-
                 break;
 
             case "culpable":
-
                 this.seleccionarCulpable();
-
                 break;
 
             case "cancelar":
-
                 this.desactivarAgente();
-
                 break;
 
         }
 
     }
-
-    /* ======================================================
-       INTERROGAR AGENTE
-       ====================================================== */
 
     interrogarAgente() {
 
@@ -698,9 +593,7 @@ export default class TableroAgentes {
             );
 
         if (!agente) {
-
             return;
-
         }
 
         const declaracion =
@@ -727,10 +620,6 @@ export default class TableroAgentes {
 
     }
 
-    /* ======================================================
-       MOSTRAR PERFIL
-       ====================================================== */
-
     mostrarPerfil() {
 
         const agente =
@@ -741,9 +630,7 @@ export default class TableroAgentes {
             );
 
         if (!agente) {
-
             return;
-
         }
 
         document.querySelector(
@@ -761,9 +648,7 @@ export default class TableroAgentes {
             );
 
         if (!modal) {
-
             return;
-
         }
 
         const cerrar =
@@ -780,28 +665,20 @@ export default class TableroAgentes {
             );
 
         if (botonCerrar) {
-
             botonCerrar.addEventListener(
                 "click",
                 cerrar
             );
-
         }
 
         if (botonCerrarGrande) {
-
             botonCerrarGrande.addEventListener(
                 "click",
                 cerrar
             );
-
         }
 
     }
-
-    /* ======================================================
-       SELECCIONAR CULPABLE
-       ====================================================== */
 
     seleccionarCulpable() {
 
@@ -813,22 +690,14 @@ export default class TableroAgentes {
             );
 
         if (!agente) {
-
             return;
-
         }
-
-        /*
-         * La lógica de confirmación pertenece
-         * al Tablero principal.
-         *
-         * No duplicamos aquí la lógica del modal.
-         */
 
         if (
             this.tableroPrincipal &&
             typeof this.tableroPrincipal
-                .abrirModalConfirmacion === "function"
+                .abrirModalConfirmacion ===
+                "function"
         ) {
 
             this.tableroPrincipal
@@ -840,19 +709,13 @@ export default class TableroAgentes {
 
     }
 
-    /* ======================================================
-       DESACTIVAR AGENTE
-       ====================================================== */
-
     desactivarAgente() {
 
         if (
             !this.tarjetaActiva ||
             !this.agenteActivo
         ) {
-
             return;
-
         }
 
         const tarjeta =
@@ -884,26 +747,15 @@ export default class TableroAgentes {
 
         }
 
-        this.agenteActivo =
-            null;
-
-        this.tarjetaActiva =
-            null;
+        this.agenteActivo = null;
+        this.tarjetaActiva = null;
 
     }
 
-    /* ======================================================
-       OCULTAR MENÚ
-       ====================================================== */
-
     ocultarMenuAgente() {
 
-        if (
-            !this.modalAgente
-        ) {
-
+        if (!this.modalAgente) {
             return;
-
         }
 
         this.modalAgente.classList.remove(
