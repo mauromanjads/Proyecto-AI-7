@@ -64,8 +64,7 @@ export default class Tablero {
             //TEMPORALMENTE PARA DISEÑO
            
             this.tableroAgentes.cargarAgentes(
-                //agentes,
-                PERSONAJES,
+                agentes,                
                 declaraciones
             );
 

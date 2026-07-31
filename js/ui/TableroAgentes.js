@@ -11,6 +11,7 @@ import Tubos from "./Tubos.js";
 import Mensajes from "./Mensajes.js";
 import Modal from "./ModalPerfil.js";
 import BaseHexagonal3D from "./BaseHexagonal3D.js";
+import NucleoNexus from "./NucleoNexus.js";
 import { PERSONAJES } from "../datos/personajes.js";
 
 export default class TableroAgentes {
@@ -20,18 +21,18 @@ export default class TableroAgentes {
         this.contenedor = null;
         this.tablero = null;
         this.tubos = null;
+        this.nucleo = null;
+
         this.agenteActivo = null;
         this.tarjetaActiva = null;
         this.modalAgente = null;
+
         this.declaraciones = [];
         this.tableroPrincipal = null;
-
         this.bases3D = [];
 
         this.agentes =
-            this.prepararAgentes(
-                PERSONAJES
-            );
+            this.prepararAgentes(PERSONAJES);
 
     }
 
@@ -41,51 +42,32 @@ export default class TableroAgentes {
             return [];
         }
 
-        return agentes.map(
-            agente => ({
-
-                ...agente,
-
-                posicion:
-                    agente.posicion ??
-                    (
-                        agente.id <= 4
-                            ? "arriba"
-                            : "abajo"
-                    )
-
-            })
-        );
+        return agentes.map(agente => ({
+            ...agente,
+            posicion:
+                agente.posicion ??
+                (agente.id <= 4 ? "arriba" : "abajo")
+        }));
 
     }
 
     iniciar() {
 
         this.contenedor =
-            document.getElementById(
-                "tablero-agentes"
-            );
+            document.getElementById("tablero-agentes");
 
         if (!this.contenedor) {
-
-            console.error(
-                "No se encontró #tablero-agentes"
-            );
-
+            console.error("No se encontró #tablero-agentes");
             return;
-
         }
 
         this.renderizar();
-
         this.iniciarTubos();
+        this.iniciarNucleo();
 
     }
 
-    cargarAgentes(
-        agentes,
-        declaraciones = []
-    ) {
+    cargarAgentes(agentes, declaraciones = []) {
 
         if (
             !Array.isArray(agentes) ||
@@ -100,9 +82,7 @@ export default class TableroAgentes {
                 : [];
 
         this.agentes =
-            this.prepararAgentes(
-                agentes
-            );
+            this.prepararAgentes(agentes);
 
         this.agenteActivo = null;
         this.tarjetaActiva = null;
@@ -112,26 +92,19 @@ export default class TableroAgentes {
         }
 
         this.renderizar();
-
         this.iniciarTubos();
-
-    }
-
-    iniciarTubos() {
-
-        this.tubos =
-            new Tubos(
-                this.tablero,
-                this.agentes
-            );
-
-        this.tubos.iniciar();
+        this.iniciarNucleo();
 
     }
 
     renderizar() {
 
         this.limpiarBases3D();
+
+        if (this.nucleo) {
+            this.nucleo.destruir();
+            this.nucleo = null;
+        }
 
         this.contenedor.innerHTML = `
 
@@ -142,10 +115,7 @@ export default class TableroAgentes {
                 <div class="nexus-agentes">
 
                     ${this.agentes.map(
-                        agente =>
-                            this.crearAgente(
-                                agente
-                            )
+                        agente => this.crearAgente(agente)
                     ).join("")}
 
                 </div>
@@ -162,12 +132,7 @@ export default class TableroAgentes {
                         data-accion="interrogar"
                     >
                         <svg viewBox="0 0 24 24">
-                            <circle
-                                cx="11"
-                                cy="11"
-                                r="6"
-                            ></circle>
-
+                            <circle cx="11" cy="11" r="6"></circle>
                             <path d="M16 16l5 5"></path>
                         </svg>
                     </button>
@@ -179,15 +144,8 @@ export default class TableroAgentes {
                         data-accion="perfil"
                     >
                         <svg viewBox="0 0 24 24">
-                            <circle
-                                cx="12"
-                                cy="8"
-                                r="4"
-                            ></circle>
-
-                            <path
-                                d="M4 21c.8-4.2 3.4-6 8-6s7.2 1.8 8 6"
-                            ></path>
+                            <circle cx="12" cy="8" r="4"></circle>
+                            <path d="M4 21c.8-4.2 3.4-6 8-6s7.2 1.8 8 6"></path>
                         </svg>
                     </button>
 
@@ -198,21 +156,9 @@ export default class TableroAgentes {
                         data-accion="culpable"
                     >
                         <svg viewBox="0 0 24 24">
-                            <circle
-                                cx="12"
-                                cy="12"
-                                r="8"
-                            ></circle>
-
-                            <circle
-                                cx="12"
-                                cy="12"
-                                r="3"
-                            ></circle>
-
-                            <path
-                                d="M12 2v3M12 19v3M2 12h3M19 12h3"
-                            ></path>
+                            <circle cx="12" cy="12" r="8"></circle>
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path>
                         </svg>
                     </button>
 
@@ -223,16 +169,13 @@ export default class TableroAgentes {
                         data-accion="cancelar"
                     >
                         <svg viewBox="0 0 24 24">
-                            <path
-                                d="M6 6l12 12M18 6L6 18"
-                            ></path>
+                            <path d="M6 6l12 12M18 6L6 18"></path>
                         </svg>
                     </button>
 
                 </div>
 
             </div>
-
         `;
 
         this.tablero =
@@ -246,7 +189,6 @@ export default class TableroAgentes {
             );
 
         this.iniciarBases3D();
-
         this.configurarInteracciones();
 
     }
@@ -254,7 +196,6 @@ export default class TableroAgentes {
     crearAgente(agente) {
 
         return `
-
             <div
                 class="
                     tablero-agente
@@ -281,45 +222,16 @@ export default class TableroAgentes {
 
                     <div class="tablero-agente-hex">
 
-                        <div
-                            class="tablero-agente-hex-pared"
-                        ></div>
+                        <div class="tablero-agente-hex-pared"></div>
 
-                        <div
-                            class="tablero-agente-hex-superficie"
-                        ></div>
+                        <div class="tablero-agente-hex-superficie"></div>
 
-                        <div
-                            class="tablero-agente-etiqueta"
-                        >
+                        <div class="tablero-agente-etiqueta">
 
-                            <span
-                                class="
-                                    tornillo
-                                    tornillo-arriba-izquierda
-                                "
-                            ></span>
-
-                            <span
-                                class="
-                                    tornillo
-                                    tornillo-arriba-derecha
-                                "
-                            ></span>
-
-                            <span
-                                class="
-                                    tornillo
-                                    tornillo-abajo-izquierda
-                                "
-                            ></span>
-
-                            <span
-                                class="
-                                    tornillo
-                                    tornillo-abajo-derecha
-                                "
-                            ></span>
+                            <span class="tornillo tornillo-arriba-izquierda"></span>
+                            <span class="tornillo tornillo-arriba-derecha"></span>
+                            <span class="tornillo tornillo-abajo-izquierda"></span>
+                            <span class="tornillo tornillo-abajo-derecha"></span>
 
                             <span class="etiqueta-nombre">
                                 ${agente.nombre}
@@ -332,8 +244,38 @@ export default class TableroAgentes {
                 </div>
 
             </div>
-
         `;
+
+    }
+
+    iniciarNucleo() {
+
+        if (!this.tablero) {
+            return;
+        }
+
+        this.nucleo =
+            new NucleoNexus(
+                this.tablero
+            );
+
+        this.nucleo.iniciar();
+
+    }
+
+    iniciarTubos() {
+
+        if (!this.tablero) {
+            return;
+        }
+
+        this.tubos =
+            new Tubos(
+                this.tablero,
+                this.agentes
+            );
+
+        this.tubos.iniciar();
 
     }
 
@@ -346,22 +288,16 @@ export default class TableroAgentes {
                 ".tablero-agente-hex-superficie"
             );
 
-        superficies.forEach(
-            superficie => {
+        superficies.forEach(superficie => {
 
-                const base =
-                    new BaseHexagonal3D(
-                        superficie
-                    );
+            const base =
+                new BaseHexagonal3D(superficie);
 
-                base.iniciar();
+            base.iniciar();
 
-                this.bases3D.push(
-                    base
-                );
+            this.bases3D.push(base);
 
-            }
-        );
+        });
 
     }
 
@@ -371,21 +307,16 @@ export default class TableroAgentes {
             return;
         }
 
-        this.bases3D.forEach(
-            base => {
+        this.bases3D.forEach(base => {
 
-                if (
-                    base &&
-                    typeof base.destruir ===
-                    "function"
-                ) {
-
-                    base.destruir();
-
-                }
-
+            if (
+                base &&
+                typeof base.destruir === "function"
+            ) {
+                base.destruir();
             }
-        );
+
+        });
 
         this.bases3D = [];
 
@@ -398,91 +329,84 @@ export default class TableroAgentes {
                 ".tablero-agente"
             );
 
-        tarjetas.forEach(
-            tarjeta => {
+        tarjetas.forEach(tarjeta => {
 
-                const activar =
-                    () => {
+            const activar = evento => {
 
-                        const codigo =
-                            tarjeta.dataset.agente;
+                evento.stopPropagation();
 
-                        if (
-                            this.agenteActivo &&
-                            this.agenteActivo !== codigo
-                        ) {
-                            return;
-                        }
+                const codigo =
+                    tarjeta.dataset.agente;
 
-                        if (
-                            this.agenteActivo === codigo
-                        ) {
-                            return;
-                        }
+                if (
+                    this.agenteActivo &&
+                    this.agenteActivo !== codigo
+                ) {
+                    return;
+                }
 
-                        this.activarAgente(
-                            tarjeta,
-                            codigo
-                        );
+                if (
+                    this.agenteActivo === codigo
+                ) {
+                    return;
+                }
 
-                    };
-
-                tarjeta.addEventListener(
-                    "click",
-                    activar
+                this.activarAgente(
+                    tarjeta,
+                    codigo
                 );
 
-                tarjeta.addEventListener(
-                    "keydown",
-                    evento => {
+            };
 
-                        if (
-                            evento.key === "Enter" ||
-                            evento.key === " "
-                        ) {
+            tarjeta.addEventListener(
+                "click",
+                activar
+            );
 
-                            evento.preventDefault();
+            tarjeta.addEventListener(
+                "keydown",
+                evento => {
 
-                            activar();
+                    if (
+                        evento.key === "Enter" ||
+                        evento.key === " "
+                    ) {
 
-                        }
+                        evento.preventDefault();
+                        activar(evento);
 
                     }
-                );
 
-            }
-        );
+                }
+            );
+
+        });
 
         const acciones =
             this.modalAgente.querySelectorAll(
                 ".nexus-accion"
             );
 
-        acciones.forEach(
-            accion => {
+        acciones.forEach(accion => {
 
-                accion.addEventListener(
-                    "click",
-                    evento => {
+            accion.addEventListener(
+                "click",
+                evento => {
 
-                        evento.stopPropagation();
+                    evento.stopPropagation();
 
-                        this.ejecutarAccion(
-                            accion.dataset.accion
-                        );
+                    this.ejecutarAccion(
+                        accion.dataset.accion
+                    );
 
-                    }
-                );
+                }
+            );
 
-            }
-        );
+        });
 
     }
 
-    activarAgente(
-        tarjeta,
-        codigo
-    ) {
+    activarAgente(tarjeta, codigo) {
 
         if (this.agenteActivo) {
             return;
@@ -491,13 +415,8 @@ export default class TableroAgentes {
         this.agenteActivo = codigo;
         this.tarjetaActiva = tarjeta;
 
-        tarjeta.classList.add(
-            "agente-activo"
-        );
-
-        tarjeta.classList.add(
-            "agente-presionado"
-        );
+        tarjeta.classList.add("agente-activo");
+        tarjeta.classList.add("agente-presionado");
 
         tarjeta.setAttribute(
             "aria-pressed",
@@ -505,16 +424,14 @@ export default class TableroAgentes {
         );
 
         if (this.tubos) {
-
-            this.tubos.activar(
-                codigo
-            );
-
+            this.tubos.activar(codigo);
         }
 
-        this.mostrarMenuAgente(
-            tarjeta
-        );
+        if (this.nucleo) {
+            this.nucleo.activar();
+        }
+
+        this.mostrarMenuAgente(tarjeta);
 
     }
 
@@ -599,18 +516,15 @@ export default class TableroAgentes {
         const declaracion =
             this.declaraciones.find(
                 elemento =>
-                    elemento.personaje.nombre ===
+                    elemento.personaje?.nombre ===
                     agente.nombre
             );
 
         if (!declaracion) {
-
             console.warn(
                 `No se encontró declaración para ${agente.nombre}`
             );
-
             return;
-
         }
 
         new Mensajes().mostrar(
@@ -654,29 +568,19 @@ export default class TableroAgentes {
         const cerrar =
             () => modal.remove();
 
-        const botonCerrar =
-            modal.querySelector(
-                ".modal-cerrar"
-            );
+        modal.querySelector(
+            ".modal-cerrar"
+        )?.addEventListener(
+            "click",
+            cerrar
+        );
 
-        const botonCerrarGrande =
-            modal.querySelector(
-                ".modal-cerrar-grande"
-            );
-
-        if (botonCerrar) {
-            botonCerrar.addEventListener(
-                "click",
-                cerrar
-            );
-        }
-
-        if (botonCerrarGrande) {
-            botonCerrarGrande.addEventListener(
-                "click",
-                cerrar
-            );
-        }
+        modal.querySelector(
+            ".modal-cerrar-grande"
+        )?.addEventListener(
+            "click",
+            cerrar
+        );
 
     }
 
@@ -697,7 +601,7 @@ export default class TableroAgentes {
             this.tableroPrincipal &&
             typeof this.tableroPrincipal
                 .abrirModalConfirmacion ===
-                "function"
+            "function"
         ) {
 
             this.tableroPrincipal
@@ -727,10 +631,7 @@ export default class TableroAgentes {
         this.ocultarMenuAgente();
 
         tarjeta.classList.remove(
-            "agente-activo"
-        );
-
-        tarjeta.classList.remove(
+            "agente-activo",
             "agente-presionado"
         );
 
@@ -740,11 +641,11 @@ export default class TableroAgentes {
         );
 
         if (this.tubos) {
+            this.tubos.desactivar(codigo);
+        }
 
-            this.tubos.desactivar(
-                codigo
-            );
-
+        if (this.nucleo) {
+            this.nucleo.desactivar();
         }
 
         this.agenteActivo = null;

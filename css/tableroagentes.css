@@ -5,12 +5,11 @@
  * ----------------------------------------------------------
  * TABLERO NEXUS
  *
+ * - 7 agentes.
  * - Distribución 3 / 1 / 3.
- * - Personajes.
  * - Plataformas hexagonales.
- * - Base 3D mediante Three.js.
- * - Profundidad visual.
- * - Placa siempre visible.
+ * - Núcleo independiente.
+ * - Sin dependencia visual de Three.js.
  * - Estado activo.
  * - Estado presionado.
  * - Responsive.
@@ -62,7 +61,36 @@
 
 
 /* ==========================================================
-   RED NEXUS
+   NÚCLEO
+   ----------------------------------------------------------
+   El núcleo es independiente del tablero de agentes.
+   ========================================================== */
+
+.nexus-nucleo {
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 220px;
+    height: 220px;
+
+    transform:
+        translate(-50%, -50%)
+        translateZ(20px);
+
+    z-index: 15;
+
+    pointer-events: none;
+
+    transform-style: preserve-3d;
+
+}
+
+
+/* ==========================================================
+   RED
    ========================================================== */
 
 .nexus-red {
@@ -100,7 +128,7 @@
 
     inset: 0;
 
-    z-index: 10;
+    z-index: 20;
 
     transform-style: preserve-3d;
 
@@ -108,7 +136,7 @@
 
 
 /* ==========================================================
-   TARJETA
+   AGENTE
    ========================================================== */
 
 .tablero-agente {
@@ -194,9 +222,6 @@
 
 /* ==========================================================
    PERSONAJE
-   ----------------------------------------------------------
-   El personaje queda por encima de la plataforma,
-   pero su zona visual no invade la placa.
    ========================================================== */
 
 .tablero-agente-personaje {
@@ -230,10 +255,6 @@
 }
 
 
-/* ==========================================================
-   PERSONAJE ARRIBA
-   ========================================================== */
-
 .tablero-agente.agente-arriba
 .tablero-agente-personaje {
 
@@ -241,10 +262,6 @@
 
 }
 
-
-/* ==========================================================
-   PERSONAJE ABAJO
-   ========================================================== */
 
 .tablero-agente.agente-abajo
 .tablero-agente-personaje {
@@ -294,6 +311,9 @@
 
 /* ==========================================================
    BASE
+   ----------------------------------------------------------
+   Base puramente CSS.
+   Ya no necesita BaseHexagonal3D.
    ========================================================== */
 
 .tablero-agente-base {
@@ -326,10 +346,6 @@
 }
 
 
-/* ==========================================================
-   BASE ARRIBA
-   ========================================================== */
-
 .tablero-agente.agente-arriba
 .tablero-agente-base {
 
@@ -337,10 +353,6 @@
 
 }
 
-
-/* ==========================================================
-   BASE ABAJO
-   ========================================================== */
 
 .tablero-agente.agente-abajo
 .tablero-agente-base {
@@ -367,7 +379,7 @@
 
 
 /* ==========================================================
-   PARED 3D
+   PARED
    ========================================================== */
 
 .tablero-agente-hex-pared {
@@ -421,7 +433,9 @@
 
 
 /* ==========================================================
-   SUPERFICIE THREE.JS
+   SUPERFICIE
+   ----------------------------------------------------------
+   Ya no contiene canvas de Three.js.
    ========================================================== */
 
 .tablero-agente-hex-superficie {
@@ -430,11 +444,36 @@
 
     inset: 0;
 
-    background: transparent;
+    clip-path:
+        polygon(
+            12% 0,
+            88% 0,
+            100% 50%,
+            88% 100%,
+            12% 100%,
+            0 50%
+        );
 
-    border: 0;
+    background:
+        radial-gradient(
+            ellipse at center,
+            #475569 0%,
+            #1e293b 55%,
+            #020617 100%
+        );
 
-    box-shadow: none;
+    border: 1px solid
+        rgba(148,163,184,.5);
+
+    box-shadow:
+
+        inset
+        0 2px 5px
+        rgba(255,255,255,.15),
+
+        inset
+        0 -10px 15px
+        rgba(0,0,0,.65);
 
     overflow: visible;
 
@@ -444,29 +483,7 @@
 
 
 /* ==========================================================
-   CANVAS THREE.JS
-   ========================================================== */
-
-.tablero-agente-hex-superficie canvas {
-
-    position: absolute;
-
-    inset: 0;
-
-    width: 100% !important;
-    height: 100% !important;
-
-    display: block;
-
-    pointer-events: none;
-
-    z-index: 1;
-
-}
-
-
-/* ==========================================================
-   BORDE DE PROFUNDIDAD
+   BORDE
    ========================================================== */
 
 .tablero-agente-hex::after {
@@ -477,6 +494,7 @@
 
     left: 4%;
     right: 4%;
+
     top: 3%;
     bottom: 3%;
 
@@ -507,9 +525,7 @@
 
 
 /* ==========================================================
-   ETIQUETA / NOMBRE
-   ----------------------------------------------------------
-   SIEMPRE ENCIMA DE THREE.JS
+   ETIQUETA
    ========================================================== */
 
 .tablero-agente-etiqueta {
@@ -590,10 +606,6 @@
 }
 
 
-/* ==========================================================
-   NOMBRE
-   ========================================================== */
-
 .etiqueta-nombre {
 
     position: relative;
@@ -649,39 +661,27 @@
 }
 
 
-/* ==========================================================
-   POSICIÓN TORNILLOS
-   ========================================================== */
-
 .tornillo-arriba-izquierda {
-
     top: 4px;
     left: 5px;
-
 }
 
 
 .tornillo-arriba-derecha {
-
     top: 4px;
     right: 5px;
-
 }
 
 
 .tornillo-abajo-izquierda {
-
     bottom: 4px;
     left: 5px;
-
 }
 
 
 .tornillo-abajo-derecha {
-
     bottom: 4px;
     right: 5px;
-
 }
 
 
@@ -764,22 +764,21 @@
 .tablero-agente.agente-activo
 .tablero-agente-hex-superficie {
 
-    filter:
+    box-shadow:
 
-        drop-shadow(
-            0 0 12px
-            rgba(250,204,21,.95)
-        )
+        inset
+        0 2px 5px
+        rgba(255,255,255,.15),
 
-        drop-shadow(
-            0 0 30px
-            rgba(250,204,21,.65)
-        )
+        inset
+        0 -10px 15px
+        rgba(0,0,0,.65),
 
-        drop-shadow(
-            0 0 55px
-            rgba(250,204,21,.3)
-        );
+        0 0 12px
+        rgba(250,204,21,.95),
+
+        0 0 30px
+        rgba(250,204,21,.65);
 
 }
 
@@ -880,10 +879,6 @@
 }
 
 
-/* ==========================================================
-   PERSONAJE LEVANTADO
-   ========================================================== */
-
 .tablero-agente.agente-presionado
 .tablero-agente-personaje {
 
@@ -896,31 +891,27 @@
 }
 
 
-/* ==========================================================
-   BASE PRESIONADA
-   ========================================================== */
-
 .tablero-agente.agente-presionado
 .tablero-agente-hex-superficie {
 
-    filter:
+    box-shadow:
 
-        drop-shadow(
-            0 0 15px
-            rgba(250,204,21,1)
-        )
+        inset
+        0 2px 5px
+        rgba(255,255,255,.15),
 
-        drop-shadow(
-            0 0 35px
-            rgba(250,204,21,.75)
-        );
+        inset
+        0 -10px 15px
+        rgba(0,0,0,.65),
+
+        0 0 15px
+        rgba(250,204,21,1),
+
+        0 0 35px
+        rgba(250,204,21,.75);
 
 }
 
-
-/* ==========================================================
-   PARED PRESIONADA
-   ========================================================== */
 
 .tablero-agente.agente-presionado
 .tablero-agente-hex-pared {
@@ -930,10 +921,6 @@
 
 }
 
-
-/* ==========================================================
-   PERSONAJE PRESIONADO
-   ========================================================== */
 
 .tablero-agente.agente-presionado
 .tablero-agente-personaje img {
@@ -962,10 +949,6 @@
 
 }
 
-
-/* ==========================================================
-   PLACA PRESIONADA
-   ========================================================== */
 
 .tablero-agente.agente-presionado
 .tablero-agente-etiqueta {
@@ -1008,7 +991,7 @@
 
 
 /* ==========================================================
-   RESPIRACIÓN
+   ANIMACIONES
    ========================================================== */
 
 @keyframes personajeRespira {
@@ -1033,10 +1016,6 @@
 }
 
 
-/* ==========================================================
-   RESPIRACIÓN ACTIVA
-   ========================================================== */
-
 @keyframes personajeRespiraSeleccionado {
 
     0%,
@@ -1060,10 +1039,6 @@
 
 }
 
-
-/* ==========================================================
-   LEVANTAR PERSONAJE
-   ========================================================== */
 
 @keyframes personajeLevantar {
 
@@ -1109,10 +1084,6 @@
 
 }
 
-
-/* ==========================================================
-   PLATAFORMA PUSH
-   ========================================================== */
 
 @keyframes plataformaPush {
 
@@ -1163,10 +1134,6 @@
 
 }
 
-
-/* ==========================================================
-   LIBERACIÓN
-   ========================================================== */
 
 .tablero-agente:not(.agente-presionado)
 .tablero-agente-base {
@@ -1239,7 +1206,6 @@
     #tablero-agentes {
 
         min-height: 620px;
-
         padding: 10px;
 
     }
@@ -1248,14 +1214,18 @@
     .nexus-tablero {
 
         width: 760px;
-
         height: 620px;
 
         transform:
             translateY(-25px);
 
-        transform-origin:
-            center center;
+    }
+
+
+    .nexus-nucleo {
+
+        width: 170px;
+        height: 170px;
 
     }
 
@@ -1263,13 +1233,10 @@
     .tablero-agente {
 
         width: 150px;
-
         height: 200px;
 
     }
 
-
-    /* FILA SUPERIOR */
 
     .tablero-agente[data-agente="AI-01"] {
         left: 3%;
@@ -1289,17 +1256,11 @@
     }
 
 
-    /* CENTRO */
-
     .tablero-agente[data-agente="AI-04"] {
-
         left: 29%;
         top: 205px;
-
     }
 
-
-    /* INFERIOR */
 
     .tablero-agente[data-agente="AI-05"] {
         left: 3%;
@@ -1319,8 +1280,6 @@
     }
 
 
-    /* PERSONAJES */
-
     .tablero-agente-personaje {
 
         width: 190px;
@@ -1330,8 +1289,6 @@
 
     }
 
-
-    /* BASE */
 
     .tablero-agente-base {
 
@@ -1349,8 +1306,6 @@
     }
 
 
-    /* NOMBRES */
-
     .tablero-agente-etiqueta {
 
         width: 95px;
@@ -1365,8 +1320,6 @@
     }
 
 
-    /* TORNILLOS */
-
     .tornillo {
 
         width: 6px;
@@ -1374,8 +1327,6 @@
 
     }
 
-
-    /* PARED */
 
     .tablero-agente-hex-pared {
 
@@ -1397,10 +1348,7 @@
     #tablero-agentes {
 
         min-height: 560px;
-
         padding: 0;
-
-        overflow: hidden;
 
     }
 
@@ -1408,7 +1356,6 @@
     .nexus-tablero {
 
         width: 360px;
-
         height: 560px;
 
         transform: none;
@@ -1416,15 +1363,13 @@
     }
 
 
-    .nexus-agentes {
+    .nexus-nucleo {
 
-        width: 100%;
-        height: 100%;
+        width: 105px;
+        height: 105px;
 
     }
 
-
-    /* TARJETAS */
 
     .tablero-agente {
 
@@ -1433,8 +1378,6 @@
 
     }
 
-
-    /* SUPERIOR */
 
     .tablero-agente[data-agente="AI-01"] {
         left: 20px;
@@ -1454,17 +1397,11 @@
     }
 
 
-    /* CENTRO */
-
     .tablero-agente[data-agente="AI-04"] {
-
         left: 134px;
         top: 195px;
-
     }
 
-
-    /* INFERIOR */
 
     .tablero-agente[data-agente="AI-05"] {
         left: 20px;
@@ -1483,8 +1420,6 @@
         top: 375px;
     }
 
-
-    /* PERSONAJES */
 
     .tablero-agente-personaje {
 
@@ -1512,8 +1447,6 @@
     }
 
 
-    /* BASE */
-
     .tablero-agente-base {
 
         width: 92px;
@@ -1538,8 +1471,6 @@
     }
 
 
-    /* NOMBRE */
-
     .tablero-agente-etiqueta {
 
         width: 68px;
@@ -1553,8 +1484,6 @@
 
     }
 
-
-    /* TORNILLOS */
 
     .tornillo {
 
@@ -1588,8 +1517,6 @@
     }
 
 
-    /* PARED */
-
     .tablero-agente-hex-pared {
 
         transform:
@@ -1598,8 +1525,6 @@
 
     }
 
-
-    /* SOMBRA */
 
     .tablero-agente-personaje img {
 
@@ -1635,6 +1560,14 @@
     }
 
 
+    .nexus-nucleo {
+
+        width: 95px;
+        height: 95px;
+
+    }
+
+
     .tablero-agente {
 
         width: 86px;
@@ -1642,8 +1575,6 @@
 
     }
 
-
-    /* SUPERIOR */
 
     .tablero-agente[data-agente="AI-01"] {
         left: 15px;
@@ -1663,17 +1594,11 @@
     }
 
 
-    /* CENTRO */
-
     .tablero-agente[data-agente="AI-04"] {
-
         left: 117px;
         top: 185px;
-
     }
 
-
-    /* INFERIOR */
 
     .tablero-agente[data-agente="AI-05"] {
         left: 15px;
@@ -1693,8 +1618,6 @@
     }
 
 
-    /* PERSONAJES */
-
     .tablero-agente-personaje {
 
         width: 115px;
@@ -1704,8 +1627,6 @@
 
     }
 
-
-    /* BASE */
 
     .tablero-agente-base {
 
@@ -1722,8 +1643,6 @@
 
     }
 
-
-    /* NOMBRE */
 
     .tablero-agente-etiqueta {
 

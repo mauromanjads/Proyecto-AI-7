@@ -1,0 +1,522 @@
+/**
+ * ==========================================================
+ * AI-7
+ * Archivo: nucleo.css
+ * ----------------------------------------------------------
+ * NÚCLEO CENTRAL NEXUS
+ * ----------------------------------------------------------
+ * Ubicado a la DERECHA del tablero,
+ * pegado al tubo madre.
+ * ==========================================================
+ */
+
+
+/* ==========================================================
+   NÚCLEO
+   ========================================================== */
+
+.nexus-nucleo {
+
+    position: absolute;
+
+    left: calc(50% + 330px);
+    top: 50%;
+
+    width: 150px;
+    height: 150px;
+
+    transform:
+        translate(-50%, -50%)
+        translateZ(40px);
+
+    transform-style: preserve-3d;
+
+    z-index: 30;
+
+    pointer-events: none;
+
+}
+
+
+/* ==========================================================
+   CUERPO
+   ========================================================== */
+
+.nexus-nucleo-cuerpo {
+
+    position: absolute;
+
+    inset: 25px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #e2e8f0 0%,
+            #64748b 15%,
+            #334155 40%,
+            #0f172a 70%,
+            #020617 100%
+        );
+
+    border: 4px solid #64748b;
+
+    box-shadow:
+        inset 0 0 18px rgba(255,255,255,.2),
+        inset 0 -15px 20px rgba(0,0,0,.8),
+        0 10px 25px rgba(0,0,0,.8);
+
+    transform: translateZ(20px);
+
+}
+
+
+/* ==========================================================
+   LUZ
+   ========================================================== */
+
+.nexus-nucleo-luz {
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 58px;
+    height: 58px;
+
+    transform:
+        translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            #ffffff 0%,
+            #bae6fd 20%,
+            #38bdf8 45%,
+            #0284c7 70%,
+            #020617 100%
+        );
+
+    box-shadow:
+        0 0 12px rgba(56,189,248,.9),
+        0 0 30px rgba(14,165,233,.7),
+        0 0 55px rgba(14,165,233,.45);
+
+    animation:
+        nucleoPulso
+        2.5s
+        ease-in-out
+        infinite;
+
+}
+
+
+/* ==========================================================
+   CENTRO
+   ========================================================== */
+
+.nexus-nucleo-centro {
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 18px;
+    height: 18px;
+
+    transform:
+        translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 12px #ffffff;
+
+}
+
+
+/* ==========================================================
+   ANILLOS
+   ========================================================== */
+
+.nexus-nucleo-anillo {
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    border-radius: 50%;
+
+    border:
+        2px solid
+        rgba(56,189,248,.55);
+
+    transform-style: preserve-3d;
+
+}
+
+
+.nexus-anillo-externo {
+
+    width: 145px;
+    height: 145px;
+
+    margin-left: -72.5px;
+    margin-top: -72.5px;
+
+    transform:
+        rotateX(68deg);
+
+    box-shadow:
+        0 0 12px rgba(14,165,233,.35);
+
+    animation:
+        nucleoAnillo
+        8s
+        linear
+        infinite;
+
+}
+
+
+.nexus-anillo-medio {
+
+    width: 115px;
+    height: 115px;
+
+    margin-left: -57.5px;
+    margin-top: -57.5px;
+
+    transform:
+        rotateY(68deg);
+
+    border-color:
+        rgba(125,211,252,.45);
+
+    animation:
+        nucleoAnilloInverso
+        6s
+        linear
+        infinite;
+
+}
+
+
+/* ==========================================================
+   ACTIVO
+   ========================================================== */
+
+.nexus-nucleo.nucleo-activo {
+
+    filter:
+        drop-shadow(
+            0 0 12px
+            rgba(250,204,21,.9)
+        )
+        drop-shadow(
+            0 0 35px
+            rgba(250,204,21,.55)
+        );
+
+}
+
+
+.nexus-nucleo.nucleo-activo
+.nexus-nucleo-luz {
+
+    background:
+        radial-gradient(
+            circle,
+            #fffde7 0%,
+            #fef08a 20%,
+            #fde047 45%,
+            #eab308 70%,
+            #713f12 100%
+        );
+
+    box-shadow:
+        0 0 15px rgba(250,204,21,1),
+        0 0 35px rgba(250,204,21,.9),
+        0 0 65px rgba(250,204,21,.55);
+
+}
+
+
+.nexus-nucleo.nucleo-activo
+.nexus-nucleo-anillo {
+
+    border-color:
+        rgba(250,204,21,.8);
+
+}
+
+
+/* ==========================================================
+   ANIMACIONES
+   ========================================================== */
+
+@keyframes nucleoPulso {
+
+    0%,
+    100% {
+
+        transform:
+            translate(-50%, -50%)
+            scale(.92);
+
+    }
+
+    50% {
+
+        transform:
+            translate(-50%, -50%)
+            scale(1.08);
+
+    }
+
+}
+
+
+@keyframes nucleoAnillo {
+
+    from {
+
+        transform:
+            rotateX(68deg)
+            rotateZ(0deg);
+
+    }
+
+    to {
+
+        transform:
+            rotateX(68deg)
+            rotateZ(360deg);
+
+    }
+
+}
+
+
+@keyframes nucleoAnilloInverso {
+
+    from {
+
+        transform:
+            rotateY(68deg)
+            rotateZ(360deg);
+
+    }
+
+    to {
+
+        transform:
+            rotateY(68deg)
+            rotateZ(0deg);
+
+    }
+
+}
+
+
+/* ==========================================================
+   TABLET
+   ========================================================== */
+
+@media (max-width: 900px) {
+
+    .nexus-nucleo {
+
+        left: calc(50% + 265px);
+
+        width: 125px;
+        height: 125px;
+
+    }
+
+
+    .nexus-nucleo-cuerpo {
+
+        inset: 21px;
+
+    }
+
+
+    .nexus-nucleo-luz {
+
+        width: 48px;
+        height: 48px;
+
+    }
+
+
+    .nexus-nucleo-centro {
+
+        width: 15px;
+        height: 15px;
+
+    }
+
+
+    .nexus-anillo-externo {
+
+        width: 120px;
+        height: 120px;
+
+        margin-left: -60px;
+        margin-top: -60px;
+
+    }
+
+
+    .nexus-anillo-medio {
+
+        width: 95px;
+        height: 95px;
+
+        margin-left: -47.5px;
+        margin-top: -47.5px;
+
+    }
+
+}
+
+
+/* ==========================================================
+   MÓVIL
+   ========================================================== */
+
+@media (max-width: 700px) {
+
+    .nexus-nucleo {
+
+        left: calc(50% + 125px);
+
+        width: 95px;
+        height: 95px;
+
+        transform:
+            translate(-50%, -50%)
+            translateZ(40px);
+
+    }
+
+
+    .nexus-nucleo-cuerpo {
+
+        inset: 16px;
+
+        border-width: 3px;
+
+    }
+
+
+    .nexus-nucleo-luz {
+
+        width: 36px;
+        height: 36px;
+
+    }
+
+
+    .nexus-nucleo-centro {
+
+        width: 11px;
+        height: 11px;
+
+    }
+
+
+    .nexus-anillo-externo {
+
+        width: 92px;
+        height: 92px;
+
+        margin-left: -46px;
+        margin-top: -46px;
+
+    }
+
+
+    .nexus-anillo-medio {
+
+        width: 72px;
+        height: 72px;
+
+        margin-left: -36px;
+        margin-top: -36px;
+
+    }
+
+}
+
+
+/* ==========================================================
+   MÓVILES PEQUEÑOS
+   ========================================================== */
+
+@media (max-width: 390px) {
+
+    .nexus-nucleo {
+
+        left: calc(50% + 118px);
+
+        width: 90px;
+        height: 90px;
+
+    }
+
+
+    .nexus-nucleo-cuerpo {
+
+        inset: 15px;
+
+    }
+
+
+    .nexus-nucleo-luz {
+
+        width: 34px;
+        height: 34px;
+
+    }
+
+
+    .nexus-nucleo-centro {
+
+        width: 10px;
+        height: 10px;
+
+    }
+
+
+    .nexus-anillo-externo {
+
+        width: 87px;
+        height: 87px;
+
+        margin-left: -43.5px;
+        margin-top: -43.5px;
+
+    }
+
+
+    .nexus-anillo-medio {
+
+        width: 68px;
+        height: 68px;
+
+        margin-left: -34px;
+        margin-top: -34px;
+
+    }
+
+}
