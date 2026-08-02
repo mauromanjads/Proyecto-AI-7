@@ -18,7 +18,10 @@ export default class BaseHexagonal3D {
         this.scene = null;
         this.camera = null;
         this.renderer = null;
+
         this.base = null;
+        this.borde = null;
+        this.material = null;
 
     }
 
@@ -35,8 +38,8 @@ export default class BaseHexagonal3D {
             this.contenedor.clientHeight;
 
         if (
-            ancho === 0 ||
-            alto === 0
+            ancho <= 0 ||
+            alto <= 0
         ) {
             return;
         }
@@ -46,7 +49,7 @@ export default class BaseHexagonal3D {
 
         this.camera =
             new THREE.PerspectiveCamera(
-                35,
+                32,
                 ancho / alto,
                 0.1,
                 100
@@ -54,8 +57,8 @@ export default class BaseHexagonal3D {
 
         this.camera.position.set(
             0,
-            2.8,
-            5
+            3.2,
+            6
         );
 
         this.camera.lookAt(
@@ -82,6 +85,11 @@ export default class BaseHexagonal3D {
             alto
         );
 
+        this.renderer.setClearColor(
+            0x000000,
+            0
+        );
+
         this.contenedor.appendChild(
             this.renderer.domElement
         );
@@ -97,28 +105,44 @@ export default class BaseHexagonal3D {
 
         const ambiente =
             new THREE.AmbientLight(
-                0xffffff,
-                1.5
+                0xffead0,
+                2
             );
 
         this.scene.add(
             ambiente
         );
 
-        const luzPrincipal =
+        const principal =
             new THREE.DirectionalLight(
-                0xffffff,
-                3
+                0xffc078,
+                4
             );
 
-        luzPrincipal.position.set(
-            2,
-            5,
-            4
+        principal.position.set(
+            3,
+            6,
+            5
         );
 
         this.scene.add(
-            luzPrincipal
+            principal
+        );
+
+        const relleno =
+            new THREE.DirectionalLight(
+                0xff8a3d,
+                2
+            );
+
+        relleno.position.set(
+            -4,
+            2,
+            -3
+        );
+
+        this.scene.add(
+            relleno
         );
 
     }
@@ -127,23 +151,29 @@ export default class BaseHexagonal3D {
 
         const geometria =
             new THREE.CylinderGeometry(
-                1.65,
-                1.65,
-                0.35,
-                6
+                1.75,
+                1.85,
+                0.42,
+                6,
+                1,
+                false
             );
 
-        const material =
+        this.material =
             new THREE.MeshStandardMaterial({
-                color: 0x475569,
-                metalness: 0.85,
-                roughness: 0.28
+
+                color: 0x8b451f,
+
+                metalness: 0.82,
+
+                roughness: 0.24
+
             });
 
         this.base =
             new THREE.Mesh(
                 geometria,
-                material
+                this.material
             );
 
         this.base.rotation.y =
@@ -151,6 +181,43 @@ export default class BaseHexagonal3D {
 
         this.scene.add(
             this.base
+        );
+
+        const geometriaBorde =
+            new THREE.CylinderGeometry(
+                1.82,
+                1.92,
+                0.14,
+                6,
+                1,
+                false
+            );
+
+        const materialBorde =
+            new THREE.MeshStandardMaterial({
+
+                color: 0xd97732,
+
+                metalness: 0.9,
+
+                roughness: 0.2
+
+            });
+
+        this.borde =
+            new THREE.Mesh(
+                geometriaBorde,
+                materialBorde
+            );
+
+        this.borde.position.y =
+            0.22;
+
+        this.borde.rotation.y =
+            Math.PI / 6;
+
+        this.scene.add(
+            this.borde
         );
 
     }
@@ -169,6 +236,61 @@ export default class BaseHexagonal3D {
             this.scene,
             this.camera
         );
+
+    }
+
+    destruir() {
+
+        if (this.base) {
+
+            this.base.geometry.dispose();
+
+            if (this.base.material) {
+                this.base.material.dispose();
+            }
+
+            this.scene?.remove(
+                this.base
+            );
+
+        }
+
+        if (this.borde) {
+
+            this.borde.geometry.dispose();
+
+            if (this.borde.material) {
+                this.borde.material.dispose();
+            }
+
+            this.scene?.remove(
+                this.borde
+            );
+
+        }
+
+        if (this.renderer) {
+
+            this.renderer.dispose();
+
+            if (
+                this.renderer.domElement &&
+                this.renderer.domElement.parentNode
+            ) {
+
+                this.renderer.domElement.parentNode.removeChild(
+                    this.renderer.domElement
+                );
+
+            }
+
+        }
+
+        this.scene = null;
+        this.camera = null;
+        this.renderer = null;
+        this.base = null;
+        this.borde = null;
 
     }
 

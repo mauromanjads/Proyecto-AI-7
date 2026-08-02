@@ -4,22 +4,8 @@
  * Archivo: tablero-agentes.css
  * ----------------------------------------------------------
  * TABLERO NEXUS
- *
- * - 7 agentes.
- * - Distribución 3 / 1 / 3.
- * - Plataformas hexagonales.
- * - Núcleo independiente.
- * - Sin dependencia visual de Three.js.
- * - Estado activo.
- * - Estado presionado.
- * - Responsive.
  * ==========================================================
  */
-
-
-/* ==========================================================
-   CONTENEDOR
-   ========================================================== */
 
 #tablero-agentes {
 
@@ -30,7 +16,7 @@
     align-items: center;
     justify-content: center;
 
-    padding: 45px;
+    padding: 20px;
 
     box-sizing: border-box;
 
@@ -55,15 +41,13 @@
     transform-style: preserve-3d;
 
     transform:
-        translateY(-60px);
+        translateY(-25px);
 
 }
 
 
 /* ==========================================================
    NÚCLEO
-   ----------------------------------------------------------
-   El núcleo es independiente del tablero de agentes.
    ========================================================== */
 
 .nexus-nucleo {
@@ -113,8 +97,6 @@
 
     display: block;
 
-    overflow: visible;
-
 }
 
 
@@ -136,7 +118,7 @@
 
 
 /* ==========================================================
-   AGENTE
+   BLOQUE DEL PERSONAJE
    ========================================================== */
 
 .tablero-agente {
@@ -149,6 +131,7 @@
     cursor: pointer;
 
     user-select: none;
+
     -webkit-user-select: none;
 
     touch-action: manipulation;
@@ -158,7 +141,8 @@
     transform-style: preserve-3d;
 
     transition:
-        filter .3s ease;
+        transform .18s ease,
+        filter .25s ease;
 
 }
 
@@ -189,31 +173,25 @@
     left: 2%;
 }
 
-
 .tablero-agente[data-agente="AI-02"] {
     left: 19%;
 }
-
 
 .tablero-agente[data-agente="AI-03"] {
     left: 36%;
 }
 
-
 .tablero-agente[data-agente="AI-04"] {
     left: 53%;
 }
-
 
 .tablero-agente[data-agente="AI-05"] {
     left: 19%;
 }
 
-
 .tablero-agente[data-agente="AI-06"] {
     left: 36%;
 }
-
 
 .tablero-agente[data-agente="AI-07"] {
     left: 53%;
@@ -230,43 +208,33 @@
 
     left: 50%;
 
-    width: 300px;
-    height: 200px;
+    width: 170px;
+    height: 125px;
 
-    margin-left: -150px;
+    margin-left: -85px;
+
+    top: 47px;
 
     transform:
-        translateY(0)
         translateZ(45px);
-
-    transform-origin:
-        center bottom;
 
     pointer-events: none;
 
-    z-index: 30;
-
-    animation:
-        personajeRespira
-        3s
-        ease-in-out
-        infinite;
+    z-index: 40;
 
 }
 
 
-.tablero-agente.agente-arriba
-.tablero-agente-personaje {
-
-    top: 0;
-
-}
-
+/* ==========================================================
+   PERSONAJE INFERIOR
+   ========================================================== */
 
 .tablero-agente.agente-abajo
 .tablero-agente-personaje {
 
-    bottom: 25px;
+    top: auto;
+
+    bottom: 70px;
 
 }
 
@@ -295,25 +263,51 @@
 
     filter:
         drop-shadow(
-            0 18px 8px
+            0 12px 7px
             rgba(0,0,0,.78)
         )
         drop-shadow(
-            0 2px 20px
+            0 2px 15px
             rgba(0,0,0,.35)
         );
 
-    transition:
-        filter .3s ease;
+    animation:
+        personaje-respiracion
+        3.2s
+        ease-in-out
+        infinite;
 
 }
 
 
 /* ==========================================================
-   BASE
-   ----------------------------------------------------------
-   Base puramente CSS.
-   Ya no necesita BaseHexagonal3D.
+   RESPIRACIÓN
+   ========================================================== */
+
+@keyframes personaje-respiracion {
+
+    0%,
+    100% {
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+    50% {
+
+        transform:
+            translateY(-3px)
+            scale(1.012);
+
+    }
+
+}
+
+
+/* ==========================================================
+   BASE HEXAGONAL 3D
    ========================================================== */
 
 .tablero-agente-base {
@@ -322,210 +316,61 @@
 
     left: 50%;
 
-    width: 180px;
-    height: 90px;
+    width: 330px;
+    height: 155px;
 
-    padding: 0;
+    margin-left: -165px;
 
-    border: 0;
+    bottom: -5px;
 
     background: transparent;
 
     transform:
-        translateX(-50%)
-        translateY(0)
         translateZ(0);
 
-    transform-style:
-        preserve-3d;
+    transform-style: preserve-3d;
 
-    z-index: 20;
+    z-index: 25;
 
     pointer-events: none;
 
-}
-
-
-.tablero-agente.agente-arriba
-.tablero-agente-base {
-
-    bottom: 0;
+    overflow: visible;
 
 }
 
+
+/* ==========================================================
+   BASE PERSONAJES INFERIORES
+   ========================================================== */
 
 .tablero-agente.agente-abajo
 .tablero-agente-base {
 
-    top: 190px;
+    top: 145px;
+
+    bottom: auto;
 
 }
 
 
 /* ==========================================================
-   HEXÁGONO
+   CANVAS THREE.JS
    ========================================================== */
 
-.tablero-agente-hex {
+.tablero-agente-base canvas {
 
-    position: absolute;
+    width: 100% !important;
+    height: 100% !important;
 
-    inset: 0;
-
-    transform-style:
-        preserve-3d;
-
-}
-
-
-/* ==========================================================
-   PARED
-   ========================================================== */
-
-.tablero-agente-hex-pared {
-
-    position: absolute;
-
-    inset: 0;
-
-    clip-path:
-        polygon(
-            12% 0,
-            88% 0,
-            100% 50%,
-            88% 100%,
-            12% 100%,
-            0 50%
-        );
-
-    transform:
-        translateY(18px)
-        translateZ(-8px);
-
-    background:
-        linear-gradient(
-            180deg,
-            #64748b 0%,
-            #334155 25%,
-            #1e293b 60%,
-            #020617 100%
-        );
-
-    box-shadow:
-
-        inset
-        0 3px 5px
-        rgba(255,255,255,.12),
-
-        inset
-        0 -15px 18px
-        rgba(0,0,0,.7),
-
-        0 14px 20px
-        rgba(0,0,0,.8),
-
-        0 25px 35px
-        rgba(0,0,0,.45);
-
-    z-index: 1;
-
-}
-
-
-/* ==========================================================
-   SUPERFICIE
-   ----------------------------------------------------------
-   Ya no contiene canvas de Three.js.
-   ========================================================== */
-
-.tablero-agente-hex-superficie {
-
-    position: absolute;
-
-    inset: 0;
-
-    clip-path:
-        polygon(
-            12% 0,
-            88% 0,
-            100% 50%,
-            88% 100%,
-            12% 100%,
-            0 50%
-        );
-
-    background:
-        radial-gradient(
-            ellipse at center,
-            #475569 0%,
-            #1e293b 55%,
-            #020617 100%
-        );
-
-    border: 1px solid
-        rgba(148,163,184,.5);
-
-    box-shadow:
-
-        inset
-        0 2px 5px
-        rgba(255,255,255,.15),
-
-        inset
-        0 -10px 15px
-        rgba(0,0,0,.65);
-
-    overflow: visible;
-
-    z-index: 2;
-
-}
-
-
-/* ==========================================================
-   BORDE
-   ========================================================== */
-
-.tablero-agente-hex::after {
-
-    content: "";
-
-    position: absolute;
-
-    left: 4%;
-    right: 4%;
-
-    top: 3%;
-    bottom: 3%;
-
-    clip-path:
-        polygon(
-            12% 0,
-            88% 0,
-            100% 50%,
-            88% 100%,
-            12% 100%,
-            0 50%
-        );
-
-    border:
-        1px solid
-        rgba(255,255,255,.16);
-
-    box-shadow:
-        inset
-        0 0 12px
-        rgba(255,255,255,.08);
+    display: block;
 
     pointer-events: none;
 
-    z-index: 4;
-
 }
 
 
 /* ==========================================================
-   ETIQUETA
+   PLACA DEL NOMBRE
    ========================================================== */
 
 .tablero-agente-etiqueta {
@@ -533,10 +378,11 @@
     position: absolute;
 
     left: 50%;
-    bottom: 7px;
 
-    width: 120px;
-    height: 30px;
+    bottom: -1px;
+
+    width: 135px;
+    height: 31px;
 
     display: flex;
 
@@ -545,11 +391,10 @@
 
     transform:
         translateX(-50%)
-        translateZ(35px)
-        perspective(500px)
+        translateZ(65px)
         rotateX(8deg);
 
-    color: #e2e8f0;
+    color: #fff1d0;
 
     font-size: 15px;
 
@@ -560,57 +405,50 @@
     background:
         linear-gradient(
             180deg,
-            #64748b 0%,
-            #334155 40%,
-            #1e293b 75%,
-            #020617 100%
+            #7c3f1d 0%,
+            #a95320 35%,
+            #6f3218 75%,
+            #3a180c 100%
         );
 
     border:
         2px solid
-        #94a3b8;
+        #d98a45;
 
-    border-radius: 5px;
+    border-radius: 6px;
 
     box-shadow:
 
         inset
         0 2px 3px
-        rgba(255,255,255,.28),
+        rgba(255,220,160,.35),
 
         inset
         0 -5px 8px
-        rgba(0,0,0,.75),
+        rgba(30,10,0,.75),
 
         0 3px 0
-        #0f172a,
+        #2b1107,
 
-        0 6px 8px
-        rgba(0,0,0,.75),
-
-        0 0 10px
-        rgba(0,0,0,.25);
+        0 6px 10px
+        rgba(0,0,0,.75);
 
     text-shadow:
         0 2px 3px
         rgba(0,0,0,.95);
 
-    transition:
-        background .3s ease,
-        border-color .3s ease,
-        box-shadow .3s ease,
-        color .3s ease;
+    z-index: 60;
 
-    z-index: 50;
+    pointer-events: none;
 
 }
 
 
+/* ==========================================================
+   NOMBRE
+   ========================================================== */
+
 .etiqueta-nombre {
-
-    position: relative;
-
-    z-index: 60;
 
     white-space: nowrap;
 
@@ -633,21 +471,21 @@
     background:
         radial-gradient(
             circle at 35% 30%,
-            #ffffff 0%,
-            #cbd5e1 25%,
-            #64748b 60%,
-            #1e293b 100%
+            #fff7df 0%,
+            #e8b77a 25%,
+            #a85f2c 60%,
+            #3a180c 100%
         );
 
     border:
         1px solid
-        #0f172a;
+        #321207;
 
     box-shadow:
 
         inset
         1px 1px 1px
-        rgba(255,255,255,.9),
+        rgba(255,255,255,.85),
 
         inset
         -1px -1px 1px
@@ -656,32 +494,84 @@
         0 1px 3px
         rgba(0,0,0,.9);
 
-    z-index: 70;
-
 }
 
 
-.tornillo-arriba-izquierda {
-    top: 4px;
+.tornillo-izquierdo {
+
     left: 5px;
+
 }
 
 
-.tornillo-arriba-derecha {
-    top: 4px;
+.tornillo-derecho {
+
     right: 5px;
+
 }
 
 
-.tornillo-abajo-izquierda {
-    bottom: 4px;
-    left: 5px;
+/* ==========================================================
+   VACÍO
+   ========================================================== */
+
+.tablero-agente.agente-vacio {
+
+    cursor: default;
+
+    pointer-events: none;
+
+    opacity: .72;
+
 }
 
 
-.tornillo-abajo-derecha {
-    bottom: 4px;
-    right: 5px;
+.tablero-agente.agente-vacio
+.tablero-agente-etiqueta {
+
+    color: #c8a98a;
+
+    background:
+        linear-gradient(
+            180deg,
+            #3f2417,
+            #29160e
+        );
+
+    border-color:
+        #70452c;
+
+    box-shadow:
+
+        inset
+        0 2px 3px
+        rgba(255,255,255,.08),
+
+        inset
+        0 -5px 8px
+        rgba(0,0,0,.8),
+
+        0 4px 8px
+        rgba(0,0,0,.7);
+
+}
+
+
+.tablero-agente.agente-vacio
+.tablero-agente-personaje {
+
+    display: none;
+
+}
+
+
+.tablero-agente.agente-vacio
+.tablero-agente-base {
+
+    filter:
+        saturate(.55)
+        brightness(.75);
+
 }
 
 
@@ -689,12 +579,25 @@
    HOVER
    ========================================================== */
 
-.tablero-agente:hover {
+.tablero-agente:not(.agente-vacio):hover {
+
+    transform:
+        translateY(5px);
+
+}
+
+
+.tablero-agente:not(.agente-vacio):hover
+.tablero-agente-personaje img {
 
     filter:
         drop-shadow(
-            0 0 7px
-            rgba(125,211,252,.65)
+            0 14px 7px
+            rgba(0,0,0,.8)
+        )
+        drop-shadow(
+            0 0 12px
+            rgba(255,160,65,.55)
         );
 
 }
@@ -709,76 +612,32 @@
     filter:
         drop-shadow(
             0 0 10px
-            rgba(250,204,21,1)
+            rgba(255,177,72,.85)
         )
         drop-shadow(
             0 0 25px
-            rgba(250,204,21,.3)
+            rgba(255,125,35,.28)
         );
 
 }
 
 
 /* ==========================================================
-   PERSONAJE ACTIVO
+   BASE ACTIVA
    ========================================================== */
 
 .tablero-agente.agente-activo
-.tablero-agente-personaje img {
+.tablero-agente-base {
 
     filter:
-
         drop-shadow(
-            0 18px 8px
-            rgba(0,0,0,.8)
+            0 0 12px
+            rgba(255,184,75,.95)
         )
-
         drop-shadow(
-            0 0 10px
-            rgba(250,204,21,1)
-        )
-
-        drop-shadow(
-            0 0 25px
-            rgba(250,204,21,.9)
-        )
-
-        drop-shadow(
-            0 0 45px
-            rgba(250,204,21,.6)
+            0 0 28px
+            rgba(255,115,25,.65)
         );
-
-    animation:
-        personajeRespiraSeleccionado
-        3s
-        ease-in-out
-        infinite;
-
-}
-
-
-/* ==========================================================
-   PLATAFORMA ACTIVA
-   ========================================================== */
-
-.tablero-agente.agente-activo
-.tablero-agente-hex-superficie {
-
-    box-shadow:
-
-        inset
-        0 2px 5px
-        rgba(255,255,255,.15),
-
-        inset
-        0 -10px 15px
-        rgba(0,0,0,.65),
-
-        0 0 12px
-        rgba(250,204,21,.95),
-
-        0 0 30px
-        rgba(250,204,21,.65);
 
 }
 
@@ -790,19 +649,19 @@
 .tablero-agente.agente-activo
 .tablero-agente-etiqueta {
 
-    color: #422006;
+    color: #3a1608;
 
     background:
         linear-gradient(
             180deg,
-            #fff7ae 0%,
-            #fde047 35%,
-            #eab308 70%,
-            #a16207 100%
+            #ffe7a3 0%,
+            #ffc766 35%,
+            #d9772b 70%,
+            #78350f 100%
         );
 
     border-color:
-        #fef08a;
+        #ffd58a;
 
     box-shadow:
 
@@ -812,387 +671,179 @@
 
         inset
         0 -5px 8px
-        rgba(120,53,15,.65),
+        rgba(80,25,0,.6),
 
         0 3px 0
-        #713f12,
+        #54200a,
 
-        0 6px 8px
+        0 6px 10px
         rgba(0,0,0,.8),
 
         0 0 20px
-        rgba(250,204,21,.9),
-
-        0 0 40px
-        rgba(250,204,21,.45);
+        rgba(255,166,55,.8);
 
 }
 
 
 /* ==========================================================
-   TORNILLOS ACTIVOS
+   MENÚ DE ACCIONES
    ========================================================== */
 
-.tablero-agente.agente-activo
-.tornillo {
+.nexus-modal-agente {
+
+    position: absolute;
+
+    z-index: 1000;
+
+    pointer-events: none;
+
+}
+
+
+.nexus-modal-agente.menu-visible {
+
+    pointer-events: auto;
+
+}
+
+
+/* ==========================================================
+   BOTONES
+   ========================================================== */
+
+.nexus-accion {
+
+    position: absolute;
+
+    width: 76px;
+    height: 76px;
+
+    margin: 0;
+
+    padding: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    border:
+        2px solid
+        rgba(255,255,255,.55);
 
     background:
         radial-gradient(
             circle at 35% 30%,
-            #fff7ed 0%,
-            #fde68a 25%,
-            #ca8a04 60%,
-            #713f12 100%
+            #fff5b5 0%,
+            #ffd83d 35%,
+            #f4b900 70%,
+            #a96d00 100%
         );
-
-    border-color:
-        #713f12;
 
     box-shadow:
 
         inset
-        1px 1px 1px
-        rgba(255,255,255,.9),
+        0 3px 5px
+        rgba(255,255,255,.75),
 
-        0 0 6px
-        rgba(250,204,21,.9),
+        inset
+        0 -8px 12px
+        rgba(100,50,0,.45),
 
-        0 1px 3px
-        rgba(0,0,0,.9);
+        0 4px 12px
+        rgba(0,0,0,.75),
+
+        0 0 18px
+        rgba(255,190,30,.75);
+
+    cursor: pointer;
+
+    z-index: 1100;
+
+    transform:
+        translate(-50%, -50%);
+
+}
+
+
+.nexus-accion svg {
+
+    width: 27px;
+    height: 27px;
+
+    fill: none;
+
+    stroke:
+        #241300;
+
+    stroke-width: 2;
+
+    stroke-linecap: round;
+
+    stroke-linejoin: round;
+
+}
+
+
+.nexus-accion:hover {
+
+    transform:
+        translate(-50%, -50%)
+        scale(1.08);
 
 }
 
 
 /* ==========================================================
-   PUSH
+   ANIMACIÓN MENÚ
    ========================================================== */
 
-.tablero-agente.agente-presionado
-.tablero-agente-base {
+.nexus-modal-agente.menu-visible
+.nexus-accion {
 
     animation:
-        plataformaPush
-        .5s
-        cubic-bezier(.22,1,.36,1)
-        forwards;
+        menu-aparece
+        .22s
+        ease-out
+        both;
 
 }
 
 
-.tablero-agente.agente-presionado
-.tablero-agente-personaje {
+@keyframes menu-aparece {
 
-    animation:
-        personajeLevantar
-        .5s
-        cubic-bezier(.22,1,.36,1)
-        forwards;
+    from {
 
-}
+        opacity: 0;
 
+        transform:
+            translate(-50%, -50%)
+            scale(.55);
 
-.tablero-agente.agente-presionado
-.tablero-agente-hex-superficie {
+    }
 
-    box-shadow:
+    to {
 
-        inset
-        0 2px 5px
-        rgba(255,255,255,.15),
+        opacity: 1;
 
-        inset
-        0 -10px 15px
-        rgba(0,0,0,.65),
+        transform:
+            translate(-50%, -50%)
+            scale(1);
 
-        0 0 15px
-        rgba(250,204,21,1),
-
-        0 0 35px
-        rgba(250,204,21,.75);
-
-}
-
-
-.tablero-agente.agente-presionado
-.tablero-agente-hex-pared {
-
-    filter:
-        brightness(.7);
-
-}
-
-
-.tablero-agente.agente-presionado
-.tablero-agente-personaje img {
-
-    filter:
-
-        drop-shadow(
-            0 23px 10px
-            rgba(0,0,0,.85)
-        )
-
-        drop-shadow(
-            0 0 12px
-            rgba(250,204,21,1)
-        )
-
-        drop-shadow(
-            0 0 28px
-            rgba(250,204,21,.85)
-        )
-
-        drop-shadow(
-            0 0 45px
-            rgba(250,204,21,.45)
-        );
-
-}
-
-
-.tablero-agente.agente-presionado
-.tablero-agente-etiqueta {
-
-    color: #422006;
-
-    background:
-        linear-gradient(
-            180deg,
-            #fffde7 0%,
-            #fef08a 20%,
-            #fde047 45%,
-            #eab308 75%,
-            #a16207 100%
-        );
-
-    border-color:
-        #fff7ae;
-
-    box-shadow:
-
-        inset
-        0 3px 4px
-        rgba(255,255,255,.7),
-
-        inset
-        0 -5px 8px
-        rgba(120,53,15,.7),
-
-        0 2px 0
-        #713f12,
-
-        0 5px 8px
-        rgba(0,0,0,.85),
-
-        0 0 25px
-        rgba(250,204,21,1);
+    }
 
 }
 
 
 /* ==========================================================
-   ANIMACIONES
+   CIERRE MENÚ
    ========================================================== */
 
-@keyframes personajeRespira {
+.nexus-modal-agente.menu-cerrando {
 
-    0%,
-    100% {
-
-        transform:
-            translateY(0)
-            translateZ(45px);
-
-    }
-
-    50% {
-
-        transform:
-            translateY(-5px)
-            translateZ(45px);
-
-    }
-
-}
-
-
-@keyframes personajeRespiraSeleccionado {
-
-    0%,
-    100% {
-
-        transform:
-            translateY(-8px)
-            translateZ(45px)
-            scale(1.01);
-
-    }
-
-    50% {
-
-        transform:
-            translateY(-13px)
-            translateZ(45px)
-            scale(1.02);
-
-    }
-
-}
-
-
-@keyframes personajeLevantar {
-
-    0% {
-
-        transform:
-            translateY(0)
-            translateZ(45px);
-
-    }
-
-    30% {
-
-        transform:
-            translateY(-4px)
-            translateZ(45px);
-
-    }
-
-    60% {
-
-        transform:
-            translateY(-10px)
-            translateZ(45px);
-
-    }
-
-    80% {
-
-        transform:
-            translateY(-9px)
-            translateZ(45px);
-
-    }
-
-    100% {
-
-        transform:
-            translateY(-8px)
-            translateZ(45px);
-
-    }
-
-}
-
-
-@keyframes plataformaPush {
-
-    0% {
-
-        transform:
-            translateX(-50%)
-            translateY(0)
-            translateZ(0);
-
-    }
-
-    25% {
-
-        transform:
-            translateX(-50%)
-            translateY(5px)
-            translateZ(0);
-
-    }
-
-    55% {
-
-        transform:
-            translateX(-50%)
-            translateY(12px)
-            translateZ(0);
-
-    }
-
-    75% {
-
-        transform:
-            translateX(-50%)
-            translateY(14px)
-            translateZ(0);
-
-    }
-
-    100% {
-
-        transform:
-            translateX(-50%)
-            translateY(13px)
-            translateZ(0);
-
-    }
-
-}
-
-
-.tablero-agente:not(.agente-presionado)
-.tablero-agente-base {
-
-    animation:
-        plataformaRelease
-        .5s
-        cubic-bezier(.22,1,.36,1)
-        forwards;
-
-}
-
-
-@keyframes plataformaRelease {
-
-    0% {
-
-        transform:
-            translateX(-50%)
-            translateY(13px)
-            translateZ(0);
-
-    }
-
-    35% {
-
-        transform:
-            translateX(-50%)
-            translateY(7px)
-            translateZ(0);
-
-    }
-
-    65% {
-
-        transform:
-            translateX(-50%)
-            translateY(-2px)
-            translateZ(0);
-
-    }
-
-    82% {
-
-        transform:
-            translateX(-50%)
-            translateY(2px)
-            translateZ(0);
-
-    }
-
-    100% {
-
-        transform:
-            translateX(-50%)
-            translateY(0)
-            translateZ(0);
-
-    }
+    pointer-events: none;
 
 }
 
@@ -1206,6 +857,7 @@
     #tablero-agentes {
 
         min-height: 620px;
+
         padding: 10px;
 
     }
@@ -1217,7 +869,7 @@
         height: 620px;
 
         transform:
-            translateY(-25px);
+            translateY(-15px);
 
     }
 
@@ -1243,36 +895,30 @@
         top: 25px;
     }
 
-
     .tablero-agente[data-agente="AI-02"] {
         left: 29%;
         top: 25px;
     }
-
 
     .tablero-agente[data-agente="AI-03"] {
         left: 55%;
         top: 25px;
     }
 
-
     .tablero-agente[data-agente="AI-04"] {
         left: 29%;
         top: 205px;
     }
-
 
     .tablero-agente[data-agente="AI-05"] {
         left: 3%;
         top: 385px;
     }
 
-
     .tablero-agente[data-agente="AI-06"] {
         left: 29%;
         top: 385px;
     }
-
 
     .tablero-agente[data-agente="AI-07"] {
         left: 55%;
@@ -1282,18 +928,32 @@
 
     .tablero-agente-personaje {
 
-        width: 190px;
-        height: 145px;
+        width: 125px;
+        height: 95px;
 
-        margin-left: -95px;
+        margin-left: -62.5px;
+
+        top: 43px;
+
+    }
+
+
+    .tablero-agente.agente-abajo
+    .tablero-agente-personaje {
+
+        top: auto;
+
+        bottom: 62px;
 
     }
 
 
     .tablero-agente-base {
 
-        width: 135px;
-        height: 70px;
+        width: 235px;
+        height: 115px;
+
+        margin-left: -117.5px;
 
     }
 
@@ -1301,17 +961,15 @@
     .tablero-agente.agente-abajo
     .tablero-agente-base {
 
-        top: 140px;
+        top: 125px;
 
     }
 
 
     .tablero-agente-etiqueta {
 
-        width: 95px;
-        height: 25px;
-
-        bottom: 6px;
+        width: 105px;
+        height: 26px;
 
         font-size: 11px;
 
@@ -1320,19 +978,18 @@
     }
 
 
-    .tornillo {
+    .nexus-accion {
 
-        width: 6px;
-        height: 6px;
+        width: 68px;
+        height: 68px;
 
     }
 
 
-    .tablero-agente-hex-pared {
+    .nexus-accion svg {
 
-        transform:
-            translateY(13px)
-            translateZ(-8px);
+        width: 24px;
+        height: 24px;
 
     }
 
@@ -1348,6 +1005,7 @@
     #tablero-agentes {
 
         min-height: 560px;
+
         padding: 0;
 
     }
@@ -1384,36 +1042,30 @@
         top: 15px;
     }
 
-
     .tablero-agente[data-agente="AI-02"] {
         left: 134px;
         top: 15px;
     }
-
 
     .tablero-agente[data-agente="AI-03"] {
         left: 245px;
         top: 15px;
     }
 
-
     .tablero-agente[data-agente="AI-04"] {
         left: 134px;
         top: 195px;
     }
-
 
     .tablero-agente[data-agente="AI-05"] {
         left: 20px;
         top: 375px;
     }
 
-
     .tablero-agente[data-agente="AI-06"] {
         left: 134px;
         top: 375px;
     }
-
 
     .tablero-agente[data-agente="AI-07"] {
         left: 245px;
@@ -1423,18 +1075,12 @@
 
     .tablero-agente-personaje {
 
-        width: 125px;
-        height: 105px;
+        width: 105px;
+        height: 82px;
 
-        margin-left: -62.5px;
+        margin-left: -52.5px;
 
-    }
-
-
-    .tablero-agente.agente-arriba
-    .tablero-agente-personaje {
-
-        top: 12px;
+        top: 8px;
 
     }
 
@@ -1442,23 +1088,19 @@
     .tablero-agente.agente-abajo
     .tablero-agente-personaje {
 
-        bottom: 30px;
+        top: auto;
+
+        bottom: 55px;
 
     }
 
 
     .tablero-agente-base {
 
-        width: 92px;
-        height: 48px;
+        width: 150px;
+        height: 82px;
 
-    }
-
-
-    .tablero-agente.agente-arriba
-    .tablero-agente-base {
-
-        bottom: 0;
+        margin-left: -75px;
 
     }
 
@@ -1466,7 +1108,7 @@
     .tablero-agente.agente-abajo
     .tablero-agente-base {
 
-        top: 97px;
+        top: 88px;
 
     }
 
@@ -1475,8 +1117,6 @@
 
         width: 68px;
         height: 19px;
-
-        bottom: 4px;
 
         font-size: 8px;
 
@@ -1493,46 +1133,18 @@
     }
 
 
-    .tornillo-arriba-izquierda {
-        top: 3px;
-        left: 3px;
-    }
+    .nexus-accion {
 
-
-    .tornillo-arriba-derecha {
-        top: 3px;
-        right: 3px;
-    }
-
-
-    .tornillo-abajo-izquierda {
-        bottom: 3px;
-        left: 3px;
-    }
-
-
-    .tornillo-abajo-derecha {
-        bottom: 3px;
-        right: 3px;
-    }
-
-
-    .tablero-agente-hex-pared {
-
-        transform:
-            translateY(8px)
-            translateZ(-7px);
+        width: 60px;
+        height: 60px;
 
     }
 
 
-    .tablero-agente-personaje img {
+    .nexus-accion svg {
 
-        filter:
-            drop-shadow(
-                0 8px 5px
-                rgba(0,0,0,.78)
-            );
+        width: 22px;
+        height: 22px;
 
     }
 
@@ -1560,14 +1172,6 @@
     }
 
 
-    .nexus-nucleo {
-
-        width: 95px;
-        height: 95px;
-
-    }
-
-
     .tablero-agente {
 
         width: 86px;
@@ -1581,36 +1185,30 @@
         top: 10px;
     }
 
-
     .tablero-agente[data-agente="AI-02"] {
         left: 112px;
         top: 10px;
     }
-
 
     .tablero-agente[data-agente="AI-03"] {
         left: 210px;
         top: 10px;
     }
 
-
     .tablero-agente[data-agente="AI-04"] {
         left: 117px;
         top: 185px;
     }
-
 
     .tablero-agente[data-agente="AI-05"] {
         left: 15px;
         top: 360px;
     }
 
-
     .tablero-agente[data-agente="AI-06"] {
         left: 112px;
         top: 360px;
     }
-
 
     .tablero-agente[data-agente="AI-07"] {
         left: 210px;
@@ -1620,18 +1218,28 @@
 
     .tablero-agente-personaje {
 
-        width: 115px;
-        height: 96px;
+        width: 95px;
+        height: 74px;
 
-        margin-left: -57.5px;
+        margin-left: -47.5px;
+
+    }
+
+
+    .tablero-agente.agente-abajo
+    .tablero-agente-personaje {
+
+        bottom: 50px;
 
     }
 
 
     .tablero-agente-base {
 
-        width: 86px;
-        height: 45px;
+        width: 135px;
+        height: 75px;
+
+        margin-left: -67.5px;
 
     }
 
@@ -1639,7 +1247,7 @@
     .tablero-agente.agente-abajo
     .tablero-agente-base {
 
-        top: 93px;
+        top: 82px;
 
     }
 

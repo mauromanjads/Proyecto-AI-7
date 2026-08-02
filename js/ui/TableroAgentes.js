@@ -20,6 +20,7 @@ export default class TableroAgentes {
 
         this.contenedor = null;
         this.tablero = null;
+
         this.tubos = null;
         this.nucleo = null;
 
@@ -28,7 +29,9 @@ export default class TableroAgentes {
         this.modalAgente = null;
 
         this.declaraciones = [];
+
         this.tableroPrincipal = null;
+
         this.bases3D = [];
 
         this.agentes =
@@ -42,23 +45,36 @@ export default class TableroAgentes {
             return [];
         }
 
-        return agentes.map(agente => ({
-            ...agente,
-            posicion:
-                agente.posicion ??
-                (agente.id <= 4 ? "arriba" : "abajo")
-        }));
+        return agentes.map(
+            agente => ({
+                ...agente,
+                posicion:
+                    agente.posicion ??
+                    (
+                        agente.id <= 4
+                            ? "arriba"
+                            : "abajo"
+                    )
+            })
+        );
 
     }
 
     iniciar() {
 
         this.contenedor =
-            document.getElementById("tablero-agentes");
+            document.getElementById(
+                "tablero-agentes"
+            );
 
         if (!this.contenedor) {
-            console.error("No se encontró #tablero-agentes");
+
+            console.error(
+                "No se encontró #tablero-agentes"
+            );
+
             return;
+
         }
 
         this.renderizar();
@@ -67,12 +83,12 @@ export default class TableroAgentes {
 
     }
 
-    cargarAgentes(agentes, declaraciones = []) {
+    cargarAgentes(
+        agentes,
+        declaraciones = []
+    ) {
 
-        if (
-            !Array.isArray(agentes) ||
-            agentes.length === 0
-        ) {
+        if (!Array.isArray(agentes)) {
             return;
         }
 
@@ -102,8 +118,10 @@ export default class TableroAgentes {
         this.limpiarBases3D();
 
         if (this.nucleo) {
+
             this.nucleo.destruir();
             this.nucleo = null;
+
         }
 
         this.contenedor.innerHTML = `
@@ -114,9 +132,7 @@ export default class TableroAgentes {
 
                 <div class="nexus-agentes">
 
-                    ${this.agentes.map(
-                        agente => this.crearAgente(agente)
-                    ).join("")}
+                    ${this.crearSlots()}
 
                 </div>
 
@@ -132,7 +148,11 @@ export default class TableroAgentes {
                         data-accion="interrogar"
                     >
                         <svg viewBox="0 0 24 24">
-                            <circle cx="11" cy="11" r="6"></circle>
+                            <circle
+                                cx="11"
+                                cy="11"
+                                r="6"
+                            ></circle>
                             <path d="M16 16l5 5"></path>
                         </svg>
                     </button>
@@ -144,8 +164,14 @@ export default class TableroAgentes {
                         data-accion="perfil"
                     >
                         <svg viewBox="0 0 24 24">
-                            <circle cx="12" cy="8" r="4"></circle>
-                            <path d="M4 21c.8-4.2 3.4-6 8-6s7.2 1.8 8 6"></path>
+                            <circle
+                                cx="12"
+                                cy="8"
+                                r="4"
+                            ></circle>
+                            <path
+                                d="M4 21c.8-4.2 3.4-6 8-6s7.2 1.8 8 6"
+                            ></path>
                         </svg>
                     </button>
 
@@ -156,9 +182,19 @@ export default class TableroAgentes {
                         data-accion="culpable"
                     >
                         <svg viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="8"></circle>
-                            <circle cx="12" cy="12" r="3"></circle>
-                            <path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path>
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="8"
+                            ></circle>
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="3"
+                            ></circle>
+                            <path
+                                d="M12 2v3M12 19v3M2 12h3M19 12h3"
+                            ></path>
                         </svg>
                     </button>
 
@@ -169,7 +205,9 @@ export default class TableroAgentes {
                         data-accion="cancelar"
                     >
                         <svg viewBox="0 0 24 24">
-                            <path d="M6 6l12 12M18 6L6 18"></path>
+                            <path
+                                d="M6 6l12 12M18 6L6 18"
+                            ></path>
                         </svg>
                     </button>
 
@@ -193,9 +231,40 @@ export default class TableroAgentes {
 
     }
 
+    crearSlots() {
+
+        const slots = [
+            "AI-01",
+            "AI-02",
+            "AI-03",
+            "AI-04",
+            "AI-05",
+            "AI-06",
+            "AI-07"
+        ];
+
+        return slots
+            .map(codigo => {
+
+                const agente =
+                    this.agentes.find(
+                        elemento =>
+                            elemento.codigo === codigo
+                    );
+
+                return agente
+                    ? this.crearAgente(agente)
+                    : this.crearAgenteVacio(codigo);
+
+            })
+            .join("");
+
+    }
+
     crearAgente(agente) {
 
         return `
+
             <div
                 class="
                     tablero-agente
@@ -220,30 +289,85 @@ export default class TableroAgentes {
 
                 <div class="tablero-agente-base">
 
-                    <div class="tablero-agente-hex">
-
-                        <div class="tablero-agente-hex-pared"></div>
-
-                        <div class="tablero-agente-hex-superficie"></div>
-
-                        <div class="tablero-agente-etiqueta">
-
-                            <span class="tornillo tornillo-arriba-izquierda"></span>
-                            <span class="tornillo tornillo-arriba-derecha"></span>
-                            <span class="tornillo tornillo-abajo-izquierda"></span>
-                            <span class="tornillo tornillo-abajo-derecha"></span>
-
-                            <span class="etiqueta-nombre">
-                                ${agente.nombre}
-                            </span>
-
-                        </div>
-
-                    </div>
+                    <div
+                        class="tablero-agente-hex-superficie"
+                    ></div>
 
                 </div>
 
+                ${this.crearEtiqueta(agente.nombre)}
+
             </div>
+
+        `;
+
+    }
+
+    crearAgenteVacio(codigo) {
+
+        const numero =
+            parseInt(
+                codigo.replace("AI-", ""),
+                10
+            );
+
+        const posicion =
+            numero <= 4
+                ? "arriba"
+                : "abajo";
+
+        return `
+
+            <div
+                class="
+                    tablero-agente
+                    agente-${posicion}
+                    agente-vacio
+                "
+                data-agente="${codigo}"
+                aria-hidden="true"
+            >
+
+                <div
+                    class="tablero-agente-personaje"
+                ></div>
+
+                <div class="tablero-agente-base">
+
+                    <div
+                        class="tablero-agente-hex-superficie"
+                    ></div>
+
+                </div>
+
+                ${this.crearEtiqueta("---")}
+
+            </div>
+
+        `;
+
+    }
+
+    crearEtiqueta(nombre) {
+
+        return `
+
+            <div class="tablero-agente-etiqueta">
+
+                <span
+                    class="tornillo tornillo-izquierdo"
+                ></span>
+
+                <span class="etiqueta-nombre">
+                    ${nombre}
+                </span>
+
+                <span
+                    class="tornillo tornillo-derecho"
+                ></span>
+
+            </div>
+
         `;
 
     }
@@ -255,9 +379,7 @@ export default class TableroAgentes {
         }
 
         this.nucleo =
-            new NucleoNexus(
-                this.tablero
-            );
+            new NucleoNexus(this.tablero);
 
         this.nucleo.iniciar();
 
@@ -288,16 +410,20 @@ export default class TableroAgentes {
                 ".tablero-agente-hex-superficie"
             );
 
-        superficies.forEach(superficie => {
+        superficies.forEach(
+            superficie => {
 
-            const base =
-                new BaseHexagonal3D(superficie);
+                const base =
+                    new BaseHexagonal3D(
+                        superficie
+                    );
 
-            base.iniciar();
+                base.iniciar();
 
-            this.bases3D.push(base);
+                this.bases3D.push(base);
 
-        });
+            }
+        );
 
     }
 
@@ -311,9 +437,12 @@ export default class TableroAgentes {
 
             if (
                 base &&
-                typeof base.destruir === "function"
+                typeof base.destruir ===
+                "function"
             ) {
+
                 base.destruir();
+
             }
 
         });
@@ -326,7 +455,7 @@ export default class TableroAgentes {
 
         const tarjetas =
             this.tablero.querySelectorAll(
-                ".tablero-agente"
+                ".tablero-agente:not(.agente-vacio)"
             );
 
         tarjetas.forEach(tarjeta => {
@@ -406,7 +535,10 @@ export default class TableroAgentes {
 
     }
 
-    activarAgente(tarjeta, codigo) {
+    activarAgente(
+        tarjeta,
+        codigo
+    ) {
 
         if (this.agenteActivo) {
             return;
@@ -415,8 +547,10 @@ export default class TableroAgentes {
         this.agenteActivo = codigo;
         this.tarjetaActiva = tarjeta;
 
-        tarjeta.classList.add("agente-activo");
-        tarjeta.classList.add("agente-presionado");
+        tarjeta.classList.add(
+            "agente-activo",
+            "agente-presionado"
+        );
 
         tarjeta.setAttribute(
             "aria-pressed",
@@ -437,23 +571,39 @@ export default class TableroAgentes {
 
     mostrarMenuAgente(tarjeta) {
 
-        if (!this.modalAgente) {
+        if (
+            !this.modalAgente ||
+            !this.tablero
+        ) {
             return;
         }
 
-        const x =
-            tarjeta.offsetLeft +
-            tarjeta.offsetWidth / 2;
+        const tableroRect =
+            this.tablero.getBoundingClientRect();
 
-        const y =
-            tarjeta.offsetTop +
-            105;
+        const tarjetaRect =
+            tarjeta.getBoundingClientRect();
+
+        /*
+         * El menú se posiciona inicialmente
+         * en el centro del personaje.
+         */
+
+        const centroX =
+            tarjetaRect.left +
+            tarjetaRect.width / 2 -
+            tableroRect.left;
+
+        const centroY =
+            tarjetaRect.top +
+            tarjetaRect.height / 2 -
+            tableroRect.top;
 
         this.modalAgente.style.left =
-            `${x}px`;
+            `${centroX}px`;
 
         this.modalAgente.style.top =
-            `${y}px`;
+            `${centroY}px`;
 
         this.modalAgente.classList.remove(
             "menu-cerrando"
@@ -469,6 +619,146 @@ export default class TableroAgentes {
             "aria-hidden",
             "false"
         );
+
+        /*
+         * Después de hacerse visible calculamos
+         * el tamaño real del menú.
+         */
+
+        requestAnimationFrame(() => {
+
+            this.ajustarMenuPantalla();
+
+        });
+
+    }
+
+    ajustarMenuPantalla() {
+
+        if (
+            !this.modalAgente ||
+            !this.tablero
+        ) {
+            return;
+        }
+
+        const margen = 12;
+
+        const tableroRect =
+            this.tablero.getBoundingClientRect();
+
+        const menuRect =
+            this.modalAgente.getBoundingClientRect();
+
+        const viewportWidth =
+            window.innerWidth;
+
+        const viewportHeight =
+            window.innerHeight;
+
+        let desplazamientoX = 0;
+        let desplazamientoY = 0;
+
+        /*
+         * IZQUIERDA
+         */
+
+        if (
+            menuRect.left <
+            margen
+        ) {
+
+            desplazamientoX =
+                margen -
+                menuRect.left;
+
+        }
+
+        /*
+         * DERECHA
+         */
+
+        if (
+            menuRect.right >
+            viewportWidth -
+            margen
+        ) {
+
+            desplazamientoX =
+                viewportWidth -
+                margen -
+                menuRect.right;
+
+        }
+
+        /*
+         * ARRIBA
+         */
+
+        if (
+            menuRect.top <
+            margen
+        ) {
+
+            desplazamientoY =
+                margen -
+                menuRect.top;
+
+        }
+
+        /*
+         * ABAJO
+         */
+
+        if (
+            menuRect.bottom >
+            viewportHeight -
+            margen
+        ) {
+
+            desplazamientoY =
+                viewportHeight -
+                margen -
+                menuRect.bottom;
+
+        }
+
+        /*
+         * Convertimos el desplazamiento de pantalla
+         * a coordenadas del tablero.
+         */
+
+        const escalaX =
+            tableroRect.width /
+            this.tablero.offsetWidth;
+
+        const escalaY =
+            tableroRect.height /
+            this.tablero.offsetHeight;
+
+        const actualLeft =
+            parseFloat(
+                this.modalAgente.style.left
+            ) || 0;
+
+        const actualTop =
+            parseFloat(
+                this.modalAgente.style.top
+            ) || 0;
+
+        this.modalAgente.style.left =
+            `${
+                actualLeft +
+                desplazamientoX /
+                escalaX
+            }px`;
+
+        this.modalAgente.style.top =
+            `${
+                actualTop +
+                desplazamientoY /
+                escalaY
+            }px`;
 
     }
 
@@ -521,9 +811,6 @@ export default class TableroAgentes {
             );
 
         if (!declaracion) {
-            console.warn(
-                `No se encontró declaración para ${agente.nombre}`
-            );
             return;
         }
 
