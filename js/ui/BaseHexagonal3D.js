@@ -20,8 +20,8 @@ export default class BaseHexagonal3D {
         this.renderer = null;
 
         this.base = null;
+        this.superficie = null;
         this.borde = null;
-        this.material = null;
 
     }
 
@@ -49,7 +49,7 @@ export default class BaseHexagonal3D {
 
         this.camera =
             new THREE.PerspectiveCamera(
-                32,
+                30,
                 ancho / alto,
                 0.1,
                 100
@@ -57,8 +57,8 @@ export default class BaseHexagonal3D {
 
         this.camera.position.set(
             0,
-            3.2,
-            6
+            3.8,
+            6.5
         );
 
         this.camera.lookAt(
@@ -90,6 +90,15 @@ export default class BaseHexagonal3D {
             0
         );
 
+        this.renderer.outputColorSpace =
+            THREE.SRGBColorSpace;
+
+        this.renderer.toneMapping =
+            THREE.ACESFilmicToneMapping;
+
+        this.renderer.toneMappingExposure =
+            1.15;
+
         this.contenedor.appendChild(
             this.renderer.domElement
         );
@@ -105,8 +114,8 @@ export default class BaseHexagonal3D {
 
         const ambiente =
             new THREE.AmbientLight(
-                0xffead0,
-                2
+                0x9ccfff,
+                2.2
             );
 
         this.scene.add(
@@ -115,13 +124,13 @@ export default class BaseHexagonal3D {
 
         const principal =
             new THREE.DirectionalLight(
-                0xffc078,
-                4
+                0xffffff,
+                4.5
             );
 
         principal.position.set(
             3,
-            6,
+            7,
             5
         );
 
@@ -129,65 +138,141 @@ export default class BaseHexagonal3D {
             principal
         );
 
-        const relleno =
-            new THREE.DirectionalLight(
-                0xff8a3d,
-                2
+        const azul =
+            new THREE.PointLight(
+                0x20aaff,
+                5,
+                8
             );
 
-        relleno.position.set(
-            -4,
-            2,
-            -3
+        azul.position.set(
+            0,
+            1,
+            1
         );
 
         this.scene.add(
-            relleno
+            azul
+        );
+
+        const naranja =
+            new THREE.PointLight(
+                0xff8a32,
+                3,
+                7
+            );
+
+        naranja.position.set(
+            -3,
+            2,
+            2
+        );
+
+        this.scene.add(
+            naranja
         );
 
     }
 
     crearBase() {
 
-        const geometria =
+        /*
+         * CUERPO PRINCIPAL
+         */
+
+        const geometriaBase =
             new THREE.CylinderGeometry(
-                1.75,
-                1.85,
-                0.42,
+                2.15,
+                2.35,
+                0.48,
                 6,
                 1,
                 false
             );
 
-        this.material =
+        const materialBase =
             new THREE.MeshStandardMaterial({
 
-                color: 0x8b451f,
+                color: 0x151d25,
 
-                metalness: 0.82,
+                metalness: 0.88,
 
-                roughness: 0.24
+                roughness: 0.25
 
             });
 
         this.base =
             new THREE.Mesh(
-                geometria,
-                this.material
+                geometriaBase,
+                materialBase
             );
 
         this.base.rotation.y =
             Math.PI / 6;
 
+        this.base.position.y =
+            -0.05;
+
         this.scene.add(
             this.base
         );
 
-        const geometriaBorde =
+
+        /*
+         * SUPERFICIE CENTRAL
+         */
+
+        const geometriaSuperficie =
             new THREE.CylinderGeometry(
                 1.82,
-                1.92,
-                0.14,
+                1.95,
+                0.16,
+                6,
+                1,
+                false
+            );
+
+        const materialSuperficie =
+            new THREE.MeshStandardMaterial({
+
+                color: 0x12415d,
+
+                metalness: 0.8,
+
+                roughness: 0.22,
+
+                emissive: 0x063653,
+
+                emissiveIntensity: 0.65
+
+            });
+
+        this.superficie =
+            new THREE.Mesh(
+                geometriaSuperficie,
+                materialSuperficie
+            );
+
+        this.superficie.rotation.y =
+            Math.PI / 6;
+
+        this.superficie.position.y =
+            0.25;
+
+        this.scene.add(
+            this.superficie
+        );
+
+
+        /*
+         * BORDE METÁLICO
+         */
+
+        const geometriaBorde =
+            new THREE.CylinderGeometry(
+                2.02,
+                2.16,
+                0.13,
                 6,
                 1,
                 false
@@ -196,11 +281,15 @@ export default class BaseHexagonal3D {
         const materialBorde =
             new THREE.MeshStandardMaterial({
 
-                color: 0xd97732,
+                color: 0xd98532,
 
-                metalness: 0.9,
+                metalness: 0.92,
 
-                roughness: 0.2
+                roughness: 0.18,
+
+                emissive: 0x542000,
+
+                emissiveIntensity: 0.35
 
             });
 
@@ -210,14 +299,104 @@ export default class BaseHexagonal3D {
                 materialBorde
             );
 
-        this.borde.position.y =
-            0.22;
-
         this.borde.rotation.y =
             Math.PI / 6;
 
+        this.borde.position.y =
+            0.34;
+
         this.scene.add(
             this.borde
+        );
+
+
+        /*
+         * ANILLO INTERIOR AZUL
+         */
+
+        const geometriaAnillo =
+            new THREE.CylinderGeometry(
+                1.72,
+                1.78,
+                0.04,
+                6,
+                1,
+                false
+            );
+
+        const materialAnillo =
+            new THREE.MeshStandardMaterial({
+
+                color: 0x20bfff,
+
+                metalness: 0.75,
+
+                roughness: 0.2,
+
+                emissive: 0x008fd0,
+
+                emissiveIntensity: 1.2
+
+            });
+
+        const anillo =
+            new THREE.Mesh(
+                geometriaAnillo,
+                materialAnillo
+            );
+
+        anillo.rotation.y =
+            Math.PI / 6;
+
+        anillo.position.y =
+            0.43;
+
+        this.scene.add(
+            anillo
+        );
+
+
+        /*
+         * DETALLE CENTRAL
+         */
+
+        const geometriaCentro =
+            new THREE.CylinderGeometry(
+                0.95,
+                1.05,
+                0.035,
+                6
+            );
+
+        const materialCentro =
+            new THREE.MeshStandardMaterial({
+
+                color: 0x1b83ad,
+
+                metalness: 0.7,
+
+                roughness: 0.2,
+
+                emissive: 0x0876a8,
+
+                emissiveIntensity: 0.9
+
+            });
+
+        const centro =
+            new THREE.Mesh(
+                geometriaCentro,
+                materialCentro
+            );
+
+        centro.rotation.y =
+            Math.PI / 6;
+
+        centro.position.y =
+            0.47;
+
+        this.scene.add(
+            centro
         );
 
     }
@@ -241,33 +420,40 @@ export default class BaseHexagonal3D {
 
     destruir() {
 
-        if (this.base) {
-
-            this.base.geometry.dispose();
-
-            if (this.base.material) {
-                this.base.material.dispose();
-            }
-
-            this.scene?.remove(
-                this.base
-            );
-
+        if (!this.scene) {
+            return;
         }
 
-        if (this.borde) {
+        this.scene.traverse(
+            objeto => {
 
-            this.borde.geometry.dispose();
+                if (objeto.geometry) {
+                    objeto.geometry.dispose();
+                }
 
-            if (this.borde.material) {
-                this.borde.material.dispose();
+                if (objeto.material) {
+
+                    if (
+                        Array.isArray(
+                            objeto.material
+                        )
+                    ) {
+
+                        objeto.material.forEach(
+                            material =>
+                                material.dispose()
+                        );
+
+                    } else {
+
+                        objeto.material.dispose();
+
+                    }
+
+                }
+
             }
-
-            this.scene?.remove(
-                this.borde
-            );
-
-        }
+        );
 
         if (this.renderer) {
 
@@ -290,6 +476,7 @@ export default class BaseHexagonal3D {
         this.camera = null;
         this.renderer = null;
         this.base = null;
+        this.superficie = null;
         this.borde = null;
 
     }

@@ -208,15 +208,15 @@
 
     left: 50%;
 
-    width: 170px;
-    height: 125px;
+    width: 185px;
+    height: 145px;
 
-    margin-left: -85px;
+    margin-left: -92.5px;
 
-    top: 47px;
+    top: 30px;
 
     transform:
-        translateZ(45px);
+        translateZ(70px);
 
     pointer-events: none;
 
@@ -229,12 +229,11 @@
    PERSONAJE INFERIOR
    ========================================================== */
 
-.tablero-agente.agente-abajo
-.tablero-agente-personaje {
+.tablero-agente.agente-abajo .tablero-agente-personaje {
 
     top: auto;
 
-    bottom: 70px;
+    bottom: 58px;
 
 }
 
@@ -316,12 +315,12 @@
 
     left: 50%;
 
-    width: 330px;
-    height: 155px;
+    width: 350px;
+    height: 175px;
 
-    margin-left: -165px;
+    margin-left: -175px;
 
-    bottom: -5px;
+    bottom: -12px;
 
     background: transparent;
 
@@ -340,13 +339,34 @@
 
 
 /* ==========================================================
+   SUPERFICIE HEXAGONAL 3D
+   ========================================================== */
+
+.tablero-agente-hex-superficie {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: visible;
+
+    pointer-events: none;
+
+    transform-style: preserve-3d;
+
+}
+
+
+/* ==========================================================
    BASE PERSONAJES INFERIORES
    ========================================================== */
 
-.tablero-agente.agente-abajo
-.tablero-agente-base {
+.tablero-agente.agente-abajo .tablero-agente-base {
 
-    top: 145px;
+    top: 132px;
 
     bottom: auto;
 
@@ -381,8 +401,8 @@
 
     bottom: -1px;
 
-    width: 135px;
-    height: 31px;
+    width: 145px;
+    height: 32px;
 
     display: flex;
 
@@ -391,7 +411,7 @@
 
     transform:
         translateX(-50%)
-        translateZ(65px)
+        translateZ(75px)
         rotateX(8deg);
 
     color: #fff1d0;
@@ -526,8 +546,7 @@
 }
 
 
-.tablero-agente.agente-vacio
-.tablero-agente-etiqueta {
+.tablero-agente.agente-vacio .tablero-agente-etiqueta {
 
     color: #c8a98a;
 
@@ -557,16 +576,14 @@
 }
 
 
-.tablero-agente.agente-vacio
-.tablero-agente-personaje {
+.tablero-agente.agente-vacio .tablero-agente-personaje {
 
     display: none;
 
 }
 
 
-.tablero-agente.agente-vacio
-.tablero-agente-base {
+.tablero-agente.agente-vacio .tablero-agente-base {
 
     filter:
         saturate(.55)
@@ -928,48 +945,46 @@
 
     .tablero-agente-personaje {
 
-        width: 125px;
-        height: 95px;
+        width: 138px;
+        height: 108px;
 
-        margin-left: -62.5px;
+        margin-left: -69px;
 
-        top: 43px;
+        top: 37px;
 
     }
 
 
-    .tablero-agente.agente-abajo
-    .tablero-agente-personaje {
+    .tablero-agente.agente-abajo .tablero-agente-personaje {
 
         top: auto;
 
-        bottom: 62px;
+        bottom: 57px;
 
     }
 
 
     .tablero-agente-base {
 
-        width: 235px;
-        height: 115px;
+        width: 255px;
+        height: 130px;
 
-        margin-left: -117.5px;
+        margin-left: -127.5px;
 
     }
 
 
-    .tablero-agente.agente-abajo
-    .tablero-agente-base {
+    .tablero-agente.agente-abajo .tablero-agente-base {
 
-        top: 125px;
+        top: 117px;
 
     }
 
 
     .tablero-agente-etiqueta {
 
-        width: 105px;
-        height: 26px;
+        width: 108px;
+        height: 27px;
 
         font-size: 11px;
 
@@ -1075,48 +1090,46 @@
 
     .tablero-agente-personaje {
 
-        width: 105px;
-        height: 82px;
+        width: 112px;
+        height: 88px;
 
-        margin-left: -52.5px;
+        margin-left: -56px;
 
-        top: 8px;
+        top: 5px;
 
     }
 
 
-    .tablero-agente.agente-abajo
-    .tablero-agente-personaje {
+    .tablero-agente.agente-abajo .tablero-agente-personaje {
 
         top: auto;
 
-        bottom: 55px;
+        bottom: 51px;
 
     }
 
 
     .tablero-agente-base {
 
-        width: 150px;
-        height: 82px;
+        width: 160px;
+        height: 88px;
 
-        margin-left: -75px;
+        margin-left: -80px;
 
     }
 
 
-    .tablero-agente.agente-abajo
-    .tablero-agente-base {
+    .tablero-agente.agente-abajo .tablero-agente-base {
 
-        top: 88px;
+        top: 84px;
 
     }
 
 
     .tablero-agente-etiqueta {
 
-        width: 68px;
-        height: 19px;
+        width: 70px;
+        height: 20px;
 
         font-size: 8px;
 
@@ -1218,36 +1231,34 @@
 
     .tablero-agente-personaje {
 
-        width: 95px;
-        height: 74px;
+        width: 102px;
+        height: 80px;
 
-        margin-left: -47.5px;
+        margin-left: -51px;
 
     }
 
 
-    .tablero-agente.agente-abajo
-    .tablero-agente-personaje {
+    .tablero-agente.agente-abajo .tablero-agente-personaje {
 
-        bottom: 50px;
+        bottom: 46px;
 
     }
 
 
     .tablero-agente-base {
 
-        width: 135px;
-        height: 75px;
+        width: 145px;
+        height: 80px;
 
-        margin-left: -67.5px;
+        margin-left: -72.5px;
 
     }
 
 
-    .tablero-agente.agente-abajo
-    .tablero-agente-base {
+    .tablero-agente.agente-abajo .tablero-agente-base {
 
-        top: 82px;
+        top: 79px;
 
     }
 
