@@ -157,8 +157,6 @@
 
 /* ==========================================================
    CENTRO DEL AGENTE
-   ----------------------------------------------------------
-   BASE Y PERSONAJE COMPARTEN EXACTAMENTE EL MISMO CENTRO.
    ========================================================== */
 
 .tablero-agente-centro {
@@ -243,17 +241,6 @@
 
 /* ==========================================================
    PERSONAJE
-   ----------------------------------------------------------
-   POSICIONAMIENTO 2D PURO (SIN translateZ / SIN rotateX).
-   El personaje NO necesita profundidad CSS propia: el efecto
-   3D ya lo aporta el canvas de Three.js debajo. Usar translateZ
-   aquí lo hacía "volar" hacia el punto de fuga COMPARTIDO del
-   tablero completo (perspective en #tablero-agentes), y por eso
-   cada agente se desfasaba distinto según su distancia al centro.
-
-   El ancla es el pie del personaje: transform usa translate(-50%, -100%)
-   así que "top" indica exactamente dónde pisa el personaje sobre
-   la superficie del hexágono. Sube/baja este valor para ajustar.
    ========================================================== */
 
 .tablero-agente-personaje {
@@ -429,15 +416,6 @@
 
 /* ==========================================================
    PLACA
-   ----------------------------------------------------------
-   POSICIONAMIENTO 2D PURO (SIN translateZ / SIN rotateX),
-   por la misma razón que el personaje: eliminar el punto de
-   fuga compartido que causaba el desfase radial.
-
-   Ahora la placa se superpone al borde frontal-inferior del
-   hexágono, como una plaqueta atornillada, en vez de flotar
-   debajo con un espacio. Ajusta "top" (%) para subir/bajar
-   la placa sobre el frente del hexágono.
    ========================================================== */
 
 .tablero-agente-etiqueta {
@@ -771,6 +749,9 @@
 
     position: absolute;
 
+    width: 0;
+    height: 0;
+
     z-index: 1000;
 
     pointer-events: none;
@@ -787,6 +768,10 @@
 
 /* ==========================================================
    BOTONES
+   ----------------------------------------------------------
+   La botonera usa como origen el punto calculado por JS.
+   El contenedor mide 0x0 para que left/top representen
+   exactamente el centro de la botonera.
    ========================================================== */
 
 .nexus-accion {
@@ -844,6 +829,10 @@
 
 }
 
+
+/* ==========================================================
+   ICONOS
+   ========================================================== */
 
 .nexus-accion svg {
 
@@ -1157,6 +1146,27 @@
 
         width: 125px;
         height: 98px;
+
+    }
+
+
+    /* ======================================================
+       PERSONAJES SUPERIORES EN MÓVIL
+       ====================================================== */
+
+    .tablero-agente[data-agente="AI-01"]
+    .tablero-agente-personaje,
+
+    .tablero-agente[data-agente="AI-02"]
+    .tablero-agente-personaje,
+
+    .tablero-agente[data-agente="AI-03"]
+    .tablero-agente-personaje,
+
+    .tablero-agente[data-agente="AI-04"]
+    .tablero-agente-personaje {
+
+        top: 43%;
 
     }
 

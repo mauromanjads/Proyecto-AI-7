@@ -117,6 +117,23 @@ export default class TableroAgentes {
 
         }
 
+        /*
+         * Si en un renderizado anterior movimos el menú
+         * de acciones a <body> (ver mostrarMenuAgente),
+         * hay que quitarlo antes de reconstruir el tablero
+         * o quedaría un nodo huérfano flotando en el body.
+         */
+
+        if (
+            this.modalAgente &&
+            this.modalAgente.parentElement ===
+            document.body
+        ) {
+
+            this.modalAgente.remove();
+
+        }
+
         this.contenedor.innerHTML = `
 
             <div class="nexus-tablero">
@@ -561,34 +578,79 @@ export default class TableroAgentes {
 
     mostrarMenuAgente(tarjeta) {
 
-        if (
-            !this.modalAgente ||
-            !this.tablero
-        ) {
+        if (!this.modalAgente) {
             return;
         }
 
-        const tableroRect =
-            this.tablero.getBoundingClientRect();
+        /*
+         * FIX CLAVE
+         * ------------------------------------------------
+         * ".nexus-tablero" tiene "transform" y
+         * "#tablero-agentes" tiene "overflow: hidden".
+         *
+         * Mientras el menú viva DENTRO del tablero, ningún
+         * "position: fixed" ni ajuste de coordenadas logra
+         * escapar de ese recorte: un ancestro con transform
+         * convierte a los hijos "fixed" en descendientes
+         * "atrapados" dentro de él, y ese ancestro sigue
+         * siendo recortado por el overflow:hidden de su
+         * propio padre.
+         *
+         * La única forma real de que la botonera no se
+         * corte (sin importar si el agente está arriba o
+         * abajo) es sacarla del DOM del tablero y montarla
+         * directo en <body>, ya con coordenadas de pantalla
+         * puras (fixed).
+         */
+
+        if (
+            this.modalAgente.parentElement !==
+            document.body
+        ) {
+
+            document.body.appendChild(
+                this.modalAgente
+            );
+
+            this.modalAgente.style.position =
+                "fixed";
+
+        }
 
         const tarjetaRect =
             tarjeta.getBoundingClientRect();
 
         const centroX =
             tarjetaRect.left +
-            tarjetaRect.width / 2 -
-            tableroRect.left;
+            tarjetaRect.width / 2;
 
         const centroY =
             tarjetaRect.top +
-            tarjetaRect.height / 2 -
-            tableroRect.top;
+            tarjetaRect.height / 2;
+
+        /*
+         * Separación visual entre la placa/personaje
+         * y la botonera.
+         *
+         * En móvil se necesita más separación porque
+         * las tarjetas son mucho más pequeñas.
+         */
+
+        const esMovil =
+            window.matchMedia(
+                "(max-width: 700px)"
+            ).matches;
+
+        const desplazamientoTop =
+            esMovil
+                ? 105
+                : 70;
 
         this.modalAgente.style.left =
             `${centroX}px`;
 
         this.modalAgente.style.top =
-            `${centroY}px`;
+            `${centroY - desplazamientoTop}px`;
 
         this.modalAgente.classList.remove(
             "menu-cerrando"
@@ -615,17 +677,22 @@ export default class TableroAgentes {
 
     ajustarMenuPantalla() {
 
-        if (
-            !this.modalAgente ||
-            !this.tablero
-        ) {
+        if (!this.modalAgente) {
             return;
         }
 
-        const margen = 12;
+        /*
+         * Ahora que el menú vive en <body> con
+         * "position: fixed", sus coordenadas ya son
+         * coordenadas de pantalla puras.
+         *
+         * Ya no hace falta convertir nada respecto al
+         * tablero ni compensar ninguna escala: solo
+         * comparamos el rectángulo del menú contra el
+         * viewport y lo desplazamos si se sale.
+         */
 
-        const tableroRect =
-            this.tablero.getBoundingClientRect();
+        const margen = 12;
 
         const menuRect =
             this.modalAgente.getBoundingClientRect();
@@ -638,6 +705,10 @@ export default class TableroAgentes {
 
         let desplazamientoX = 0;
         let desplazamientoY = 0;
+
+        /*
+         * Límites horizontales.
+         */
 
         if (
             menuRect.left <
@@ -663,6 +734,10 @@ export default class TableroAgentes {
 
         }
 
+        /*
+         * Límites verticales.
+         */
+
         if (
             menuRect.top <
             margen
@@ -687,14 +762,6 @@ export default class TableroAgentes {
 
         }
 
-        const escalaX =
-            tableroRect.width /
-            this.tablero.offsetWidth;
-
-        const escalaY =
-            tableroRect.height /
-            this.tablero.offsetHeight;
-
         const actualLeft =
             parseFloat(
                 this.modalAgente.style.left
@@ -708,15 +775,13 @@ export default class TableroAgentes {
         this.modalAgente.style.left =
             `${
                 actualLeft +
-                desplazamientoX /
-                escalaX
+                desplazamientoX
             }px`;
 
         this.modalAgente.style.top =
             `${
                 actualTop +
-                desplazamientoY /
-                escalaY
+                desplazamientoY
             }px`;
 
     }
