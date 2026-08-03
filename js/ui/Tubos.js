@@ -115,17 +115,17 @@ const CONFIGURACION_TUBOS = {
 
     "AI-01": {
 
-        punto1X: 100,
-        punto1Y: 150,
+        punto1X: -100,
+        punto1Y: 0,
 
-        punto2X: 200,
-        punto2Y: 150,
+        punto2X: -100,
+        punto2Y: 405,
 
-        punto3X: 200,
-        punto3Y: 300,
+        punto3X: 790,
+        punto3Y: 405,
 
-        punto4X: -120,
-        punto4Y: 300
+        punto4X:790,
+        punto4Y: 200
 
     },
 
@@ -136,17 +136,17 @@ const CONFIGURACION_TUBOS = {
 
     "AI-02": {
 
-        punto1X: 140,
+        punto1X: 100,
         punto1Y: 0,
 
-        punto2X: 220,
-        punto2Y: 0,
+        punto2X: 100,
+        punto2Y: 110,
 
-        punto3X: 220,
-        punto3Y: 100,
+        punto3X: 460,
+        punto3Y: 110,
 
-        punto4X: -90,
-        punto4Y: 100
+        punto4X: 460,
+        punto4Y: 110
 
     },
 
@@ -157,17 +157,17 @@ const CONFIGURACION_TUBOS = {
 
     "AI-03": {
 
-        punto1X: 140,
+        punto1X: 100,
         punto1Y: 0,
 
-        punto2X: 260,
-        punto2Y: 0,
+        punto2X: 100,
+        punto2Y: 80,
 
-        punto3X: 260,
-        punto3Y: -80,
+        punto3X: 300,
+        punto3Y: 80,
 
-        punto4X: -60,
-        punto4Y: -80
+        punto4X: 300,
+        punto4Y: 80
 
     },
 
@@ -199,17 +199,17 @@ const CONFIGURACION_TUBOS = {
 
     "AI-05": {
 
-        punto1X: 140,
+        punto1X: 100,
         punto1Y: 0,
 
-        punto2X: 250,
-        punto2Y: 0,
+        punto2X: 100,
+        punto2Y: -170,
 
-        punto3X: 250,
-        punto3Y: -120,
+        punto3X: 460,
+        punto3Y: -170,
 
-        punto4X: 0,
-        punto4Y: -120
+        punto4X: 460,
+        punto4Y: -170
 
     },
 
@@ -220,17 +220,17 @@ const CONFIGURACION_TUBOS = {
 
     "AI-06": {
 
-        punto1X: 140,
+        punto1X: 100,
         punto1Y: 0,
 
-        punto2X: 280,
-        punto2Y: 0,
+        punto2X: 100,
+        punto2Y: -140,
 
-        punto3X: 280,
-        punto3Y: 140,
+        punto3X: 300,
+        punto3Y: -140,
 
-        punto4X: 30,
-        punto4Y: 140
+        punto4X: 300,
+        punto4Y: -140
 
     },
 
@@ -244,14 +244,14 @@ const CONFIGURACION_TUBOS = {
         punto1X: 140,
         punto1Y: 0,
 
-        punto2X: 320,
+        punto2X: 140,
         punto2Y: 0,
 
-        punto3X: 320,
-        punto3Y: -160,
+        punto3X: 140,
+        punto3Y: -80,
 
-        punto4X: 60,
-        punto4Y: -160
+        punto4X: 140,
+        punto4Y: -80
 
     }
 
