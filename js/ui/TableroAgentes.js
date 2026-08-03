@@ -47,14 +47,7 @@ export default class TableroAgentes {
 
         return agentes.map(
             agente => ({
-                ...agente,
-                posicion:
-                    agente.posicion ??
-                    (
-                        agente.id <= 4
-                            ? "arriba"
-                            : "abajo"
-                    )
+                ...agente
             })
         );
 
@@ -153,7 +146,10 @@ export default class TableroAgentes {
                                 cy="11"
                                 r="6"
                             ></circle>
-                            <path d="M16 16l5 5"></path>
+
+                            <path
+                                d="M16 16l5 5"
+                            ></path>
                         </svg>
                     </button>
 
@@ -169,6 +165,7 @@ export default class TableroAgentes {
                                 cy="8"
                                 r="4"
                             ></circle>
+
                             <path
                                 d="M4 21c.8-4.2 3.4-6 8-6s7.2 1.8 8 6"
                             ></path>
@@ -187,11 +184,13 @@ export default class TableroAgentes {
                                 cy="12"
                                 r="8"
                             ></circle>
+
                             <circle
                                 cx="12"
                                 cy="12"
                                 r="3"
                             ></circle>
+
                             <path
                                 d="M12 2v3M12 19v3M2 12h3M19 12h3"
                             ></path>
@@ -214,6 +213,7 @@ export default class TableroAgentes {
                 </div>
 
             </div>
+
         `;
 
         this.tablero =
@@ -266,10 +266,7 @@ export default class TableroAgentes {
         return `
 
             <div
-                class="
-                    tablero-agente
-                    agente-${agente.posicion}
-                "
+                class="tablero-agente"
                 data-agente="${agente.codigo}"
                 role="button"
                 tabindex="0"
@@ -277,21 +274,25 @@ export default class TableroAgentes {
                 aria-pressed="false"
             >
 
-                <div class="tablero-agente-personaje">
+                <div class="tablero-agente-centro">
 
-                    <img
-                        src="assets/img/${agente.avatar}"
-                        alt="${agente.nombre}"
-                        draggable="false"
-                    >
+                    <div class="tablero-agente-base">
 
-                </div>
+                        <div
+                            class="tablero-agente-hex-superficie"
+                        ></div>
 
-                <div class="tablero-agente-base">
+                    </div>
 
-                    <div
-                        class="tablero-agente-hex-superficie"
-                    ></div>
+                    <div class="tablero-agente-personaje">
+
+                        <img
+                            src="assets/img/${agente.avatar}"
+                            alt="${agente.nombre}"
+                            draggable="false"
+                        >
+
+                    </div>
 
                 </div>
 
@@ -305,38 +306,26 @@ export default class TableroAgentes {
 
     crearAgenteVacio(codigo) {
 
-        const numero =
-            parseInt(
-                codigo.replace("AI-", ""),
-                10
-            );
-
-        const posicion =
-            numero <= 4
-                ? "arriba"
-                : "abajo";
-
         return `
 
             <div
                 class="
                     tablero-agente
-                    agente-${posicion}
                     agente-vacio
                 "
                 data-agente="${codigo}"
                 aria-hidden="true"
             >
 
-                <div
-                    class="tablero-agente-personaje"
-                ></div>
+                <div class="tablero-agente-centro">
 
-                <div class="tablero-agente-base">
+                    <div class="tablero-agente-base">
 
-                    <div
-                        class="tablero-agente-hex-superficie"
-                    ></div>
+                        <div
+                            class="tablero-agente-hex-superficie"
+                        ></div>
+
+                    </div>
 
                 </div>
 
@@ -502,6 +491,7 @@ export default class TableroAgentes {
                     ) {
 
                         evento.preventDefault();
+
                         activar(evento);
 
                     }
@@ -584,11 +574,6 @@ export default class TableroAgentes {
         const tarjetaRect =
             tarjeta.getBoundingClientRect();
 
-        /*
-         * El menú se posiciona inicialmente
-         * en el centro del personaje.
-         */
-
         const centroX =
             tarjetaRect.left +
             tarjetaRect.width / 2 -
@@ -619,11 +604,6 @@ export default class TableroAgentes {
             "aria-hidden",
             "false"
         );
-
-        /*
-         * Después de hacerse visible calculamos
-         * el tamaño real del menú.
-         */
 
         requestAnimationFrame(() => {
 
@@ -659,10 +639,6 @@ export default class TableroAgentes {
         let desplazamientoX = 0;
         let desplazamientoY = 0;
 
-        /*
-         * IZQUIERDA
-         */
-
         if (
             menuRect.left <
             margen
@@ -673,10 +649,6 @@ export default class TableroAgentes {
                 menuRect.left;
 
         }
-
-        /*
-         * DERECHA
-         */
 
         if (
             menuRect.right >
@@ -691,10 +663,6 @@ export default class TableroAgentes {
 
         }
 
-        /*
-         * ARRIBA
-         */
-
         if (
             menuRect.top <
             margen
@@ -705,10 +673,6 @@ export default class TableroAgentes {
                 menuRect.top;
 
         }
-
-        /*
-         * ABAJO
-         */
 
         if (
             menuRect.bottom >
@@ -722,11 +686,6 @@ export default class TableroAgentes {
                 menuRect.bottom;
 
         }
-
-        /*
-         * Convertimos el desplazamiento de pantalla
-         * a coordenadas del tablero.
-         */
 
         const escalaX =
             tableroRect.width /

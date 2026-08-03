@@ -63,7 +63,7 @@ export default class BaseHexagonal3D {
 
         this.camera.lookAt(
             0,
-            0,
+            0.25,
             0
         );
 
@@ -176,10 +176,6 @@ export default class BaseHexagonal3D {
 
     crearBase() {
 
-        /*
-         * CUERPO PRINCIPAL
-         */
-
         const geometriaBase =
             new THREE.CylinderGeometry(
                 2.15,
@@ -216,11 +212,6 @@ export default class BaseHexagonal3D {
         this.scene.add(
             this.base
         );
-
-
-        /*
-         * SUPERFICIE CENTRAL
-         */
 
         const geometriaSuperficie =
             new THREE.CylinderGeometry(
@@ -263,11 +254,6 @@ export default class BaseHexagonal3D {
             this.superficie
         );
 
-
-        /*
-         * BORDE METÁLICO
-         */
-
         const geometriaBorde =
             new THREE.CylinderGeometry(
                 2.02,
@@ -309,11 +295,6 @@ export default class BaseHexagonal3D {
             this.borde
         );
 
-
-        /*
-         * ANILLO INTERIOR AZUL
-         */
-
         const geometriaAnillo =
             new THREE.CylinderGeometry(
                 1.72,
@@ -354,11 +335,6 @@ export default class BaseHexagonal3D {
         this.scene.add(
             anillo
         );
-
-
-        /*
-         * DETALLE CENTRAL
-         */
 
         const geometriaCentro =
             new THREE.CylinderGeometry(
