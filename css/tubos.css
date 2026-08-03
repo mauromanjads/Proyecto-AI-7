@@ -27,9 +27,15 @@
 
     inset: 0;
 
-    z-index: 5;
+    z-index: 1;
 
     pointer-events: none;
+
+}
+
+.nexus-red canvas {
+
+    z-index: 1;
 
 }
 
@@ -606,7 +612,7 @@
 .nexus-red {
 
     z-index:
-        5;
+        40;
 
 }
 

@@ -71,8 +71,8 @@ export default class TableroAgentes {
         }
 
         this.renderizar();
-        this.iniciarTubos();
         this.iniciarNucleo();
+        this.iniciarTubos();
 
     }
 
@@ -101,8 +101,8 @@ export default class TableroAgentes {
         }
 
         this.renderizar();
-        this.iniciarTubos();
         this.iniciarNucleo();
+        this.iniciarTubos();
 
     }
 

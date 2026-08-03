@@ -84,7 +84,11 @@ export default class Tubos {
             this.resizeHandler
         );
 
-        this.actualizar();
+        requestAnimationFrame(() => {
+
+            this.actualizar();
+
+        });
 
         this.animar();
 
@@ -272,115 +276,60 @@ export default class Tubos {
 
         this.conectores.clear();
 
+        const codigos = [
+            "AI-01",
+            "AI-02",
+            "AI-03",
+            "AI-04",
+            "AI-05",
+            "AI-06",
+            "AI-07"
+        ];
 
-        /* ==================================================
-           TUBO MADRE
-           ================================================== */
-
-        this.tuboMadre =
-            this.crearTubo(
-                125,
-                350,
-                980,
-                350,
-                18
-            );
-
-
-        this.tuboMadre.userData.radio =
-            18;
-
-
-        /* ==================================================
-           POSICIONES LÓGICAS
-           ================================================== */
-
-        const posiciones = {
-
-            "AI-01": {
-                x: 125,
-                y: 125
-            },
-
-            "AI-02": {
-                x: 329,
-                y: 125
-            },
-
-            "AI-03": {
-                x: 533,
-                y: 125
-            },
-
-            "AI-04": {
-                x: 737,
-                y: 125
-            },
-
-            "AI-05": {
-                x: 329,
-                y: 575
-            },
-
-            "AI-06": {
-                x: 533,
-                y: 575
-            },
-
-            "AI-07": {
-                x: 737,
-                y: 575
-            }
-
+        const lanes = {
+            "AI-01": -140,
+            "AI-02": -85,
+            "AI-03": -20,
+            "AI-04": 70,
+            "AI-05": -120,
+            "AI-06": -45,
+            "AI-07": 35
         };
 
-
-        Object.entries(
-            posiciones
-        ).forEach(
-            ([codigo, posicion]) => {
-
-                const arriba =
-                    posicion.y < 350;
-
+        codigos.forEach(
+            (codigo) => {
 
                 const tubo =
                     this.crearTubo(
-                        posicion.x,
-                        posicion.y,
-                        posicion.x,
-                        350,
-                        14
+                        0,
+                        0,
+                        0,
+                        0,
+                        6
                     );
-
 
                 tubo.userData.codigo =
                     codigo;
 
                 tubo.userData.radio =
-                    14;
+                    6;
 
-
-                tubo.userData.arriba =
-                    arriba;
-
+                tubo.userData.lane =
+                    lanes[codigo] || 0;
 
                 this.tubos.set(
                     codigo,
                     tubo
                 );
 
-
                 const conector =
                     this.crearConector(
-                        posicion.x,
-                        350
+                        0,
+                        0
                     );
-
 
                 conector.userData.codigo =
                     codigo;
-
 
                 this.conectores.set(
                     codigo,
@@ -405,101 +354,49 @@ export default class Tubos {
         radio
     ) {
 
-        const inicio =
-            this.convertirCoordenada(
-                x1,
-                y1
-            );
-
-
-        const fin =
-            this.convertirCoordenada(
-                x2,
-                y2
-            );
-
-
-        const direccion =
-            new THREE.Vector3()
-                .subVectors(
-                    fin,
-                    inicio
-                );
-
-
-        const longitud =
-            direccion.length();
-
-
-        const geometria =
-            new THREE.CylinderGeometry(
-                radio,
-                radio,
-                longitud,
-                24,
-                1,
-                false
-            );
-
-
         const material =
             new THREE.MeshStandardMaterial({
 
                 color:
-                    0x7f1d1d,
-
-                metalness:
-                    0.82,
-
-                roughness:
-                    0.30,
+                    0x4dd9ff,
 
                 emissive:
-                    0x240000,
+                    0x09364a,
 
                 emissiveIntensity:
-                    0.35
+                    1.1,
+
+                metalness:
+                    0.92,
+
+                roughness:
+                    0.18,
+
+                transparent:
+                    true,
+
+                opacity:
+                    0.82
 
             });
 
-
         const tubo =
-            new THREE.Mesh(
-                geometria,
-                material
-            );
+            new THREE.Group();
 
+        tubo.userData.radio =
+            radio;
 
-        const centro =
-            new THREE.Vector3()
-                .addVectors(
-                    inicio,
-                    fin
-                )
-                .multiplyScalar(
-                    0.5
-                );
+        tubo.userData.material =
+            material;
 
+        tubo.userData.segmentos = [];
 
-        tubo.position.copy(
-            centro
-        );
-
-
-        tubo.quaternion.setFromUnitVectors(
-            new THREE.Vector3(
-                0,
-                1,
-                0
-            ),
-            direccion.normalize()
-        );
-
+        tubo.position.z =
+            -40;
 
         this.scene.add(
             tubo
         );
-
 
         return tubo;
 
@@ -527,19 +424,19 @@ export default class Tubos {
             new THREE.MeshStandardMaterial({
 
                 color:
-                    0xb91c1c,
+                    0x7ce8ff,
 
                 metalness:
-                    0.9,
+                    0.95,
 
                 roughness:
-                    0.22,
+                    0.14,
 
                 emissive:
-                    0x330000,
+                    0x0a516d,
 
                 emissiveIntensity:
-                    0.4
+                    0.55
 
             });
 
@@ -582,9 +479,17 @@ export default class Tubos {
         y
     ) {
 
+        const ancho =
+            this.red?.clientWidth ||
+            1200;
+
+        const alto =
+            this.red?.clientHeight ||
+            700;
+
         return new THREE.Vector3(
-            x - 600,
-            350 - y,
+            x - ancho / 2,
+            alto / 2 - y,
             0
         );
 
@@ -648,16 +553,16 @@ export default class Tubos {
          */
 
         this.camera.left =
-            -600;
+            -ancho / 2;
 
         this.camera.right =
-            600;
+            ancho / 2;
 
         this.camera.top =
-            350;
+            alto / 2;
 
         this.camera.bottom =
-            -350;
+            -alto / 2;
 
 
         this.camera.updateProjectionMatrix();
@@ -685,10 +590,8 @@ export default class Tubos {
 
         }
 
-
         const rectTablero =
             this.tablero.getBoundingClientRect();
-
 
         if (
             rectTablero.width <= 0 ||
@@ -699,21 +602,41 @@ export default class Tubos {
 
         }
 
+        const rectRed =
+            this.red.getBoundingClientRect();
 
-        /*
-         * El tablero lógico siempre representa
-         * 1200 x 700.
-         */
+        const nucleo =
+            this.tablero.querySelector(
+                ".nexus-nucleo-centro"
+            );
 
-        const escalaX =
-            1200 /
-            rectTablero.width;
+        if (!nucleo) {
 
+            return;
 
-        const escalaY =
-            700 /
-            rectTablero.height;
+        }
 
+        const rectNucleo =
+            nucleo.getBoundingClientRect();
+
+        if (
+            rectNucleo.width <= 0 ||
+            rectNucleo.height <= 0
+        ) {
+
+            return;
+
+        }
+
+        const destinoX =
+            rectNucleo.left -
+            rectRed.left +
+            rectNucleo.width / 2;
+
+        const destinoY =
+            rectNucleo.top -
+            rectRed.top +
+            rectNucleo.height / 2;
 
         this.tubos.forEach(
             (tubo, codigo) => {
@@ -723,88 +646,60 @@ export default class Tubos {
                         `.tablero-agente[data-agente="${codigo}"]`
                     );
 
-
                 if (!agente) {
 
                     return;
 
                 }
 
-
-                const base =
+                const origenElemento =
                     agente.querySelector(
                         ".tablero-agente-base"
+                    ) ||
+                    agente.querySelector(
+                        ".tablero-agente-centro"
                     );
 
-
-                if (!base) {
+                if (!origenElemento) {
 
                     return;
 
                 }
 
-
                 const rect =
-                    base.getBoundingClientRect();
+                    origenElemento.getBoundingClientRect();
 
+                const origenX =
+                    rect.left -
+                    rectRed.left +
+                    rect.width / 2;
 
-                /*
-                 * Centro real del hexágono.
-                 */
-
-                const x =
-                    (
-                        rect.left -
-                        rectTablero.left +
-                        rect.width / 2
-                    ) *
-                    escalaX;
-
-
-                const y =
-                    (
-                        rect.top -
-                        rectTablero.top +
-                        rect.height / 2
-                    ) *
-                    escalaY;
-
-
-                /*
-                 * Todos los tubos llegan
-                 * exactamente al tubo madre.
-                 */
-
-                const extremoY =
-                    350;
-
+                const origenY =
+                    rect.top -
+                    rectRed.top +
+                    rect.height / 2;
 
                 this.reposicionarTubo(
                     tubo,
-                    x,
-                    y,
-                    x,
-                    extremoY
+                    origenX,
+                    origenY,
+                    destinoX,
+                    destinoY,
+                    tubo.userData.lane || 0
                 );
-
 
                 const conector =
                     this.conectores.get(
                         codigo
                     );
 
-
                 if (conector) {
 
-                    const posicion =
-                        this.convertirCoordenada(
-                            x,
-                            extremoY
-                        );
-
-
                     conector.position.copy(
-                        posicion
+                        this.convertirCoordenada(
+                            origenX,
+                            origenY
+                        )
                     );
 
                 }
@@ -824,7 +719,8 @@ export default class Tubos {
         x1,
         y1,
         x2,
-        y2
+        y2,
+        lane = 0
     ) {
 
         const inicio =
@@ -833,93 +729,128 @@ export default class Tubos {
                 y1
             );
 
-
         const fin =
             this.convertirCoordenada(
                 x2,
                 y2
             );
 
+        const radio =
+            tubo.userData.radio || 6;
 
-        const direccion =
-            new THREE.Vector3()
-                .subVectors(
-                    fin,
-                    inicio
+        const corridorX =
+            Math.max(
+                inicio.x + 140,
+                fin.x - 120
+            ) +
+            lane * 0.35;
+
+        const puntoA =
+            new THREE.Vector3(
+                corridorX,
+                inicio.y,
+                0
+            );
+
+        const puntoB =
+            new THREE.Vector3(
+                corridorX,
+                fin.y,
+                0
+            );
+
+        const ruta = [
+            inicio,
+            puntoA,
+            puntoB,
+            fin
+        ];
+
+        tubo.clear();
+        tubo.userData.segmentos = [];
+
+        for (
+            let indice = 0;
+            indice < ruta.length - 1;
+            indice++
+        ) {
+
+            const desde =
+                ruta[indice];
+
+            const hasta =
+                ruta[indice + 1];
+
+            const delta =
+                new THREE.Vector3(
+                    hasta.x - desde.x,
+                    hasta.y - desde.y,
+                    0
                 );
 
+            const longitud =
+                Math.max(
+                    delta.length(),
+                    1
+                );
 
-        const longitud =
-            direccion.length();
+            const geometria =
+                new THREE.CylinderGeometry(
+                    radio,
+                    radio,
+                    longitud,
+                    18,
+                    1,
+                    false
+                );
 
+            const segmento =
+                new THREE.Mesh(
+                    geometria,
+                    tubo.userData.material
+                );
 
-        const radio =
-            tubo.userData.radio ||
-            14;
+            segmento.position.z =
+                indice * -0.2;
 
-
-        /*
-         * Guardamos el material.
-         */
-
-        const material =
-            tubo.material;
-
-
-        /*
-         * Eliminamos la geometría anterior.
-         */
-
-        tubo.geometry.dispose();
-
-
-        /*
-         * Creamos la nueva geometría.
-         */
-
-        tubo.geometry =
-            new THREE.CylinderGeometry(
-                radio,
-                radio,
-                longitud,
-                24,
-                1,
-                false
+            tubo.userData.segmentos.push(
+                segmento
             );
 
+            const centro =
+                new THREE.Vector3(
+                    (desde.x + hasta.x) / 2,
+                    (desde.y + hasta.y) / 2,
+                    0
+                );
 
-        tubo.material =
-            material;
-
-
-        /*
-         * Centro del tubo.
-         */
-
-        tubo.position
-            .copy(
-                inicio
-            )
-            .add(
-                fin
-            )
-            .multiplyScalar(
-                0.5
+            segmento.position.copy(
+                centro
             );
 
+            const direccion =
+                delta.clone().normalize();
 
-        /*
-         * Orientación.
-         */
+            const quaternion =
+                new THREE.Quaternion()
+                    .setFromUnitVectors(
+                        new THREE.Vector3(
+                            0,
+                            1,
+                            0
+                        ),
+                        direccion
+                    );
 
-        tubo.quaternion.setFromUnitVectors(
-            new THREE.Vector3(
-                0,
-                1,
-                0
-            ),
-            direccion.normalize()
-        );
+            segmento.quaternion.copy(
+                quaternion
+            );
+
+            tubo.add(
+                segmento
+            );
+
+        }
 
     }
 
@@ -981,16 +912,22 @@ export default class Tubos {
 
         if (tubo) {
 
-            tubo.material.color.set(
-                0xff2020
-            );
+            const segmentos =
+                tubo.userData.segmentos ||
+                tubo.children;
 
-            tubo.material.emissive.set(
-                0x990000
-            );
+            segmentos.forEach(
+                segmento => {
 
-            tubo.material.emissiveIntensity =
-                1.8;
+                    segmento.material.color.set(
+                        0xff2020
+                    );
+
+                    segmento.material.opacity =
+                        1;
+
+                }
+            );
 
         }
 
@@ -1059,16 +996,22 @@ export default class Tubos {
 
         if (tubo) {
 
-            tubo.material.color.set(
-                0x7f1d1d
-            );
+            const segmentos =
+                tubo.userData.segmentos ||
+                tubo.children;
 
-            tubo.material.emissive.set(
-                0x240000
-            );
+            segmentos.forEach(
+                segmento => {
 
-            tubo.material.emissiveIntensity =
-                0.35;
+                    segmento.material.color.set(
+                        0x4dd9ff
+                    );
+
+                    segmento.material.opacity =
+                        0.82;
+
+                }
+            );
 
         }
 
@@ -1092,9 +1035,20 @@ export default class Tubos {
         const quedanActivos =
             [...this.tubos.values()]
                 .some(
-                    elemento =>
-                        elemento.material
-                            .emissiveIntensity > 1
+                    elemento => {
+
+                        const segmentos =
+                            elemento.userData
+                                .segmentos ||
+                            elemento.children;
+
+                        return segmentos.some(
+                            segmento =>
+                                segmento.material
+                                    .emissiveIntensity > 1
+                        );
+
+                    }
                 );
 
 
