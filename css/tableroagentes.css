@@ -119,12 +119,19 @@
 
 /* ==========================================================
    AGENTE
+   ----------------------------------------------------------
+   EL ÁREA DEL AGENTE REPRESENTA:
+   HEXÁGONO + PERSONAJE.
+   LA BOTONERA NO FORMA PARTE DE ESTA ÁREA.
    ========================================================== */
 
 .tablero-agente {
 
-    --base-width: 350px;
-    --base-height: 175px;
+    --base-width: 220px;
+    --base-height: 110px;
+
+    --personaje-width: 220px;
+    --personaje-height: 172px;
 
     --placa-width: 145px;
     --placa-height: 32px;
@@ -132,9 +139,18 @@
     position: absolute;
 
     width: var(--base-width);
-    height: var(--base-height);
+
+    height:
+        calc(
+            var(--base-height) +
+            var(--personaje-height) -
+            55px
+        );
 
     margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
 
     cursor: pointer;
 
@@ -163,16 +179,22 @@
 
     position: absolute;
 
-    left: 50%;
-    top: 50%;
+    left: 0;
+    top: 0;
 
-    width: 100%;
-    height: 100%;
+    width: var(--base-width);
+    height: var(--base-height);
 
     margin: 0;
+    padding: 0;
 
     transform:
-        translate(-50%, -50%);
+        translateY(
+            calc(
+                var(--personaje-height) -
+                105px
+            )
+        );
 
     transform-style: preserve-3d;
 
@@ -185,7 +207,7 @@
 
 .tablero-agente[data-agente="AI-01"] {
 
-    left: 2%;
+    left: 7%;
     top: 0;
 
 }
@@ -193,7 +215,7 @@
 
 .tablero-agente[data-agente="AI-02"] {
 
-    left: 19%;
+    left: 25%;
     top: 0;
 
 }
@@ -201,7 +223,7 @@
 
 .tablero-agente[data-agente="AI-03"] {
 
-    left: 36%;
+    left: 43%;
     top: 0;
 
 }
@@ -209,7 +231,7 @@
 
 .tablero-agente[data-agente="AI-04"] {
 
-    left: 53%;
+    left: 61%;
     top: 0;
 
 }
@@ -217,7 +239,7 @@
 
 .tablero-agente[data-agente="AI-05"] {
 
-    left: 19%;
+    left: 25%;
     top: 310px;
 
 }
@@ -225,7 +247,7 @@
 
 .tablero-agente[data-agente="AI-06"] {
 
-    left: 36%;
+    left: 43%;
     top: 310px;
 
 }
@@ -233,7 +255,7 @@
 
 .tablero-agente[data-agente="AI-07"] {
 
-    left: 53%;
+    left: 61%;
     top: 310px;
 
 }
@@ -248,17 +270,18 @@
     position: absolute;
 
     left: 50%;
+
     top: 48%;
 
-    width: 220px;
-    height: 172px;
+    width: var(--personaje-width);
+    height: var(--personaje-height);
 
     margin: 0;
 
     transform:
         translate(-50%, -100%);
 
-    pointer-events: none;
+    pointer-events: auto;
 
     z-index: 40;
 
@@ -349,10 +372,11 @@
     left: 50%;
     top: 50%;
 
-    width: 100%;
-    height: 100%;
+    width: var(--base-width);
+    height: var(--base-height);
 
     margin: 0;
+    padding: 0;
 
     background: transparent;
 
@@ -364,7 +388,7 @@
 
     z-index: 25;
 
-    pointer-events: none;
+    pointer-events: auto;
 
     overflow: visible;
 
@@ -386,7 +410,7 @@
 
     overflow: visible;
 
-    pointer-events: none;
+    pointer-events: auto;
 
     transform-style: preserve-3d;
 
@@ -409,7 +433,7 @@
 
     display: block;
 
-    pointer-events: none;
+    pointer-events: auto;
 
 }
 
@@ -501,7 +525,6 @@
     width: 100%;
 
     margin: 0;
-
     padding: 0;
 
     text-align: center;
@@ -752,6 +775,9 @@
     width: 0;
     height: 0;
 
+    margin: 0;
+    padding: 0;
+
     z-index: 1000;
 
     pointer-events: none;
@@ -761,18 +787,10 @@
 
 .nexus-modal-agente.menu-visible {
 
-    pointer-events: auto;
+    pointer-events: none;
 
 }
 
-
-/* ==========================================================
-   BOTONES
-   ----------------------------------------------------------
-   La botonera usa como origen el punto calculado por JS.
-   El contenedor mide 0x0 para que left/top representen
-   exactamente el centro de la botonera.
-   ========================================================== */
 
 .nexus-accion {
 
@@ -788,6 +806,8 @@
 
     align-items: center;
     justify-content: center;
+
+    box-sizing: border-box;
 
     border-radius: 50%;
 
@@ -824,15 +844,13 @@
 
     z-index: 1100;
 
+    pointer-events: auto;
+
     transform:
         translate(-50%, -50%);
 
 }
 
-
-/* ==========================================================
-   ICONOS
-   ========================================================== */
 
 .nexus-accion svg {
 
@@ -861,10 +879,6 @@
 
 }
 
-
-/* ==========================================================
-   ANIMACIÓN MENÚ
-   ========================================================== */
 
 .nexus-modal-agente.menu-visible
 .nexus-accion {
@@ -902,10 +916,6 @@
 
 }
 
-
-/* ==========================================================
-   CIERRE MENÚ
-   ========================================================== */
 
 .nexus-modal-agente.menu-cerrando {
 
@@ -950,8 +960,11 @@
 
     .tablero-agente {
 
-        --base-width: 255px;
-        --base-height: 130px;
+        --base-width: 165px;
+        --base-height: 82px;
+
+        --personaje-width: 165px;
+        --personaje-height: 129px;
 
         --placa-width: 108px;
         --placa-height: 27px;
@@ -961,7 +974,7 @@
 
     .tablero-agente[data-agente="AI-01"] {
 
-        left: 3%;
+        left: 8%;
         top: 25px;
 
     }
@@ -977,7 +990,7 @@
 
     .tablero-agente[data-agente="AI-03"] {
 
-        left: 55%;
+        left: 50%;
         top: 25px;
 
     }
@@ -993,7 +1006,7 @@
 
     .tablero-agente[data-agente="AI-05"] {
 
-        left: 3%;
+        left: 8%;
         top: 385px;
 
     }
@@ -1009,16 +1022,8 @@
 
     .tablero-agente[data-agente="AI-07"] {
 
-        left: 55%;
+        left: 50%;
         top: 385px;
-
-    }
-
-
-    .tablero-agente-personaje {
-
-        width: 165px;
-        height: 129px;
 
     }
 
@@ -1077,8 +1082,11 @@
 
     .tablero-agente {
 
-        --base-width: 160px;
-        --base-height: 88px;
+        --base-width: 105px;
+        --base-height: 58px;
+
+        --personaje-width: 125px;
+        --personaje-height: 98px;
 
         --placa-width: 70px;
         --placa-height: 20px;
@@ -1088,7 +1096,7 @@
 
     .tablero-agente[data-agente="AI-01"] {
 
-        left: 20px;
+        left: 12px;
         top: 15px;
 
     }
@@ -1096,7 +1104,7 @@
 
     .tablero-agente[data-agente="AI-02"] {
 
-        left: 134px;
+        left: 128px;
         top: 15px;
 
     }
@@ -1104,7 +1112,7 @@
 
     .tablero-agente[data-agente="AI-03"] {
 
-        left: 245px;
+        left: 244px;
         top: 15px;
 
     }
@@ -1112,7 +1120,7 @@
 
     .tablero-agente[data-agente="AI-04"] {
 
-        left: 134px;
+        left: 128px;
         top: 195px;
 
     }
@@ -1120,7 +1128,7 @@
 
     .tablero-agente[data-agente="AI-05"] {
 
-        left: 20px;
+        left: 12px;
         top: 375px;
 
     }
@@ -1128,7 +1136,7 @@
 
     .tablero-agente[data-agente="AI-06"] {
 
-        left: 134px;
+        left: 128px;
         top: 375px;
 
     }
@@ -1136,34 +1144,12 @@
 
     .tablero-agente[data-agente="AI-07"] {
 
-        left: 245px;
+        left: 244px;
         top: 375px;
 
     }
 
 
-    .tablero-agente-personaje {
-
-        width: 125px;
-        height: 98px;
-
-    }
-
-
-    /* ======================================================
-       PERSONAJES SUPERIORES EN MÓVIL
-       ====================================================== */
-
-    .tablero-agente[data-agente="AI-01"]
-    .tablero-agente-personaje,
-
-    .tablero-agente[data-agente="AI-02"]
-    .tablero-agente-personaje,
-
-    .tablero-agente[data-agente="AI-03"]
-    .tablero-agente-personaje,
-
-    .tablero-agente[data-agente="AI-04"]
     .tablero-agente-personaje {
 
         top: 43%;
@@ -1220,8 +1206,11 @@
 
     .tablero-agente {
 
-        --base-width: 145px;
-        --base-height: 80px;
+        --base-width: 95px;
+        --base-height: 52px;
+
+        --personaje-width: 115px;
+        --personaje-height: 90px;
 
         --placa-width: 64px;
         --placa-height: 18px;
@@ -1231,7 +1220,7 @@
 
     .tablero-agente[data-agente="AI-01"] {
 
-        left: 15px;
+        left: 10px;
         top: 10px;
 
     }
@@ -1239,7 +1228,7 @@
 
     .tablero-agente[data-agente="AI-02"] {
 
-        left: 112px;
+        left: 113px;
         top: 10px;
 
     }
@@ -1247,7 +1236,7 @@
 
     .tablero-agente[data-agente="AI-03"] {
 
-        left: 210px;
+        left: 216px;
         top: 10px;
 
     }
@@ -1255,7 +1244,7 @@
 
     .tablero-agente[data-agente="AI-04"] {
 
-        left: 117px;
+        left: 113px;
         top: 185px;
 
     }
@@ -1263,7 +1252,7 @@
 
     .tablero-agente[data-agente="AI-05"] {
 
-        left: 15px;
+        left: 10px;
         top: 360px;
 
     }
@@ -1271,7 +1260,7 @@
 
     .tablero-agente[data-agente="AI-06"] {
 
-        left: 112px;
+        left: 113px;
         top: 360px;
 
     }
@@ -1279,7 +1268,7 @@
 
     .tablero-agente[data-agente="AI-07"] {
 
-        left: 210px;
+        left: 216px;
         top: 360px;
 
     }
@@ -1294,6 +1283,7 @@
 
 }
 
+
 /* ==========================================================
    ECHO — SOLO MÓVILES
    ========================================================== */
@@ -1303,14 +1293,15 @@
     .tablero-agente[data-agente="AI-04"]
     .tablero-agente-centro {
 
-        left: 0%;
+        left: 0;
 
     }
+
 
     .tablero-agente[data-agente="AI-04"]
     .tablero-agente-etiqueta {
 
-        left: 0%;
+        left: 0;
 
     }
 

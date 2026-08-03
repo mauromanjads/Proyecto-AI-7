@@ -117,13 +117,6 @@ export default class TableroAgentes {
 
         }
 
-        /*
-         * Si en un renderizado anterior movimos el menú
-         * de acciones a <body> (ver mostrarMenuAgente),
-         * hay que quitarlo antes de reconstruir el tablero
-         * o quedaría un nodo huérfano flotando en el body.
-         */
-
         if (
             this.modalAgente &&
             this.modalAgente.parentElement ===
@@ -158,6 +151,7 @@ export default class TableroAgentes {
                         data-accion="interrogar"
                     >
                         <svg viewBox="0 0 24 24">
+
                             <circle
                                 cx="11"
                                 cy="11"
@@ -167,6 +161,7 @@ export default class TableroAgentes {
                             <path
                                 d="M16 16l5 5"
                             ></path>
+
                         </svg>
                     </button>
 
@@ -177,6 +172,7 @@ export default class TableroAgentes {
                         data-accion="perfil"
                     >
                         <svg viewBox="0 0 24 24">
+
                             <circle
                                 cx="12"
                                 cy="8"
@@ -186,6 +182,7 @@ export default class TableroAgentes {
                             <path
                                 d="M4 21c.8-4.2 3.4-6 8-6s7.2 1.8 8 6"
                             ></path>
+
                         </svg>
                     </button>
 
@@ -196,6 +193,7 @@ export default class TableroAgentes {
                         data-accion="culpable"
                     >
                         <svg viewBox="0 0 24 24">
+
                             <circle
                                 cx="12"
                                 cy="12"
@@ -211,6 +209,7 @@ export default class TableroAgentes {
                             <path
                                 d="M12 2v3M12 19v3M2 12h3M19 12h3"
                             ></path>
+
                         </svg>
                     </button>
 
@@ -221,9 +220,11 @@ export default class TableroAgentes {
                         data-accion="cancelar"
                     >
                         <svg viewBox="0 0 24 24">
+
                             <path
                                 d="M6 6l12 12M18 6L6 18"
                             ></path>
+
                         </svg>
                     </button>
 
@@ -459,6 +460,10 @@ export default class TableroAgentes {
 
     configurarInteracciones() {
 
+        if (!this.tablero) {
+            return;
+        }
+
         const tarjetas =
             this.tablero.querySelectorAll(
                 ".tablero-agente:not(.agente-vacio)"
@@ -466,37 +471,110 @@ export default class TableroAgentes {
 
         tarjetas.forEach(tarjeta => {
 
-            const activar = evento => {
+            const codigo =
+                tarjeta.dataset.agente;
 
-                evento.stopPropagation();
+            /*
+             * ==================================================
+             * EL CONTENEDOR COMPLETO NO ES CLICKEABLE.
+             *
+             * Esto evita que la zona de la botonera,
+             * etiqueta u otros elementos del agente
+             * interfieran con el clic.
+             * ==================================================
+             */
 
-                const codigo =
-                    tarjeta.dataset.agente;
+            tarjeta.style.pointerEvents =
+                "none";
 
-                if (
-                    this.agenteActivo &&
-                    this.agenteActivo !== codigo
-                ) {
-                    return;
-                }
+            /*
+             * ==================================================
+             * PERSONAJE
+             * ==================================================
+             */
 
-                if (
-                    this.agenteActivo === codigo
-                ) {
-                    return;
-                }
-
-                this.activarAgente(
-                    tarjeta,
-                    codigo
+            const personaje =
+                tarjeta.querySelector(
+                    ".tablero-agente-personaje"
                 );
 
-            };
+            if (personaje) {
 
-            tarjeta.addEventListener(
-                "click",
-                activar
-            );
+                personaje.style.pointerEvents =
+                    "auto";
+
+                personaje.addEventListener(
+                    "click",
+                    evento => {
+
+                        evento.stopPropagation();
+
+                        this.activarDesdeZonaAgente(
+                            tarjeta,
+                            codigo,
+                            evento
+                        );
+
+                    }
+                );
+
+            }
+
+            /*
+             * ==================================================
+             * BASE
+             * ==================================================
+             */
+
+            const base =
+                tarjeta.querySelector(
+                    ".tablero-agente-base"
+                );
+
+            if (base) {
+
+                base.style.pointerEvents =
+                    "auto";
+
+                /*
+                 * La superficie contiene el canvas
+                 * generado por Three.js.
+                 */
+
+                const superficie =
+                    base.querySelector(
+                        ".tablero-agente-hex-superficie"
+                    );
+
+                if (superficie) {
+
+                    superficie.style.pointerEvents =
+                        "auto";
+
+                    superficie.addEventListener(
+                        "click",
+                        evento => {
+
+                            evento.stopPropagation();
+
+                            this.activarDesdeZonaAgente(
+                                tarjeta,
+                                codigo,
+                                evento
+                            );
+
+                        }
+                    );
+
+                }
+
+            }
+
+            /*
+             * ==================================================
+             * TECLADO
+             * ==================================================
+             */
 
             tarjeta.addEventListener(
                 "keydown",
@@ -509,7 +587,11 @@ export default class TableroAgentes {
 
                         evento.preventDefault();
 
-                        activar(evento);
+                        this.activarDesdeZonaAgente(
+                            tarjeta,
+                            codigo,
+                            evento
+                        );
 
                     }
 
@@ -517,6 +599,12 @@ export default class TableroAgentes {
             );
 
         });
+
+        /*
+         * ======================================================
+         * BOTONERA
+         * ======================================================
+         */
 
         const acciones =
             this.modalAgente.querySelectorAll(
@@ -539,6 +627,36 @@ export default class TableroAgentes {
             );
 
         });
+
+    }
+
+    activarDesdeZonaAgente(
+        tarjeta,
+        codigo,
+        evento
+    ) {
+
+        if (evento) {
+            evento.stopPropagation();
+        }
+
+        if (
+            this.agenteActivo &&
+            this.agenteActivo !== codigo
+        ) {
+            return;
+        }
+
+        if (
+            this.agenteActivo === codigo
+        ) {
+            return;
+        }
+
+        this.activarAgente(
+            tarjeta,
+            codigo
+        );
 
     }
 
@@ -582,27 +700,6 @@ export default class TableroAgentes {
             return;
         }
 
-        /*
-         * FIX CLAVE
-         * ------------------------------------------------
-         * ".nexus-tablero" tiene "transform" y
-         * "#tablero-agentes" tiene "overflow: hidden".
-         *
-         * Mientras el menú viva DENTRO del tablero, ningún
-         * "position: fixed" ni ajuste de coordenadas logra
-         * escapar de ese recorte: un ancestro con transform
-         * convierte a los hijos "fixed" en descendientes
-         * "atrapados" dentro de él, y ese ancestro sigue
-         * siendo recortado por el overflow:hidden de su
-         * propio padre.
-         *
-         * La única forma real de que la botonera no se
-         * corte (sin importar si el agente está arriba o
-         * abajo) es sacarla del DOM del tablero y montarla
-         * directo en <body>, ya con coordenadas de pantalla
-         * puras (fixed).
-         */
-
         if (
             this.modalAgente.parentElement !==
             document.body
@@ -627,14 +724,6 @@ export default class TableroAgentes {
         const centroY =
             tarjetaRect.top +
             tarjetaRect.height / 2;
-
-        /*
-         * Separación visual entre la placa/personaje
-         * y la botonera.
-         *
-         * En móvil se necesita más separación porque
-         * las tarjetas son mucho más pequeñas.
-         */
 
         const esMovil =
             window.matchMedia(
@@ -681,17 +770,6 @@ export default class TableroAgentes {
             return;
         }
 
-        /*
-         * Ahora que el menú vive en <body> con
-         * "position: fixed", sus coordenadas ya son
-         * coordenadas de pantalla puras.
-         *
-         * Ya no hace falta convertir nada respecto al
-         * tablero ni compensar ninguna escala: solo
-         * comparamos el rectángulo del menú contra el
-         * viewport y lo desplazamos si se sale.
-         */
-
         const margen = 12;
 
         const menuRect =
@@ -705,10 +783,6 @@ export default class TableroAgentes {
 
         let desplazamientoX = 0;
         let desplazamientoY = 0;
-
-        /*
-         * Límites horizontales.
-         */
 
         if (
             menuRect.left <
@@ -733,10 +807,6 @@ export default class TableroAgentes {
                 menuRect.right;
 
         }
-
-        /*
-         * Límites verticales.
-         */
 
         if (
             menuRect.top <
