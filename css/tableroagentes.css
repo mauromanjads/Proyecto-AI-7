@@ -1293,3 +1293,25 @@
     }
 
 }
+
+/* ==========================================================
+   ECHO — SOLO MÓVILES
+   ========================================================== */
+
+@media (max-width: 768px) {
+
+    .tablero-agente[data-agente="AI-04"]
+    .tablero-agente-centro {
+
+        left: 0%;
+
+    }
+
+    .tablero-agente[data-agente="AI-04"]
+    .tablero-agente-etiqueta {
+
+        left: 0%;
+
+    }
+
+}
