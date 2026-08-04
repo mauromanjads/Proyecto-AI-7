@@ -27,10 +27,6 @@
 }
 
 
-/* ==========================================================
-   TABLERO
-   ========================================================== */
-
 .nexus-tablero {
 
     position: relative;
@@ -45,10 +41,6 @@
 
 }
 
-
-/* ==========================================================
-   NÚCLEO
-   ========================================================== */
 
 .nexus-nucleo {
 
@@ -73,10 +65,6 @@
 }
 
 
-/* ==========================================================
-   RED
-   ========================================================== */
-
 .nexus-red {
 
     position: absolute;
@@ -100,10 +88,6 @@
 }
 
 
-/* ==========================================================
-   AGENTES
-   ========================================================== */
-
 .nexus-agentes {
 
     position: absolute;
@@ -116,14 +100,6 @@
 
 }
 
-
-/* ==========================================================
-   AGENTE
-   ----------------------------------------------------------
-   EL ÁREA DEL AGENTE REPRESENTA:
-   HEXÁGONO + PERSONAJE.
-   LA BOTONERA NO FORMA PARTE DE ESTA ÁREA.
-   ========================================================== */
 
 .tablero-agente {
 
@@ -171,9 +147,22 @@
 }
 
 
-/* ==========================================================
-   CENTRO DEL AGENTE
-   ========================================================== */
+/*
+ * ==========================================================
+ * TODO EL CONTENIDO VISUAL DEL AGENTE ES PASIVO.
+ *
+ * EL ÚNICO ELEMENTO QUE RECIBE EL CLIC ES:
+ *
+ * .tablero-agente
+ * ==========================================================
+ */
+
+.tablero-agente > * {
+
+    pointer-events: none;
+
+}
+
 
 .tablero-agente-centro {
 
@@ -182,11 +171,13 @@
     left: 0;
     top: 0;
 
-    width: var(--base-width);
+    width: 100%;
     height: var(--base-height);
 
     margin: 0;
     padding: 0;
+
+    box-sizing: border-box;
 
     transform:
         translateY(
@@ -200,10 +191,6 @@
 
 }
 
-
-/* ==========================================================
-   POSICIONES
-   ========================================================== */
 
 .tablero-agente[data-agente="AI-01"] {
 
@@ -261,10 +248,6 @@
 }
 
 
-/* ==========================================================
-   PERSONAJE
-   ========================================================== */
-
 .tablero-agente-personaje {
 
     position: absolute;
@@ -281,8 +264,6 @@
     transform:
         translate(-50%, -100%);
 
-    pointer-events: auto;
-
     z-index: 40;
 
     display: flex;
@@ -292,10 +273,6 @@
 
 }
 
-
-/* ==========================================================
-   IMAGEN
-   ========================================================== */
 
 .tablero-agente-personaje img {
 
@@ -309,8 +286,6 @@
     object-position: center bottom;
 
     margin: 0;
-
-    pointer-events: none;
 
     user-select: none;
 
@@ -334,10 +309,6 @@
 
 }
 
-
-/* ==========================================================
-   RESPIRACIÓN
-   ========================================================== */
 
 @keyframes personaje-respiracion {
 
@@ -369,57 +340,51 @@
 
     position: absolute;
 
-    left: 50%;
-    top: 50%;
+    left: 0;
+    top: 0;
 
-    width: var(--base-width);
-    height: var(--base-height);
+    width: 100%;
+    height: 100%;
 
     margin: 0;
     padding: 0;
 
+    box-sizing: border-box;
+
     background: transparent;
 
-    transform:
-        translate(-50%, -50%)
-        translateZ(0);
+    transform: none;
 
     transform-style: preserve-3d;
 
     z-index: 25;
 
-    pointer-events: auto;
-
-    overflow: visible;
+    overflow: hidden;
 
 }
 
-
-/* ==========================================================
-   SUPERFICIE
-   ========================================================== */
 
 .tablero-agente-hex-superficie {
 
     position: absolute;
 
-    inset: 0;
+    left: 0;
+    top: 0;
 
     width: 100%;
     height: 100%;
 
-    overflow: visible;
+    margin: 0;
+    padding: 0;
 
-    pointer-events: auto;
+    box-sizing: border-box;
+
+    overflow: hidden;
 
     transform-style: preserve-3d;
 
 }
 
-
-/* ==========================================================
-   CANVAS THREE.JS
-   ========================================================== */
 
 .tablero-agente-base canvas {
 
@@ -431,16 +396,13 @@
     width: 100% !important;
     height: 100% !important;
 
-    display: block;
+    margin: 0;
+    padding: 0;
 
-    pointer-events: auto;
+    display: block;
 
 }
 
-
-/* ==========================================================
-   PLACA
-   ========================================================== */
 
 .tablero-agente-etiqueta {
 
@@ -509,14 +471,8 @@
 
     z-index: 60;
 
-    pointer-events: none;
-
 }
 
-
-/* ==========================================================
-   NOMBRE
-   ========================================================== */
 
 .etiqueta-nombre {
 
@@ -533,10 +489,6 @@
 
 }
 
-
-/* ==========================================================
-   TORNILLOS
-   ========================================================== */
 
 .tornillo {
 
@@ -589,10 +541,6 @@
 
 }
 
-
-/* ==========================================================
-   VACÍO
-   ========================================================== */
 
 .tablero-agente.agente-vacio {
 
@@ -654,10 +602,6 @@
 }
 
 
-/* ==========================================================
-   HOVER
-   ========================================================== */
-
 .tablero-agente:not(.agente-vacio):hover {
 
     transform:
@@ -682,10 +626,6 @@
 }
 
 
-/* ==========================================================
-   ACTIVO
-   ========================================================== */
-
 .tablero-agente.agente-activo {
 
     filter:
@@ -700,10 +640,6 @@
 
 }
 
-
-/* ==========================================================
-   BASE ACTIVA
-   ========================================================== */
 
 .tablero-agente.agente-activo
 .tablero-agente-base {
@@ -720,10 +656,6 @@
 
 }
 
-
-/* ==========================================================
-   PLACA ACTIVA
-   ========================================================== */
 
 .tablero-agente.agente-activo
 .tablero-agente-etiqueta {
@@ -763,10 +695,6 @@
 
 }
 
-
-/* ==========================================================
-   MENÚ DE ACCIONES
-   ========================================================== */
 
 .nexus-modal-agente {
 

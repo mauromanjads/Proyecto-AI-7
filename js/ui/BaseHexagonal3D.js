@@ -4,6 +4,13 @@
  * Archivo: BaseHexagonal3D.js
  * ----------------------------------------------------------
  * BASE HEXAGONAL 3D
+ * ----------------------------------------------------------
+ * LA GEOMETRÍA SE ADAPTA AL CONTENEDOR.
+ *
+ * EL CANVAS SIEMPRE OCUPA EL 100% DEL CONTENEDOR.
+ *
+ * EL HEXÁGONO PUEDE CRECER VISUALMENTE PERO NUNCA
+ * SUPERA LOS LÍMITES DEL CANVAS.
  * ==========================================================
  */
 
@@ -22,6 +29,19 @@ export default class BaseHexagonal3D {
         this.base = null;
         this.superficie = null;
         this.borde = null;
+        this.anillo = null;
+        this.centro = null;
+
+        this.resizeObserver = null;
+
+        /*
+         * Factor visual del hexágono.
+         *
+         * Aumentamos considerablemente el tamaño respecto
+         * a la versión anterior, pero el cálculo final
+         * siempre queda limitado por el contenedor.
+         */
+        this.factorTamano = 1.35;
 
     }
 
@@ -82,7 +102,8 @@ export default class BaseHexagonal3D {
 
         this.renderer.setSize(
             ancho,
-            alto
+            alto,
+            false
         );
 
         this.renderer.setClearColor(
@@ -99,12 +120,26 @@ export default class BaseHexagonal3D {
         this.renderer.toneMappingExposure =
             1.15;
 
+        this.renderer.domElement.style.width =
+            "100%";
+
+        this.renderer.domElement.style.height =
+            "100%";
+
+        this.renderer.domElement.style.display =
+            "block";
+
+        this.renderer.domElement.style.pointerEvents =
+            "none";
+
         this.contenedor.appendChild(
             this.renderer.domElement
         );
 
         this.crearLuces();
         this.crearBase();
+        this.configurarResize();
+        this.ajustarTamano();
 
         this.renderizar();
 
@@ -320,20 +355,20 @@ export default class BaseHexagonal3D {
 
             });
 
-        const anillo =
+        this.anillo =
             new THREE.Mesh(
                 geometriaAnillo,
                 materialAnillo
             );
 
-        anillo.rotation.y =
+        this.anillo.rotation.y =
             Math.PI / 6;
 
-        anillo.position.y =
+        this.anillo.position.y =
             0.43;
 
         this.scene.add(
-            anillo
+            this.anillo
         );
 
         const geometriaCentro =
@@ -359,20 +394,206 @@ export default class BaseHexagonal3D {
 
             });
 
-        const centro =
+        this.centro =
             new THREE.Mesh(
                 geometriaCentro,
                 materialCentro
             );
 
-        centro.rotation.y =
+        this.centro.rotation.y =
             Math.PI / 6;
 
-        centro.position.y =
+        this.centro.position.y =
             0.47;
 
         this.scene.add(
-            centro
+            this.centro
+        );
+
+    }
+
+    configurarResize() {
+
+        if (!this.contenedor) {
+            return;
+        }
+
+        this.resizeObserver =
+            new ResizeObserver(
+                () => {
+
+                    this.redimensionar();
+
+                }
+            );
+
+        this.resizeObserver.observe(
+            this.contenedor
+        );
+
+    }
+
+    redimensionar() {
+
+        if (
+            !this.renderer ||
+            !this.camera ||
+            !this.contenedor
+        ) {
+            return;
+        }
+
+        const ancho =
+            this.contenedor.clientWidth;
+
+        const alto =
+            this.contenedor.clientHeight;
+
+        if (
+            ancho <= 0 ||
+            alto <= 0
+        ) {
+            return;
+        }
+
+        this.camera.aspect =
+            ancho / alto;
+
+        this.camera.updateProjectionMatrix();
+
+        this.renderer.setSize(
+            ancho,
+            alto,
+            false
+        );
+
+        this.ajustarTamano();
+
+        this.renderizar();
+
+    }
+
+    ajustarTamano() {
+
+        if (
+            !this.scene ||
+            !this.contenedor
+        ) {
+            return;
+        }
+
+        const ancho =
+            this.contenedor.clientWidth;
+
+        const alto =
+            this.contenedor.clientHeight;
+
+        if (
+            ancho <= 0 ||
+            alto <= 0
+        ) {
+            return;
+        }
+
+        /*
+         * ==================================================
+         * ADAPTACIÓN AL CONTENEDOR
+         * ==================================================
+         *
+         * La geometría base tiene aproximadamente:
+         *
+         * ancho lógico = 4.7
+         * alto lógico  = 0.48
+         *
+         * No usamos directamente el tamaño del canvas
+         * porque Three.js trabaja en unidades 3D.
+         *
+         * El tamaño se regula mediante una escala
+         * calculada según la relación ancho/alto.
+         */
+
+        const relacion =
+            ancho / alto;
+
+        /*
+         * Para tableros anchos podemos aprovechar más
+         * el ancho disponible.
+         *
+         * Para tableros estrechos reducimos la escala
+         * para impedir que el hexágono se corte.
+         */
+
+        let escala;
+
+        if (relacion >= 1.8) {
+
+            escala =
+                this.factorTamano;
+
+        } else if (relacion >= 1.4) {
+
+            escala =
+                this.factorTamano * 0.94;
+
+        } else if (relacion >= 1.1) {
+
+            escala =
+                this.factorTamano * 0.84;
+
+        } else {
+
+            escala =
+                this.factorTamano * 0.72;
+
+        }
+
+        /*
+         * Límite absoluto de seguridad.
+         *
+         * Nunca dejamos que la geometría crezca
+         * indefinidamente aunque cambie el tamaño
+         * del contenedor.
+         */
+
+        escala =
+            Math.min(
+                escala,
+                1.35
+            );
+
+        /*
+         * Aplicamos exactamente la misma escala
+         * a todas las piezas del hexágono.
+         */
+
+        this.base.scale.set(
+            escala,
+            escala,
+            escala
+        );
+
+        this.superficie.scale.set(
+            escala,
+            escala,
+            escala
+        );
+
+        this.borde.scale.set(
+            escala,
+            escala,
+            escala
+        );
+
+        this.anillo.scale.set(
+            escala,
+            escala,
+            escala
+        );
+
+        this.centro.scale.set(
+            escala,
+            escala,
+            escala
         );
 
     }
@@ -395,6 +616,14 @@ export default class BaseHexagonal3D {
     }
 
     destruir() {
+
+        if (this.resizeObserver) {
+
+            this.resizeObserver.disconnect();
+
+            this.resizeObserver = null;
+
+        }
 
         if (!this.scene) {
             return;
@@ -451,9 +680,12 @@ export default class BaseHexagonal3D {
         this.scene = null;
         this.camera = null;
         this.renderer = null;
+
         this.base = null;
         this.superficie = null;
         this.borde = null;
+        this.anillo = null;
+        this.centro = null;
 
     }
 

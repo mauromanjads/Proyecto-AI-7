@@ -476,99 +476,27 @@ export default class TableroAgentes {
 
             /*
              * ==================================================
-             * EL CONTENEDOR COMPLETO NO ES CLICKEABLE.
+             * CLIC ÚNICO
+             * ==================================================
              *
-             * Esto evita que la zona de la botonera,
-             * etiqueta u otros elementos del agente
-             * interfieran con el clic.
-             * ==================================================
+             * TODO EL .tablero-agente ES LA ZONA CLICKEABLE.
+             *
+             * No se asignan eventos al personaje,
+             * al hexágono, al canvas ni a la etiqueta.
              */
 
-            tarjeta.style.pointerEvents =
-                "none";
+            tarjeta.addEventListener(
+                "click",
+                evento => {
 
-            /*
-             * ==================================================
-             * PERSONAJE
-             * ==================================================
-             */
-
-            const personaje =
-                tarjeta.querySelector(
-                    ".tablero-agente-personaje"
-                );
-
-            if (personaje) {
-
-                personaje.style.pointerEvents =
-                    "auto";
-
-                personaje.addEventListener(
-                    "click",
-                    evento => {
-
-                        evento.stopPropagation();
-
-                        this.activarDesdeZonaAgente(
-                            tarjeta,
-                            codigo,
-                            evento
-                        );
-
-                    }
-                );
-
-            }
-
-            /*
-             * ==================================================
-             * BASE
-             * ==================================================
-             */
-
-            const base =
-                tarjeta.querySelector(
-                    ".tablero-agente-base"
-                );
-
-            if (base) {
-
-                base.style.pointerEvents =
-                    "auto";
-
-                /*
-                 * La superficie contiene el canvas
-                 * generado por Three.js.
-                 */
-
-                const superficie =
-                    base.querySelector(
-                        ".tablero-agente-hex-superficie"
-                    );
-
-                if (superficie) {
-
-                    superficie.style.pointerEvents =
-                        "auto";
-
-                    superficie.addEventListener(
-                        "click",
-                        evento => {
-
-                            evento.stopPropagation();
-
-                            this.activarDesdeZonaAgente(
-                                tarjeta,
-                                codigo,
-                                evento
-                            );
-
-                        }
+                    this.activarDesdeZonaAgente(
+                        tarjeta,
+                        codigo,
+                        evento
                     );
 
                 }
-
-            }
+            );
 
             /*
              * ==================================================
