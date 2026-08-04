@@ -5,113 +5,40 @@
  * ----------------------------------------------------------
  * RED NEXUS
  *
- * Tubos 3D mediante Three.js.
- *
- * CADA PERSONAJE TIENE SU PROPIO TUBO.
- *
- * CADA TUBO TIENE 4 PUNTOS DE QUIEBRE MANUALES.
- *
- * ESTRUCTURA:
- *
- * PERSONAJE
- *     │
- *     ▼
- * PUNTO 1
- *     │
- *     ▼
- * PUNTO 2
- *     │
- *     ▼
- * PUNTO 3
- *     │
- *     ▼
- * PUNTO 4
- *     │
- *     ▼
- * NEXUS
+ * TUBOS SVG 3D - CRISTAL / METAL / CABLEADO INTERNO
  *
  * ==========================================================
  *
- * CONFIGURACIÓN MANUAL
+ * RESPONSABILIDADES:
  *
- * TODO EL POSICIONAMIENTO DE LOS TUBOS SE CONTROLA DESDE:
- *
- *     CONFIGURACION_TUBOS
- *
- * Cada personaje tiene:
- *
- *     punto1X
- *     punto1Y
- *
- *     punto2X
- *     punto2Y
- *
- *     punto3X
- *     punto3Y
- *
- *     punto4X
- *     punto4Y
+ * - Crear la capa SVG de conexiones.
+ * - Mantener las posiciones configuradas.
+ * - Conectar personajes con NEXUS.
+ * - Dibujar tubos transparentes con profundidad.
+ * - Dibujar cableado interno.
+ * - Dibujar codos 3D.
+ * - Dibujar anillos metálicos.
+ * - Gestionar estados normal / activo.
+ * - Adaptarse al tamaño del contenedor.
  *
  * ==========================================================
  *
  * IMPORTANTE:
  *
- * Los puntos son relativos al personaje.
+ * LA GEOMETRÍA DE LOS RECORRIDOS SE CONTROLA ÚNICAMENTE
+ * DESDE CONFIGURACION_TUBOS.
  *
- * X positivo = derecha
- * X negativo = izquierda
- *
- * Y positivo = abajo
- * Y negativo = arriba
- *
- * El NEXUS siempre es el destino final.
+ * NO modificar esta configuración desde la lógica visual.
  *
  * ==========================================================
  */
 
-import * as THREE from "three";
-
 
 /* ==========================================================
    CONFIGURACIÓN MANUAL DE LOS TUBOS
-   ==========================================================
-
-   CADA PERSONAJE ES INDEPENDIENTE.
-
-   Puedes modificar TODOS los puntos manualmente.
-
-   ----------------------------------------------------------
-
-   EJEMPLO:
-
-   punto1X: 100
-   punto1Y: 50
-
-   significa:
-
-   100 px a la derecha
-   50 px hacia abajo
-
-   ----------------------------------------------------------
-
-   Si quieres subirlo:
-
-   punto1Y: -50
-
-   ----------------------------------------------------------
-
-   Si quieres moverlo a la izquierda:
-
-   punto1X: -100
-
    ========================================================== */
 
 const CONFIGURACION_TUBOS = {
-
-
-    /* ======================================================
-       AI-01
-       ====================================================== */
 
     "AI-01": {
 
@@ -124,15 +51,10 @@ const CONFIGURACION_TUBOS = {
         punto3X: 790,
         punto3Y: 405,
 
-        punto4X:790,
+        punto4X: 790,
         punto4Y: 200
 
     },
-
-
-    /* ======================================================
-       AI-02
-       ====================================================== */
 
     "AI-02": {
 
@@ -150,11 +72,6 @@ const CONFIGURACION_TUBOS = {
 
     },
 
-
-    /* ======================================================
-       AI-03
-       ====================================================== */
-
     "AI-03": {
 
         punto1X: 100,
@@ -170,11 +87,6 @@ const CONFIGURACION_TUBOS = {
         punto4Y: 80
 
     },
-
-
-    /* ======================================================
-       AI-04
-       ====================================================== */
 
     "AI-04": {
 
@@ -192,11 +104,6 @@ const CONFIGURACION_TUBOS = {
 
     },
 
-
-    /* ======================================================
-       AI-05
-       ====================================================== */
-
     "AI-05": {
 
         punto1X: 100,
@@ -212,11 +119,6 @@ const CONFIGURACION_TUBOS = {
         punto4Y: -170
 
     },
-
-
-    /* ======================================================
-       AI-06
-       ====================================================== */
 
     "AI-06": {
 
@@ -234,23 +136,18 @@ const CONFIGURACION_TUBOS = {
 
     },
 
-
-    /* ======================================================
-       AI-07
-       ====================================================== */
-
     "AI-07": {
 
-        punto1X: 140,
+        punto1X: 100,
         punto1Y: 0,
 
-        punto2X: 140,
+        punto2X: 100,
         punto2Y: 0,
 
-        punto3X: 140,
+        punto3X: 100,
         punto3Y: -80,
 
-        punto4X: 140,
+        punto4X: 100,
         punto4Y: -80
 
     }
@@ -259,11 +156,27 @@ const CONFIGURACION_TUBOS = {
 
 
 /* ==========================================================
+   CÓDIGOS
+   ========================================================== */
+
+const CODIGOS = [
+
+    "AI-01",
+    "AI-02",
+    "AI-03",
+    "AI-04",
+    "AI-05",
+    "AI-06",
+    "AI-07"
+
+];
+
+
+/* ==========================================================
    CLASE TUBOS
    ========================================================== */
 
 export default class Tubos {
-
 
     constructor(
         tablero,
@@ -276,19 +189,19 @@ export default class Tubos {
 
         this.red = null;
 
-        this.scene = null;
-
-        this.camera = null;
-
-        this.renderer = null;
+        this.svg = null;
 
         this.tubos = new Map();
 
         this.conectores = new Map();
 
+        this.resizeObserver = null;
+
         this.resizeHandler = null;
 
-        this.animacion = null;
+        this.id = `nexus-${Date.now()}-${Math.random()
+            .toString(36)
+            .substring(2, 8)}`;
 
     }
 
@@ -309,12 +222,10 @@ export default class Tubos {
 
         }
 
-
         this.red =
             this.tablero.querySelector(
                 ".nexus-red"
             );
-
 
         if (!this.red) {
 
@@ -326,198 +237,707 @@ export default class Tubos {
 
         }
 
+        this.crearSVG();
 
-        this.crearEscena();
+        this.crearTubos();
 
+        this.resizeObserver =
+            new ResizeObserver(
+                () => this.actualizar()
+            );
 
-        this.resizeHandler =
-            () => this.actualizar();
-
-
-        window.addEventListener(
-            "resize",
-            this.resizeHandler
+        this.resizeObserver.observe(
+            this.red
         );
-
 
         requestAnimationFrame(
-            () => {
-
-                this.actualizar();
-
-            }
+            () => this.actualizar()
         );
-
-
-        this.animar();
 
     }
 
 
     /* ======================================================
-       ESCENA THREE.JS
+       CREAR SVG
        ====================================================== */
 
-    crearEscena() {
+    crearSVG() {
 
-        this.red.innerHTML = "";
-
-
-        this.scene =
-            new THREE.Scene();
-
-
-        /* ==================================================
-           CÁMARA
-           ================================================== */
-
-        this.camera =
-            new THREE.OrthographicCamera(
-                -600,
-                600,
-                350,
-                -350,
-                0.1,
-                2000
+        const anterior =
+            this.red.querySelector(
+                ".nexus-red-svg"
             );
 
+        if (anterior) {
 
-        this.camera.position.set(
-            0,
-            0,
-            1000
+            anterior.remove();
+
+        }
+
+        this.svg =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "svg"
+            );
+
+        this.svg.classList.add(
+            "nexus-red-svg"
         );
 
-
-        this.camera.lookAt(
-            0,
-            0,
-            0
+        this.svg.setAttribute(
+            "preserveAspectRatio",
+            "none"
         );
 
-
-        /* ==================================================
-           RENDERER
-           ================================================== */
-
-        this.renderer =
-            new THREE.WebGLRenderer({
-
-                alpha: true,
-
-                antialias: true,
-
-                powerPreference:
-                    "high-performance"
-
-            });
-
-
-        this.renderer.setPixelRatio(
-            Math.min(
-                window.devicePixelRatio || 1,
-                2
-            )
-        );
-
-
-        this.renderer.setClearColor(
-            0x000000,
-            0
-        );
-
+        this.crearDefs();
 
         this.red.appendChild(
-            this.renderer.domElement
+            this.svg
         );
 
-
-        this.renderer.domElement.style.position =
-            "absolute";
+    }
 
 
-        this.renderer.domElement.style.inset =
-            "0";
+    /* ======================================================
+       DEFINICIONES SVG
+       ====================================================== */
 
+    crearDefs() {
 
-        this.renderer.domElement.style.width =
-            "100%";
-
-
-        this.renderer.domElement.style.height =
-            "100%";
-
-
-        this.renderer.domElement.style.display =
-            "block";
-
-
-        /*
-         * Three.js solamente dibuja.
-         *
-         * Los elementos HTML continúan
-         * recibiendo los clics.
-         */
-
-        this.renderer.domElement.style.pointerEvents =
-            "none";
+        const defs =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "defs"
+            );
 
 
         /* ==================================================
-           LUCES
+           GRADIENTE DEL CRISTAL
            ================================================== */
 
-        const ambiente =
-            new THREE.AmbientLight(
-                0xffffff,
-                1.5
+        const cristal =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "linearGradient"
             );
 
+        cristal.id =
+            "nexusCristal";
 
-        this.scene.add(
-            ambiente
+        cristal.setAttribute(
+            "x1",
+            "0%"
+        );
+
+        cristal.setAttribute(
+            "y1",
+            "0%"
+        );
+
+        cristal.setAttribute(
+            "x2",
+            "0%"
+        );
+
+        cristal.setAttribute(
+            "y2",
+            "100%"
+        );
+
+        this.agregarStop(
+            cristal,
+            "0%",
+            "#d9fbff",
+            ".72"
+        );
+
+        this.agregarStop(
+            cristal,
+            "10%",
+            "#64c5dd",
+            ".42"
+        );
+
+        this.agregarStop(
+            cristal,
+            "27%",
+            "#16495c",
+            ".30"
+        );
+
+        this.agregarStop(
+            cristal,
+            "47%",
+            "#071e2b",
+            ".18"
+        );
+
+        this.agregarStop(
+            cristal,
+            "58%",
+            "#65d9ef",
+            ".30"
+        );
+
+        this.agregarStop(
+            cristal,
+            "78%",
+            "#123b4a",
+            ".40"
+        );
+
+        this.agregarStop(
+            cristal,
+            "94%",
+            "#07131c",
+            ".78"
+        );
+
+        this.agregarStop(
+            cristal,
+            "100%",
+            "#c8f8ff",
+            ".50"
+        );
+
+        defs.appendChild(
+            cristal
         );
 
 
-        const luz =
-            new THREE.DirectionalLight(
-                0xffffff,
-                2.5
+        /* ==================================================
+           GRADIENTE DEL BORDE
+           ================================================== */
+
+        const borde =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "linearGradient"
             );
 
+        borde.id =
+            "nexusCristalBorde";
 
-        luz.position.set(
-            -300,
-            500,
-            800
+        borde.setAttribute(
+            "x1",
+            "0%"
+        );
+
+        borde.setAttribute(
+            "y1",
+            "0%"
+        );
+
+        borde.setAttribute(
+            "x2",
+            "0%"
+        );
+
+        borde.setAttribute(
+            "y2",
+            "100%"
+        );
+
+        this.agregarStop(
+            borde,
+            "0%",
+            "#effeff",
+            ".95"
+        );
+
+        this.agregarStop(
+            borde,
+            "14%",
+            "#55cce8",
+            ".82"
+        );
+
+        this.agregarStop(
+            borde,
+            "40%",
+            "#0c718e",
+            ".75"
+        );
+
+        this.agregarStop(
+            borde,
+            "55%",
+            "#b8f5ff",
+            ".92"
+        );
+
+        this.agregarStop(
+            borde,
+            "78%",
+            "#17647c",
+            ".78"
+        );
+
+        this.agregarStop(
+            borde,
+            "100%",
+            "#d8fbff",
+            ".90"
+        );
+
+        defs.appendChild(
+            borde
         );
 
 
-        this.scene.add(
-            luz
-        );
+        /* ==================================================
+           GRADIENTE DEL CABLE AZUL
+           ================================================== */
 
-
-        const luzRelleno =
-            new THREE.DirectionalLight(
-                0xff5555,
-                0.8
+        const cable =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "linearGradient"
             );
 
+        cable.id =
+            "nexusCable";
 
-        luzRelleno.position.set(
-            400,
-            -300,
-            500
+        cable.setAttribute(
+            "x1",
+            "0%"
+        );
+
+        cable.setAttribute(
+            "y1",
+            "0%"
+        );
+
+        cable.setAttribute(
+            "x2",
+            "100%"
+        );
+
+        cable.setAttribute(
+            "y2",
+            "0%"
+        );
+
+        this.agregarStop(
+            cable,
+            "0%",
+            "#007ea3",
+            ".75"
+        );
+
+        this.agregarStop(
+            cable,
+            "50%",
+            "#75f3ff",
+            "1"
+        );
+
+        this.agregarStop(
+            cable,
+            "100%",
+            "#009cc5",
+            ".75"
+        );
+
+        defs.appendChild(
+            cable
         );
 
 
-        this.scene.add(
-            luzRelleno
+        /* ==================================================
+           GRADIENTE DEL CABLE ROJO
+           ================================================== */
+
+        const cableRojo =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "linearGradient"
+            );
+
+        cableRojo.id =
+            "nexusCableRojo";
+
+        cableRojo.setAttribute(
+            "x1",
+            "0%"
+        );
+
+        cableRojo.setAttribute(
+            "x2",
+            "100%"
+        );
+
+        this.agregarStop(
+            cableRojo,
+            "0%",
+            "#6b101b",
+            ".7"
+        );
+
+        this.agregarStop(
+            cableRojo,
+            "50%",
+            "#ff405d",
+            "1"
+        );
+
+        this.agregarStop(
+            cableRojo,
+            "100%",
+            "#7f1423",
+            ".7"
+        );
+
+        defs.appendChild(
+            cableRojo
         );
 
 
-        this.crearTubos3D();
+        /* ==================================================
+           GRADIENTE METÁLICO DE LOS CODOS
+           ================================================== */
+
+        const metal =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "radialGradient"
+            );
+
+        metal.id =
+            "nexusMetal";
+
+        metal.setAttribute(
+            "cx",
+            "35%"
+        );
+
+        metal.setAttribute(
+            "cy",
+            "30%"
+        );
+
+        metal.setAttribute(
+            "r",
+            "75%"
+        );
+
+        this.agregarStop(
+            metal,
+            "0%",
+            "#effeff",
+            "1"
+        );
+
+        this.agregarStop(
+            metal,
+            "18%",
+            "#a9eaf5",
+            ".95"
+        );
+
+        this.agregarStop(
+            metal,
+            "42%",
+            "#33788b",
+            ".95"
+        );
+
+        this.agregarStop(
+            metal,
+            "70%",
+            "#092431",
+            "1"
+        );
+
+        this.agregarStop(
+            metal,
+            "100%",
+            "#02080d",
+            "1"
+        );
+
+        defs.appendChild(
+            metal
+        );
+
+
+        /* ==================================================
+           GRADIENTE DEL CENTRO DEL CODO
+           ================================================== */
+
+        const nucleoCodo =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "radialGradient"
+            );
+
+        nucleoCodo.id =
+            "nexusCodoNucleo";
+
+        this.agregarStop(
+            nucleoCodo,
+            "0%",
+            "#efffff",
+            "1"
+        );
+
+        this.agregarStop(
+            nucleoCodo,
+            "22%",
+            "#66efff",
+            "1"
+        );
+
+        this.agregarStop(
+            nucleoCodo,
+            "52%",
+            "#087b9b",
+            ".95"
+        );
+
+        this.agregarStop(
+            nucleoCodo,
+            "100%",
+            "#031923",
+            "1"
+        );
+
+        defs.appendChild(
+            nucleoCodo
+        );
+
+
+        /* ==================================================
+           GRADIENTE ACTIVO
+           ================================================== */
+
+        const activo =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "linearGradient"
+            );
+
+        activo.id =
+            "nexusTuboActivo";
+
+        activo.setAttribute(
+            "x1",
+            "0%"
+        );
+
+        activo.setAttribute(
+            "y1",
+            "0%"
+        );
+
+        activo.setAttribute(
+            "x2",
+            "100%"
+        );
+
+        activo.setAttribute(
+            "y2",
+            "0%"
+        );
+
+        this.agregarStop(
+            activo,
+            "0%",
+            "#168ba6",
+            ".75"
+        );
+
+        this.agregarStop(
+            activo,
+            "40%",
+            "#dfffff",
+            "1"
+        );
+
+        this.agregarStop(
+            activo,
+            "65%",
+            "#67e8f9",
+            "1"
+        );
+
+        this.agregarStop(
+            activo,
+            "100%",
+            "#0ea5c6",
+            ".75"
+        );
+
+        defs.appendChild(
+            activo
+        );
+
+
+        /* ==================================================
+           FILTRO DE PROFUNDIDAD
+           ================================================== */
+
+        const sombra =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "filter"
+            );
+
+        sombra.id =
+            "nexusTuboSombra";
+
+        sombra.setAttribute(
+            "x",
+            "-30%"
+        );
+
+        sombra.setAttribute(
+            "y",
+            "-30%"
+        );
+
+        sombra.setAttribute(
+            "width",
+            "160%"
+        );
+
+        sombra.setAttribute(
+            "height",
+            "160%"
+        );
+
+        const blur =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "feGaussianBlur"
+            );
+
+        blur.setAttribute(
+            "stdDeviation",
+            "2.2"
+        );
+
+        blur.setAttribute(
+            "result",
+            "blur"
+        );
+
+        const offset =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "feOffset"
+            );
+
+        offset.setAttribute(
+            "dx",
+            "2"
+        );
+
+        offset.setAttribute(
+            "dy",
+            "3"
+        );
+
+        offset.setAttribute(
+            "result",
+            "offset"
+        );
+
+        const merge =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "feMerge"
+            );
+
+        const mergeNode1 =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "feMergeNode"
+            );
+
+        mergeNode1.setAttribute(
+            "in",
+            "offset"
+        );
+
+        const mergeNode2 =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "feMergeNode"
+            );
+
+        mergeNode2.setAttribute(
+            "in",
+            "SourceGraphic"
+        );
+
+        merge.appendChild(
+            mergeNode1
+        );
+
+        merge.appendChild(
+            mergeNode2
+        );
+
+        sombra.appendChild(
+            blur
+        );
+
+        sombra.appendChild(
+            offset
+        );
+
+        sombra.appendChild(
+            merge
+        );
+
+        defs.appendChild(
+            sombra
+        );
+
+
+        this.svg.appendChild(
+            defs
+        );
+
+    }
+
+
+    /* ======================================================
+       AGREGAR STOP
+       ====================================================== */
+
+    agregarStop(
+        gradiente,
+        offset,
+        color,
+        opacity
+    ) {
+
+        const stop =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "stop"
+            );
+
+        stop.setAttribute(
+            "offset",
+            offset
+        );
+
+        stop.setAttribute(
+            "stop-color",
+            color
+        );
+
+        stop.setAttribute(
+            "stop-opacity",
+            opacity
+        );
+
+        gradiente.appendChild(
+            stop
+        );
 
     }
 
@@ -526,95 +946,29 @@ export default class Tubos {
        CREAR TUBOS
        ====================================================== */
 
-    crearTubos3D() {
+    crearTubos() {
 
         this.tubos.clear();
 
         this.conectores.clear();
 
-
-        const codigos = [
-
-            "AI-01",
-            "AI-02",
-            "AI-03",
-            "AI-04",
-            "AI-05",
-            "AI-06",
-            "AI-07"
-
-        ];
-
-
-        codigos.forEach(
+        CODIGOS.forEach(
             codigo => {
 
-                const tubo =
-                    this.crearTubo();
-
-
-                tubo.userData.codigo =
-                    codigo;
-
-
-                tubo.userData.radio =
-                    6;
-
-
-                /*
-                 * Guardar configuración
-                 * específica del personaje.
-                 */
-
-                tubo.userData.configuracion =
-                    CONFIGURACION_TUBOS[codigo];
-
-
-                /*
-                 * Los cinco segmentos:
-                 *
-                 * 1. personaje → punto1
-                 * 2. punto1 → punto2
-                 * 3. punto2 → punto3
-                 * 4. punto3 → punto4
-                 * 5. punto4 → nexus
-                 */
-
-                tubo.userData.segmentos = {
-
-                    personajePunto1: null,
-
-                    punto1Punto2: null,
-
-                    punto2Punto3: null,
-
-                    punto3Punto4: null,
-
-                    punto4Nexus: null
-
-                };
-
+                const grupo =
+                    this.crearGrupoTubo(
+                        codigo
+                    );
 
                 this.tubos.set(
                     codigo,
-                    tubo
+                    grupo
                 );
-
-
-                /*
-                 * Conector del personaje.
-                 */
 
                 const conector =
                     this.crearConector(
-                        0,
-                        0
+                        codigo
                     );
-
-
-                conector.userData.codigo =
-                    codigo;
-
 
                 this.conectores.set(
                     codigo,
@@ -631,57 +985,222 @@ export default class Tubos {
        CREAR GRUPO DE TUBO
        ====================================================== */
 
-    crearTubo() {
+    crearGrupoTubo(
+        codigo
+    ) {
 
-        const material =
-            new THREE.MeshStandardMaterial({
+        const grupo =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "g"
+            );
 
-                color:
-                    0x4dd9ff,
+        grupo.classList.add(
+            "nexus-tubo-grupo"
+        );
 
-                emissive:
-                    0x09364a,
-
-                emissiveIntensity:
-                    1.1,
-
-                metalness:
-                    0.92,
-
-                roughness:
-                    0.18,
-
-                transparent:
-                    true,
-
-                opacity:
-                    0.82
-
-            });
+        grupo.dataset.codigo =
+            codigo;
 
 
-        const tubo =
-            new THREE.Group();
+        /* ==================================================
+           HALO
+           ================================================== */
+
+        const halo =
+            this.crearPath(
+                "nexus-tubo-halo"
+            );
 
 
-        tubo.userData.material =
-            material;
+        /* ==================================================
+           SOMBRA
+           ================================================== */
+
+        const sombra =
+            this.crearPath(
+                "nexus-tubo-sombra"
+            );
 
 
-        /*
-         * Colocar detrás de los personajes.
-         */
+        /* ==================================================
+           CRISTAL EXTERIOR
+           ================================================== */
 
-        tubo.position.z =
-            -999;
+        const cristal =
+            this.crearPath(
+                "nexus-tubo-cristal"
+            );
 
 
-        this.scene.add(
-            tubo
+        /* ==================================================
+           BORDE
+           ================================================== */
+
+        const borde =
+            this.crearPath(
+                "nexus-tubo-borde"
+            );
+
+
+        /* ==================================================
+           CABLE INTERNO AZUL
+           ================================================== */
+
+        const cableAzul =
+            this.crearPath(
+                "nexus-tubo-cable-azul"
+            );
+
+
+        /* ==================================================
+           CABLE INTERNO ROJO
+           ================================================== */
+
+        const cableRojo =
+            this.crearPath(
+                "nexus-tubo-cable-rojo"
+            );
+
+
+        /* ==================================================
+           NÚCLEO
+           ================================================== */
+
+        const nucleo =
+            this.crearPath(
+                "nexus-tubo-nucleo"
+            );
+
+
+        /* ==================================================
+           REFLEJO SUPERIOR
+           ================================================== */
+
+        const reflejo =
+            this.crearPath(
+                "nexus-tubo-reflejo"
+            );
+
+
+        grupo.userData = {
+
+            codigo,
+
+            halo,
+
+            sombra,
+
+            cristal,
+
+            borde,
+
+            cableAzul,
+
+            cableRojo,
+
+            nucleo,
+
+            reflejo,
+
+            puntos: [],
+
+            segmentos: {
+
+                personajePunto1: null,
+
+                punto1Punto2: null,
+
+                punto2Punto3: null,
+
+                punto3Punto4: null,
+
+                punto4Nexus: null
+
+            },
+
+            codos: []
+
+        };
+
+
+        grupo.appendChild(
+            halo
+        );
+
+        grupo.appendChild(
+            sombra
+        );
+
+        grupo.appendChild(
+            cristal
+        );
+
+        grupo.appendChild(
+            borde
+        );
+
+        grupo.appendChild(
+            cableAzul
+        );
+
+        grupo.appendChild(
+            cableRojo
+        );
+
+        grupo.appendChild(
+            nucleo
+        );
+
+        grupo.appendChild(
+            reflejo
         );
 
 
-        return tubo;
+        this.svg.appendChild(
+            grupo
+        );
+
+
+        return grupo;
+
+    }
+
+
+    /* ======================================================
+       CREAR PATH
+       ====================================================== */
+
+    crearPath(
+        clase
+    ) {
+
+        const path =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "path"
+            );
+
+        path.classList.add(
+            clase
+        );
+
+        path.setAttribute(
+            "fill",
+            "none"
+        );
+
+        path.setAttribute(
+            "stroke-linecap",
+            "round"
+        );
+
+        path.setAttribute(
+            "stroke-linejoin",
+            "round"
+        );
+
+        return path;
 
     }
 
@@ -691,124 +1210,129 @@ export default class Tubos {
        ====================================================== */
 
     crearConector(
-        x,
-        y
+        codigo
     ) {
 
-        const geometria =
-            new THREE.SphereGeometry(
-                10,
-                20,
-                20
+        const grupo =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "g"
             );
 
+        grupo.classList.add(
+            "nexus-conector-grupo"
+        );
 
-        const material =
-            new THREE.MeshStandardMaterial({
-
-                color:
-                    0x7ce8ff,
-
-                metalness:
-                    0.95,
-
-                roughness:
-                    0.14,
-
-                emissive:
-                    0x0a516d,
-
-                emissiveIntensity:
-                    0.55
-
-            });
+        grupo.dataset.codigo =
+            codigo;
 
 
-        const conector =
-            new THREE.Mesh(
-                geometria,
-                material
+        const sombra =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "circle"
             );
 
-
-        const posicion =
-            this.convertirCoordenada(
-                x,
-                y
-            );
-
-
-        conector.position.copy(
-            posicion
+        sombra.classList.add(
+            "nexus-conector-sombra"
         );
 
 
-        this.scene.add(
-            conector
+        const halo =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "circle"
+            );
+
+        halo.classList.add(
+            "nexus-conector-halo"
         );
 
 
-        return conector;
+        const cuerpo =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "circle"
+            );
+
+        cuerpo.classList.add(
+            "nexus-conector"
+        );
+
+
+        const aro =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "circle"
+            );
+
+        aro.classList.add(
+            "nexus-conector-aro"
+        );
+
+
+        const nucleo =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "circle"
+            );
+
+        nucleo.classList.add(
+            "nexus-conector-nucleo"
+        );
+
+
+        grupo.appendChild(
+            sombra
+        );
+
+        grupo.appendChild(
+            halo
+        );
+
+        grupo.appendChild(
+            cuerpo
+        );
+
+        grupo.appendChild(
+            aro
+        );
+
+        grupo.appendChild(
+            nucleo
+        );
+
+
+        this.svg.appendChild(
+            grupo
+        );
+
+
+        return grupo;
 
     }
 
 
     /* ======================================================
-       CONVERTIR COORDENADAS
-       ====================================================== */
-
-    convertirCoordenada(
-        x,
-        y
-    ) {
-
-        const ancho =
-            this.red?.clientWidth ||
-            1200;
-
-
-        const alto =
-            this.red?.clientHeight ||
-            700;
-
-
-        return new THREE.Vector3(
-
-            x - ancho / 2,
-
-            alto / 2 - y,
-
-            0
-
-        );
-
-    }
-
-
-    /* ======================================================
-       RESPONSIVE
+       ACTUALIZAR
        ====================================================== */
 
     actualizar() {
 
         if (
-            !this.renderer ||
             !this.red ||
-            !this.camera
+            !this.svg
         ) {
 
             return;
 
         }
 
-
         const ancho =
             this.red.clientWidth;
 
-
         const alto =
             this.red.clientHeight;
-
 
         if (
             ancho <= 0 ||
@@ -819,32 +1343,20 @@ export default class Tubos {
 
         }
 
-
-        this.renderer.setSize(
-            ancho,
-            alto,
-            false
+        this.svg.setAttribute(
+            "viewBox",
+            `0 0 ${ancho} ${alto}`
         );
 
+        this.svg.setAttribute(
+            "width",
+            ancho
+        );
 
-        this.camera.left =
-            -ancho / 2;
-
-
-        this.camera.right =
-            ancho / 2;
-
-
-        this.camera.top =
-            alto / 2;
-
-
-        this.camera.bottom =
-            -alto / 2;
-
-
-        this.camera.updateProjectionMatrix();
-
+        this.svg.setAttribute(
+            "height",
+            alto
+        );
 
         this.ajustarAHexagonos();
 
@@ -852,21 +1364,13 @@ export default class Tubos {
 
 
     /* ======================================================
-       PEGAR TUBOS A PERSONAJES
+       AJUSTAR A PERSONAJES Y NEXUS
        ====================================================== */
 
     ajustarAHexagonos() {
 
-        if (!this.tablero) {
-
-            return;
-
-        }
-
-
         const rectRed =
             this.red.getBoundingClientRect();
-
 
         if (
             rectRed.width <= 0 ||
@@ -878,15 +1382,10 @@ export default class Tubos {
         }
 
 
-        /* ==================================================
-           NEXUS
-           ================================================== */
-
         const nucleo =
             this.tablero.querySelector(
                 ".nexus-nucleo-centro"
             );
-
 
         if (!nucleo) {
 
@@ -898,7 +1397,6 @@ export default class Tubos {
         const rectNucleo =
             nucleo.getBoundingClientRect();
 
-
         if (
             rectNucleo.width <= 0 ||
             rectNucleo.height <= 0
@@ -909,25 +1407,16 @@ export default class Tubos {
         }
 
 
-        /*
-         * Centro del NEXUS.
-         */
-
         const destinoX =
             rectNucleo.left -
             rectRed.left +
             rectNucleo.width / 2;
-
 
         const destinoY =
             rectNucleo.top -
             rectRed.top +
             rectNucleo.height / 2;
 
-
-        /* ==================================================
-           PROCESAR CADA PERSONAJE
-           ================================================== */
 
         this.tubos.forEach(
             (tubo, codigo) => {
@@ -937,17 +1426,12 @@ export default class Tubos {
                         `.tablero-agente[data-agente="${codigo}"]`
                     );
 
-
                 if (!agente) {
 
                     return;
 
                 }
 
-
-                /*
-                 * Buscar base del personaje.
-                 */
 
                 const origenElemento =
                     agente.querySelector(
@@ -956,7 +1440,6 @@ export default class Tubos {
                     agente.querySelector(
                         ".tablero-agente-centro"
                     );
-
 
                 if (!origenElemento) {
 
@@ -969,15 +1452,10 @@ export default class Tubos {
                     origenElemento.getBoundingClientRect();
 
 
-                /*
-                 * Centro del personaje.
-                 */
-
                 const origenX =
                     rect.left -
                     rectRed.left +
                     rect.width / 2;
-
 
                 const origenY =
                     rect.top -
@@ -985,13 +1463,8 @@ export default class Tubos {
                     rect.height / 2;
 
 
-                /*
-                 * Configuración del personaje.
-                 */
-
                 const config =
-                    tubo.userData.configuracion;
-
+                    CONFIGURACION_TUBOS[codigo];
 
                 if (!config) {
 
@@ -999,10 +1472,6 @@ export default class Tubos {
 
                 }
 
-
-                /*
-                 * Construir la ruta.
-                 */
 
                 this.reposicionarTubo(
 
@@ -1019,33 +1488,45 @@ export default class Tubos {
                 );
 
 
-                /*
-                 * Conector del personaje.
-                 */
+                this.posicionarConector(
 
-                const conector =
-                    this.conectores.get(
-                        codigo
-                    );
+                    codigo,
 
+                    origenX,
+                    origenY
 
-                if (conector) {
-
-                    conector.position.copy(
-
-                        this.convertirCoordenada(
-
-                            origenX,
-
-                            origenY
-
-                        )
-
-                    );
-
-                }
+                );
 
             }
+        );
+
+    }
+
+
+    /* ======================================================
+       POSICIONAR CONECTOR
+       ====================================================== */
+
+    posicionarConector(
+        codigo,
+        x,
+        y
+    ) {
+
+        const conector =
+            this.conectores.get(
+                codigo
+            );
+
+        if (!conector) {
+
+            return;
+
+        }
+
+        conector.setAttribute(
+            "transform",
+            `translate(${x} ${y})`
         );
 
     }
@@ -1069,501 +1550,550 @@ export default class Tubos {
 
     ) {
 
-        /*
-         * ==================================================
-         * PUNTO INICIAL
-         *
-         * CENTRO DEL PERSONAJE
-         * ==================================================
-         */
+        const punto1 = {
 
-        const inicio =
-            this.convertirCoordenada(
-                x1,
-                y1
-            );
-
-
-        /*
-         * ==================================================
-         * PUNTO FINAL
-         *
-         * CENTRO DEL NEXUS
-         * ==================================================
-         */
-
-        const fin =
-            this.convertirCoordenada(
-                x2,
-                y2
-            );
-
-
-        const radio =
-            tubo.userData.radio || 6;
-
-
-        /* ==================================================
-           PUNTO 1
-           ================================================== */
-
-        const punto1 =
-            new THREE.Vector3(
-
-                inicio.x +
+            x:
+                x1 +
                 (config.punto1X || 0),
 
-                inicio.y -
-                (config.punto1Y || 0),
-
-                0
-
-            );
-
-
-        /* ==================================================
-           PUNTO 2
-           ================================================== */
-
-        const punto2 =
-            new THREE.Vector3(
-
-                inicio.x +
-                (config.punto2X || 0),
-
-                inicio.y -
-                (config.punto2Y || 0),
-
-                0
-
-            );
-
-
-        /* ==================================================
-           PUNTO 3
-           ================================================== */
-
-        const punto3 =
-            new THREE.Vector3(
-
-                inicio.x +
-                (config.punto3X || 0),
-
-                inicio.y -
-                (config.punto3Y || 0),
-
-                0
-
-            );
-
-
-        /* ==================================================
-           PUNTO 4
-           ================================================== */
-
-        const punto4 =
-            new THREE.Vector3(
-
-                inicio.x +
-                (config.punto4X || 0),
-
-                inicio.y -
-                (config.punto4Y || 0),
-
-                0
-
-            );
-
-
-        /* ==================================================
-           LIMPIAR TUBO
-           ================================================== */
-
-        tubo.clear();
-
-
-        tubo.userData.segmentos = {
-
-            personajePunto1: null,
-
-            punto1Punto2: null,
-
-            punto2Punto3: null,
-
-            punto3Punto4: null,
-
-            punto4Nexus: null
+            y:
+                y1 +
+                (config.punto1Y || 0)
 
         };
 
 
-        /* ==================================================
-           TRAMO 1
-           
-           PERSONAJE → PUNTO 1
-           ================================================== */
+        const punto2 = {
 
-        const tramo1 =
-            this.crearSegmentoTubo(
+            x:
+                x1 +
+                (config.punto2X || 0),
 
-                inicio,
+            y:
+                y1 +
+                (config.punto2Y || 0)
 
-                punto1,
+        };
 
-                radio
 
+        const punto3 = {
+
+            x:
+                x1 +
+                (config.punto3X || 0),
+
+            y:
+                y1 +
+                (config.punto3Y || 0)
+
+        };
+
+
+        const punto4 = {
+
+            x:
+                x1 +
+                (config.punto4X || 0),
+
+            y:
+                y1 +
+                (config.punto4Y || 0)
+
+        };
+
+
+        const puntos = [
+
+            {
+                x: x1,
+                y: y1
+            },
+
+            punto1,
+
+            punto2,
+
+            punto3,
+
+            punto4,
+
+            {
+                x: x2,
+                y: y2
+            }
+
+        ];
+
+
+        tubo.userData.puntos =
+            puntos;
+
+
+        const d =
+            this.crearPathData(
+                puntos
             );
 
 
-        tramo1.userData.codigo =
-            tubo.userData.codigo;
+        tubo.userData.halo.setAttribute(
+            "d",
+            d
+        );
 
+        tubo.userData.sombra.setAttribute(
+            "d",
+            d
+        );
 
-        tramo1.userData.tipo =
-            "personaje-punto1";
+        tubo.userData.cristal.setAttribute(
+            "d",
+            d
+        );
 
-
-        tubo.userData.segmentos.personajePunto1 =
-            tramo1;
-
-
-        tubo.add(
-            tramo1
+        tubo.userData.borde.setAttribute(
+            "d",
+            d
         );
 
 
-        /* ==================================================
-           TRAMO 2
-           
-           PUNTO 1 → PUNTO 2
-           ================================================== */
+        /*
+         * Cableado interno.
+         *
+         * Se utilizan pequeños desplazamientos
+         * para que los cables parezcan estar
+         * dentro del cristal.
+         */
 
-        const tramo2 =
-            this.crearSegmentoTubo(
-
-                punto1,
-
-                punto2,
-
-                radio
-
-            );
-
-
-        tramo2.userData.codigo =
-            tubo.userData.codigo;
-
-
-        tramo2.userData.tipo =
-            "punto1-punto2";
-
-
-        tubo.userData.segmentos.punto1Punto2 =
-            tramo2;
-
-
-        tubo.add(
-            tramo2
+        tubo.userData.cableAzul.setAttribute(
+            "d",
+            this.crearPathDesplazado(
+                puntos,
+                -2.2,
+                1
+            )
         );
 
 
-        /* ==================================================
-           TRAMO 3
-           
-           PUNTO 2 → PUNTO 3
-           ================================================== */
-
-        const tramo3 =
-            this.crearSegmentoTubo(
-
-                punto2,
-
-                punto3,
-
-                radio
-
-            );
-
-
-        tramo3.userData.codigo =
-            tubo.userData.codigo;
-
-
-        tramo3.userData.tipo =
-            "punto2-punto3";
-
-
-        tubo.userData.segmentos.punto2Punto3 =
-            tramo3;
-
-
-        tubo.add(
-            tramo3
+        tubo.userData.cableRojo.setAttribute(
+            "d",
+            this.crearPathDesplazado(
+                puntos,
+                2,
+                -1
+            )
         );
 
 
-        /* ==================================================
-           TRAMO 4
-           
-           PUNTO 3 → PUNTO 4
-           ================================================== */
-
-        const tramo4 =
-            this.crearSegmentoTubo(
-
-                punto3,
-
-                punto4,
-
-                radio
-
-            );
-
-
-        tramo4.userData.codigo =
-            tubo.userData.codigo;
-
-
-        tramo4.userData.tipo =
-            "punto3-punto4";
-
-
-        tubo.userData.segmentos.punto3Punto4 =
-            tramo4;
-
-
-        tubo.add(
-            tramo4
+        tubo.userData.nucleo.setAttribute(
+            "d",
+            this.crearPathDesplazado(
+                puntos,
+                0,
+                0
+            )
         );
 
 
-        /* ==================================================
-           TRAMO 5
-           
-           PUNTO 4 → NEXUS
-           ================================================== */
+        tubo.userData.reflejo.setAttribute(
+            "d",
+            this.crearPathDesplazado(
+                puntos,
+                -4,
+                -2
+            )
+        );
 
-        const tramo5 =
-            this.crearSegmentoTubo(
 
-                punto4,
-
-                fin,
-
-                radio
-
+        tubo.userData.segmentos =
+            this.crearReferenciasSegmentos(
+                puntos
             );
 
 
-        tramo5.userData.codigo =
-            tubo.userData.codigo;
-
-
-        tramo5.userData.tipo =
-            "punto4-nexus";
-
-
-        tubo.userData.segmentos.punto4Nexus =
-            tramo5;
-
-
-        tubo.add(
-            tramo5
+        this.crearCodos(
+            tubo,
+            puntos
         );
 
     }
 
 
     /* ======================================================
-       CREAR SEGMENTO DE TUBO
+       PATH DESPLAZADO
        ====================================================== */
 
-    crearSegmentoTubo(
-
-        desde,
-
-        hasta,
-
-        radio
-
+    crearPathDesplazado(
+        puntos,
+        offsetX,
+        offsetY
     ) {
 
-        const delta =
-            new THREE.Vector3(
-
-                hasta.x - desde.x,
-
-                hasta.y - desde.y,
-
-                0
-
-            );
-
-
-        const longitud =
-            Math.max(
-                delta.length(),
-                1
-            );
-
-
-        /*
-         * Cilindro.
-         */
-
-        const geometria =
-            new THREE.CylinderGeometry(
-
-                radio,
-
-                radio,
-
-                longitud,
-
-                18,
-
-                1,
-
-                false
-
-            );
-
-
-        /*
-         * Material.
-         */
-
-        const material =
-            new THREE.MeshStandardMaterial({
-
-                color:
-                    0x4dd9ff,
-
-                emissive:
-                    0x09364a,
-
-                emissiveIntensity:
-                    1.1,
-
-                metalness:
-                    0.92,
-
-                roughness:
-                    0.18,
-
-                transparent:
-                    true,
-
-                opacity:
-                    0.82
-
-            });
-
-
-        /*
-         * Crear segmento.
-         */
-
-        const segmento =
-            new THREE.Mesh(
-
-                geometria,
-
-                material
-
-            );
-
-
-        /*
-         * Posición.
-         */
-
-        segmento.position.set(
-
-            (desde.x + hasta.x) / 2,
-
-            (desde.y + hasta.y) / 2,
-
-            0
-
-        );
-
-
-        /*
-         * Dirección.
-         */
-
-        const direccion =
-            delta
-                .clone()
-                .normalize();
-
-
-        /*
-         * Rotación del cilindro.
-         */
-
-        const quaternion =
-            new THREE.Quaternion()
-                .setFromUnitVectors(
-
-                    new THREE.Vector3(
-                        0,
-                        1,
-                        0
-                    ),
-
-                    direccion
-
-                );
-
-
-        segmento.quaternion.copy(
-            quaternion
-        );
-
-
-        return segmento;
-
-    }
-
-
-    /* ======================================================
-       ANIMACIÓN
-       ====================================================== */
-
-    animar() {
-
-        this.animacion =
-            requestAnimationFrame(
-                () => this.animar()
-            );
-
-
         if (
-            !this.renderer ||
-            !this.scene ||
-            !this.camera
+            !puntos ||
+            !puntos.length
         ) {
 
-            return;
+            return "";
 
         }
 
 
-        this.renderer.render(
+        let d =
+            `M ${puntos[0].x + offsetX} ${puntos[0].y + offsetY}`;
 
-            this.scene,
 
-            this.camera
+        for (
+            let i = 1;
+            i < puntos.length;
+            i++
+        ) {
 
-        );
+            d +=
+                ` L ${puntos[i].x + offsetX} ${puntos[i].y + offsetY}`;
+
+        }
+
+
+        return d;
 
     }
 
 
     /* ======================================================
-       ACTIVAR TUBO
+       PATH
+       ====================================================== */
+
+    crearPathData(
+        puntos
+    ) {
+
+        if (
+            !puntos ||
+            !puntos.length
+        ) {
+
+            return "";
+
+        }
+
+
+        let d =
+            `M ${puntos[0].x} ${puntos[0].y}`;
+
+
+        for (
+            let i = 1;
+            i < puntos.length;
+            i++
+        ) {
+
+            d +=
+                ` L ${puntos[i].x} ${puntos[i].y}`;
+
+        }
+
+
+        return d;
+
+    }
+
+
+    /* ======================================================
+       CREAR CODOS 3D
+       ====================================================== */
+
+    crearCodos(
+        tubo,
+        puntos
+    ) {
+
+        tubo.userData.codos.forEach(
+            codo => codo.remove()
+        );
+
+        tubo.userData.codos = [];
+
+
+        /*
+         * Los puntos 1-4 son los puntos de quiebre.
+         *
+         * No se dibuja un codo cuando dos segmentos
+         * están realmente alineados.
+         */
+
+        for (
+            let i = 1;
+            i < puntos.length - 1;
+            i++
+        ) {
+
+            const anterior =
+                puntos[i - 1];
+
+            const actual =
+                puntos[i];
+
+            const siguiente =
+                puntos[i + 1];
+
+
+            const dx1 =
+                actual.x -
+                anterior.x;
+
+            const dy1 =
+                actual.y -
+                anterior.y;
+
+            const dx2 =
+                siguiente.x -
+                actual.x;
+
+            const dy2 =
+                siguiente.y -
+                actual.y;
+
+
+            const horizontal1 =
+                Math.abs(dx1) >
+                Math.abs(dy1);
+
+            const horizontal2 =
+                Math.abs(dx2) >
+                Math.abs(dy2);
+
+
+            /*
+             * Si ambos segmentos tienen la misma
+             * orientación no existe codo.
+             */
+
+            if (
+                horizontal1 === horizontal2
+            ) {
+
+                continue;
+
+            }
+
+
+            const codo =
+                this.crearCodo3D(
+                    actual
+                );
+
+
+            tubo.appendChild(
+                codo
+            );
+
+
+            tubo.userData.codos.push(
+                codo
+            );
+
+        }
+
+    }
+
+
+    /* ======================================================
+       CREAR CODO 3D
+       ====================================================== */
+
+    crearCodo3D(
+        punto
+    ) {
+
+        const grupo =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "g"
+            );
+
+        grupo.classList.add(
+            "nexus-codo-3d"
+        );
+
+
+        grupo.setAttribute(
+            "transform",
+            `translate(${punto.x} ${punto.y})`
+        );
+
+
+        /*
+         * Sombra.
+         */
+
+        const sombra =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "circle"
+            );
+
+        sombra.classList.add(
+            "nexus-codo-sombra"
+        );
+
+
+        /*
+         * Halo cristalino.
+         */
+
+        const halo =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "circle"
+            );
+
+        halo.classList.add(
+            "nexus-codo-halo"
+        );
+
+
+        /*
+         * Cuerpo metálico.
+         */
+
+        const cuerpo =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "circle"
+            );
+
+        cuerpo.classList.add(
+            "nexus-codo-cuerpo"
+        );
+
+
+        /*
+         * Aro exterior.
+         */
+
+        const aro =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "circle"
+            );
+
+        aro.classList.add(
+            "nexus-codo-aro"
+        );
+
+
+        /*
+         * Núcleo interno.
+         */
+
+        const nucleo =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "circle"
+            );
+
+        nucleo.classList.add(
+            "nexus-codo-nucleo"
+        );
+
+
+        /*
+         * Reflejo.
+         */
+
+        const reflejo =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "ellipse"
+            );
+
+        reflejo.classList.add(
+            "nexus-codo-reflejo"
+        );
+
+
+        grupo.appendChild(
+            sombra
+        );
+
+        grupo.appendChild(
+            halo
+        );
+
+        grupo.appendChild(
+            cuerpo
+        );
+
+        grupo.appendChild(
+            aro
+        );
+
+        grupo.appendChild(
+            nucleo
+        );
+
+        grupo.appendChild(
+            reflejo
+        );
+
+
+        return grupo;
+
+    }
+
+
+    /* ======================================================
+       REFERENCIAS DE SEGMENTOS
+       ====================================================== */
+
+    crearReferenciasSegmentos(
+        puntos
+    ) {
+
+        const nombres = [
+
+            "personajePunto1",
+
+            "punto1Punto2",
+
+            "punto2Punto3",
+
+            "punto3Punto4",
+
+            "punto4Nexus"
+
+        ];
+
+
+        const segmentos = {};
+
+
+        for (
+            let i = 0;
+            i < nombres.length;
+            i++
+        ) {
+
+            segmentos[nombres[i]] = {
+
+                desde:
+                    puntos[i],
+
+                hasta:
+                    puntos[i + 1]
+
+            };
+
+        }
+
+
+        return segmentos;
+
+    }
+
+
+    /* ======================================================
+       ACTIVAR
        ====================================================== */
 
     activar(
@@ -1575,68 +2105,26 @@ export default class Tubos {
                 codigo
             );
 
-
         const conector =
             this.conectores.get(
                 codigo
             );
 
 
-        /*
-         * Activar solamente
-         * el tubo seleccionado.
-         */
-
         if (tubo) {
 
-            const segmentos =
-                tubo.userData.segmentos;
-
-
-            Object.values(
-                segmentos
-            ).forEach(
-                segmento => {
-
-                    if (!segmento) {
-
-                        return;
-
-                    }
-
-
-                    segmento.material.color.set(
-                        0xff2020
-                    );
-
-
-                    segmento.material.opacity =
-                        1;
-
-                }
+            tubo.classList.add(
+                "tubo-activo"
             );
 
         }
 
 
-        /*
-         * Activar conector.
-         */
-
         if (conector) {
 
-            conector.material.color.set(
-                0xff4444
+            conector.classList.add(
+                "conector-activo"
             );
-
-
-            conector.material.emissive.set(
-                0xcc0000
-            );
-
-
-            conector.material.emissiveIntensity =
-                2;
 
         }
 
@@ -1644,7 +2132,7 @@ export default class Tubos {
 
 
     /* ======================================================
-       DESACTIVAR TUBO
+       DESACTIVAR
        ====================================================== */
 
     desactivar(
@@ -1656,67 +2144,110 @@ export default class Tubos {
                 codigo
             );
 
-
         const conector =
             this.conectores.get(
                 codigo
             );
 
 
-        /*
-         * Restaurar tubo.
-         */
-
         if (tubo) {
 
-            const segmentos =
-                tubo.userData.segmentos;
-
-
-            Object.values(
-                segmentos
-            ).forEach(
-                segmento => {
-
-                    if (!segmento) {
-
-                        return;
-
-                    }
-
-
-                    segmento.material.color.set(
-                        0x4dd9ff
-                    );
-
-
-                    segmento.material.opacity =
-                        0.82;
-
-                }
+            tubo.classList.remove(
+                "tubo-activo"
             );
 
         }
 
 
-        /*
-         * Restaurar conector.
-         */
-
         if (conector) {
 
-            conector.material.color.set(
-                0xb91c1c
+            conector.classList.remove(
+                "conector-activo"
             );
 
+        }
 
-            conector.material.emissive.set(
-                0x330000
+    }
+
+
+    /* ======================================================
+       ACTIVAR RED COMPLETA
+       ====================================================== */
+
+    activarRed() {
+
+        if (this.red) {
+
+            this.red.classList.add(
+                "red-activa"
             );
 
+        }
 
-            conector.material.emissiveIntensity =
-                0.4;
+    }
+
+
+    /* ======================================================
+       DESACTIVAR RED COMPLETA
+       ====================================================== */
+
+    desactivarRed() {
+
+        if (this.red) {
+
+            this.red.classList.remove(
+                "red-activa"
+            );
+
+        }
+
+    }
+
+
+    /* ======================================================
+       DESTRUIR
+       ====================================================== */
+
+    destruir() {
+
+        if (
+            this.resizeObserver
+        ) {
+
+            this.resizeObserver.disconnect();
+
+            this.resizeObserver =
+                null;
+
+        }
+
+
+        if (
+            this.resizeHandler
+        ) {
+
+            window.removeEventListener(
+                "resize",
+                this.resizeHandler
+            );
+
+            this.resizeHandler =
+                null;
+
+        }
+
+
+        this.tubos.clear();
+
+        this.conectores.clear();
+
+
+        if (this.svg) {
+
+            this.svg.remove();
+
+            this.svg =
+                null;
 
         }
 

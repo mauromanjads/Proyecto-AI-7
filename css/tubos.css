@@ -1,437 +1,158 @@
-/* ==========================================================
-   AI-7
-   Archivo: tubos.css
-   ----------------------------------------------------------
-   RED NEXUS
-   ----------------------------------------------------------
-   RESPONSABILIDADES:
-   - SVG de conexiones
-   - Tubo madre horizontal
-   - Tubos verticales individuales
-   - Conectores
-   - Conexión hacia el núcleo
-   - Estados activos
-   - Animaciones de energía optimizadas
-   ----------------------------------------------------------
-   EL NÚCLEO 3D NO SE ESTILIZA AQUÍ
-   ========================================================== */
+/**
+ * ==========================================================
+ * AI-7
+ * Archivo: tubos.css
+ * ----------------------------------------------------------
+ * RED NEXUS
+ * ----------------------------------------------------------
+ * TUBOS FUTURISTAS 3D
+ *
+ * CRISTAL + METAL + CABLEADO INTERNO
+ * ==========================================================
+ */
 
 
 /* ==========================================================
-   RED
+   VARIABLES
    ========================================================== */
 
 .nexus-red {
 
-    position: absolute;
+    /*
+     * Tubo bastante más delgado que la versión anterior.
+     */
 
-    inset: 0;
+    --tubo-ancho:
+        10px;
 
-    z-index: 1;
+    --tubo-ancho-activo:
+        11px;
 
-    pointer-events: none;
+    --tubo-halo:
+        18px;
+
+    --tubo-borde:
+        2.2px;
+
+    --tubo-cable:
+        1.7px;
+
+    --tubo-nucleo:
+        1.4px;
+
+    --tubo-reflejo:
+        1.1px;
+
+    /*
+     * Codos.
+     */
+
+    --codo-radio:
+        8px;
+
+    --codo-aro:
+        11px;
+
+    --codo-nucleo:
+        4px;
+
+    /*
+     * Conector del personaje.
+     */
+
+    --conector-radio:
+        7px;
+
+    --conector-aro:
+        9px;
+
+    --conector-nucleo:
+        2.8px;
+
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    z-index:
+        40;
+
+    pointer-events:
+        none;
+
+    overflow:
+        visible;
 
 }
 
-.nexus-red canvas {
 
-    z-index: 1;
-
-}
-
+/* ==========================================================
+   SVG
+   ========================================================== */
 
 .nexus-red-svg {
 
-    position: absolute;
+    position:
+        absolute;
 
-    inset: 0;
+    inset:
+        0;
 
-    width: 100%;
+    width:
+        100%;
 
-    height: 100%;
+    height:
+        100%;
 
-    display: block;
+    display:
+        block;
 
-    overflow: visible;
+    overflow:
+        visible;
 
-    z-index: 5;
+    pointer-events:
+        none;
 
 }
 
 
 /* ==========================================================
-   TUBO MADRE
+   GRUPO
+   ========================================================== */
+
+.nexus-tubo-grupo {
+
+    pointer-events:
+        none;
+
+}
+
+
+/* ==========================================================
+   HALO
    ----------------------------------------------------------
-   ESTADO NORMAL
-   ----------------------------------------------------------
-   IMPORTANTE:
-   EL TUBO MADRE SIEMPRE DEBE SER VISIBLE.
+   Muy pequeño.
+   Sirve para separar el tubo del negro.
    ========================================================== */
 
-.nexus-tubo-madre {
-
-    fill: none;
-
-    stroke: #334155;
-
-    stroke-width: 18;
-
-    stroke-linecap: round;
-
-    stroke-linejoin: round;
-
-    opacity: 1;
-
-    filter:
-        drop-shadow(
-            0 4px 5px
-            rgba(0,0,0,.9)
-        );
-
-    transition:
-
-        stroke
-        .35s
-        ease,
-
-        stroke-width
-        .35s
-        ease,
-
-        filter
-        .35s
-        ease,
-
-        opacity
-        .35s
-        ease;
-
-}
-
-
-/* ==========================================================
-   TUBO MADRE
-   REFLEJO METÁLICO
-   ========================================================== */
-
-.nexus-tubo-madre {
-
-    paint-order:
-        stroke
-        fill;
-
-}
-
-
-/* ==========================================================
-   TUBO MADRE ACTIVO
-   ----------------------------------------------------------
-   TODO EL TUBO MADRE SE ILUMINA
-   ========================================================== */
-
-.nexus-tubo-madre.tubo-madre-activo {
-
-    stroke:
-        #22d3ee;
-
-    stroke-width:
-        20;
-
-    opacity:
-        1;
-
-    filter:
-
-        drop-shadow(
-            0 0 4px
-            rgba(34,211,238,1)
-        )
-
-        drop-shadow(
-            0 0 10px
-            rgba(34,211,238,.95)
-        )
-
-        drop-shadow(
-            0 0 22px
-            rgba(6,182,212,.85)
-        )
-
-        drop-shadow(
-            0 0 40px
-            rgba(6,182,212,.45)
-        );
-
-    animation:
-        tuboMadrePulso
-        2.8s
-        ease-in-out
-        infinite;
-
-}
-
-
-/* ==========================================================
-   ANIMACIÓN TUBO MADRE
-   ----------------------------------------------------------
-   OPTIMIZADA:
-   SOLO CAMBIA OPACIDAD.
-   NO CAMBIA FILTER.
-   NO CAMBIA STROKE.
-   NO CAMBIA TRANSFORM.
-   ========================================================== */
-
-@keyframes tuboMadrePulso {
-
-    0%,
-    100% {
-
-        opacity:
-            .88;
-
-    }
-
-    50% {
-
-        opacity:
-            1;
-
-    }
-
-}
-
-
-/* ==========================================================
-   TUBOS INDIVIDUALES
-   ========================================================== */
-
-.nexus-tubo {
-
-    fill: none;
-
-    stroke: #475569;
-
-    stroke-width: 14;
-
-    stroke-linecap: round;
-
-    stroke-linejoin: round;
-
-    opacity: .95;
-
-    filter:
-        drop-shadow(
-            0 3px 4px
-            rgba(0,0,0,.85)
-        );
-
-    transition:
-
-        stroke
-        .35s
-        ease,
-
-        stroke-width
-        .35s
-        ease,
-
-        filter
-        .35s
-        ease,
-
-        opacity
-        .35s
-        ease;
-
-}
-
-
-/* ==========================================================
-   TUBO INDIVIDUAL ACTIVO
-   ========================================================== */
-
-.nexus-tubo.tubo-activo {
-
-    stroke:
-        #22d3ee;
-
-    stroke-width:
-        16;
-
-    opacity:
-        1;
-
-    filter:
-
-        drop-shadow(
-            0 0 4px
-            rgba(34,211,238,1)
-        )
-
-        drop-shadow(
-            0 0 12px
-            rgba(34,211,238,.9)
-        )
-
-        drop-shadow(
-            0 0 25px
-            rgba(6,182,212,.7)
-        );
-
-    animation:
-        tuboPulso
-        2.5s
-        ease-in-out
-        infinite;
-
-}
-
-
-/* ==========================================================
-   ANIMACIÓN TUBOS INDIVIDUALES
-   ========================================================== */
-
-@keyframes tuboPulso {
-
-    0%,
-    100% {
-
-        opacity:
-            .85;
-
-    }
-
-    50% {
-
-        opacity:
-            1;
-
-    }
-
-}
-
-
-/* ==========================================================
-   CONECTORES
-   ========================================================== */
-
-.nexus-conector {
-
-    fill:
-        #334155;
-
-    stroke:
-        #94a3b8;
-
-    stroke-width:
-        3;
-
-    transform-box:
-        fill-box;
-
-    transform-origin:
-        center;
-
-    filter:
-
-        drop-shadow(
-            0 3px 4px
-            rgba(0,0,0,.9)
-        );
-
-    transition:
-
-        fill
-        .3s
-        ease,
-
-        stroke
-        .3s
-        ease,
-
-        filter
-        .3s
-        ease,
-
-        transform
-        .3s
-        ease;
-
-}
-
-
-/* ==========================================================
-   CONECTOR ACTIVO
-   ========================================================== */
-
-.nexus-conector.conector-activo {
-
-    fill:
-        #67e8f9;
-
-    stroke:
-        #ecfeff;
-
-    filter:
-
-        drop-shadow(
-            0 0 5px
-            rgba(34,211,238,1)
-        )
-
-        drop-shadow(
-            0 0 15px
-            rgba(34,211,238,.9)
-        )
-
-        drop-shadow(
-            0 0 25px
-            rgba(6,182,212,.7)
-        );
-
-    animation:
-        conectorPulso
-        2s
-        ease-in-out
-        infinite;
-
-}
-
-
-@keyframes conectorPulso {
-
-    0%,
-    100% {
-
-        transform:
-            scale(.95);
-
-    }
-
-    50% {
-
-        transform:
-            scale(1.08);
-
-    }
-
-}
-
-
-/* ==========================================================
-   CONEXIÓN HACIA EL NÚCLEO
-   ========================================================== */
-
-.nexus-tubo-nucleo {
+.nexus-tubo-halo {
 
     fill:
         none;
 
     stroke:
-        #334155;
+        rgba(38, 211, 239, .16);
 
     stroke-width:
-        18;
+        var(--tubo-halo);
 
     stroke-linecap:
         round;
@@ -440,77 +161,731 @@
         round;
 
     opacity:
-        1;
-
-    filter:
-
-        drop-shadow(
-            0 4px 5px
-            rgba(0,0,0,.9)
-        );
-
-    transition:
-
-        stroke
-        .35s
-        ease,
-
-        stroke-width
-        .35s
-        ease,
-
-        filter
-        .35s
-        ease;
+        .85;
 
 }
 
 
 /* ==========================================================
-   CONEXIÓN AL NÚCLEO ACTIVA
+   SOMBRA
+   ----------------------------------------------------------
+   Profundidad física.
    ========================================================== */
 
-.nexus-tubo-nucleo.tubo-nucleo-activo {
+.nexus-tubo-sombra {
+
+    fill:
+        none;
 
     stroke:
-        #22d3ee;
+        rgba(0, 0, 0, .78);
 
     stroke-width:
-        20;
+        13px;
 
-    filter:
+    stroke-linecap:
+        round;
 
-        drop-shadow(
-            0 0 5px
-            rgba(34,211,238,1)
-        )
+    stroke-linejoin:
+        round;
 
-        drop-shadow(
-            0 0 14px
-            rgba(34,211,238,.9)
-        )
-
-        drop-shadow(
-            0 0 28px
-            rgba(6,182,212,.75)
+    transform:
+        translate(
+            2px,
+            3px
         );
 
+    opacity:
+        .95;
+
+}
+
+
+/* ==========================================================
+   CRISTAL
+   ----------------------------------------------------------
+   EL CUERPO PRINCIPAL.
+   ========================================================== */
+
+.nexus-tubo-cristal {
+
+    fill:
+        none;
+
+    stroke:
+        url("#nexusCristal");
+
+    stroke-width:
+        12px;
+
+    stroke-linecap:
+        round;
+
+    stroke-linejoin:
+        round;
+
+    opacity:
+        .88;
+
+}
+
+
+/* ==========================================================
+   BORDE EXTERIOR
+   ----------------------------------------------------------
+   Este borde hace que el cristal sea visible sobre negro.
+   ========================================================== */
+
+.nexus-tubo-borde {
+
+    fill:
+        none;
+
+    stroke:
+        url("#nexusCristalBorde");
+
+    stroke-width:
+        var(--tubo-borde);
+
+    stroke-linecap:
+        round;
+
+    stroke-linejoin:
+        round;
+
+    opacity:
+        .94;
+
+}
+
+
+/* ==========================================================
+   CABLE INTERNO AZUL
+   ========================================================== */
+
+.nexus-tubo-cable-azul {
+
+    fill:
+        none;
+
+    stroke:
+        url("#nexusCable");
+
+    stroke-width:
+        var(--tubo-cable);
+
+    stroke-linecap:
+        round;
+
+    stroke-linejoin:
+        round;
+
+    opacity:
+        .95;
+
+    filter:
+        drop-shadow(
+            0 0 2px
+            rgba(50, 220, 255, .65)
+        );
+
+}
+
+
+/* ==========================================================
+   CABLE INTERNO ROJO
+   ========================================================== */
+
+.nexus-tubo-cable-rojo {
+
+    fill:
+        none;
+
+    stroke:
+        url("#nexusCableRojo");
+
+    stroke-width:
+        1.25px;
+
+    stroke-linecap:
+        round;
+
+    stroke-linejoin:
+        round;
+
+    opacity:
+        .82;
+
+}
+
+
+/* ==========================================================
+   NÚCLEO INTERNO
+   ----------------------------------------------------------
+   Una línea energética extremadamente fina.
+   ========================================================== */
+
+.nexus-tubo-nucleo {
+
+    fill:
+        none;
+
+    stroke:
+        #bdfaff;
+
+    stroke-width:
+        var(--tubo-nucleo);
+
+    stroke-linecap:
+        round;
+
+    stroke-linejoin:
+        round;
+
+    opacity:
+        .90;
+
+    filter:
+        drop-shadow(
+            0 0 2px
+            rgba(90, 235, 255, .9)
+        );
+
+}
+
+
+/* ==========================================================
+   REFLEJO DEL CRISTAL
+   ========================================================== */
+
+.nexus-tubo-reflejo {
+
+    fill:
+        none;
+
+    stroke:
+        rgba(245, 255, 255, .92);
+
+    stroke-width:
+        var(--tubo-reflejo);
+
+    stroke-linecap:
+        round;
+
+    stroke-linejoin:
+        round;
+
+    opacity:
+        .85;
+
+}
+
+
+/* ==========================================================
+   CODOS 3D
+   ========================================================== */
+
+.nexus-codo-3d {
+
+    pointer-events:
+        none;
+
+}
+
+
+/* ==========================================================
+   SOMBRA DEL CODO
+   ========================================================== */
+
+.nexus-codo-sombra {
+
+    r:
+        10px;
+
+    fill:
+        rgba(0, 0, 0, .85);
+
+    transform:
+        translate(
+            2px,
+            3px
+        );
+
+    opacity:
+        .95;
+
+}
+
+
+/* ==========================================================
+   HALO CRISTALINO DEL CODO
+   ========================================================== */
+
+.nexus-codo-halo {
+
+    r:
+        10px;
+
+    fill:
+        rgba(40, 211, 239, .14);
+
+    stroke:
+        rgba(75, 225, 246, .48);
+
+    stroke-width:
+        2px;
+
+}
+
+
+/* ==========================================================
+   CUERPO METÁLICO
+   ========================================================== */
+
+.nexus-codo-cuerpo {
+
+    r:
+        var(--codo-radio);
+
+    fill:
+        url("#nexusMetal");
+
+    stroke:
+        #77d9e9;
+
+    stroke-width:
+        1.2px;
+
+    filter:
+        drop-shadow(
+            2px 3px 3px
+            rgba(0, 0, 0, .8)
+        );
+
+}
+
+
+/* ==========================================================
+   ARO EXTERIOR
+   ----------------------------------------------------------
+   Da la sensación de una unión industrial.
+   ========================================================== */
+
+.nexus-codo-aro {
+
+    r:
+        var(--codo-aro);
+
+    fill:
+        none;
+
+    stroke:
+        #6daebb;
+
+    stroke-width:
+        1.5px;
+
+    opacity:
+        .92;
+
+}
+
+
+/* ==========================================================
+   NÚCLEO DEL CODO
+   ========================================================== */
+
+.nexus-codo-nucleo {
+
+    r:
+        var(--codo-nucleo);
+
+    fill:
+        url("#nexusCodoNucleo");
+
+    stroke:
+        #b9f8ff;
+
+    stroke-width:
+        .7px;
+
+    filter:
+        drop-shadow(
+            0 0 3px
+            rgba(76, 232, 255, .85)
+        );
+
+}
+
+
+/* ==========================================================
+   REFLEJO DEL CODO
+   ========================================================== */
+
+.nexus-codo-reflejo {
+
+    cx:
+        -2.5px;
+
+    cy:
+        -3px;
+
+    rx:
+        3px;
+
+    ry:
+        1.4px;
+
+    fill:
+        rgba(255, 255, 255, .75);
+
+    opacity:
+        .9;
+
+}
+
+
+/* ==========================================================
+   CONECTORES
+   ========================================================== */
+
+.nexus-conector-grupo {
+
+    pointer-events:
+        none;
+
+}
+
+
+/* ==========================================================
+   SOMBRA
+   ========================================================== */
+
+.nexus-conector-sombra {
+
+    r:
+        10px;
+
+    fill:
+        rgba(0, 0, 0, .9);
+
+    transform:
+        translate(
+            2px,
+            3px
+        );
+
+}
+
+
+/* ==========================================================
+   HALO
+   ========================================================== */
+
+.nexus-conector-halo {
+
+    r:
+        12px;
+
+    fill:
+        rgba(34, 211, 238, .12);
+
+    stroke:
+        rgba(63, 224, 243, .42);
+
+    stroke-width:
+        1.5px;
+
+}
+
+
+/* ==========================================================
+   CUERPO
+   ========================================================== */
+
+.nexus-conector {
+
+    r:
+        var(--conector-radio);
+
+    fill:
+        url("#nexusMetal");
+
+    stroke:
+        #72cbdc;
+
+    stroke-width:
+        1.4px;
+
+    filter:
+        drop-shadow(
+            2px 3px 3px
+            rgba(0, 0, 0, .8)
+        );
+
+}
+
+
+/* ==========================================================
+   ARO DEL CONECTOR
+   ========================================================== */
+
+.nexus-conector-aro {
+
+    r:
+        var(--conector-aro);
+
+    fill:
+        none;
+
+    stroke:
+        #a7eaf3;
+
+    stroke-width:
+        1.2px;
+
+    opacity:
+        .82;
+
+}
+
+
+/* ==========================================================
+   NÚCLEO DEL CONECTOR
+   ========================================================== */
+
+.nexus-conector-nucleo {
+
+    r:
+        var(--conector-nucleo);
+
+    fill:
+        #dfffff;
+
+    stroke:
+        #50e4fa;
+
+    stroke-width:
+        .8px;
+
+    filter:
+        drop-shadow(
+            0 0 3px
+            rgba(62, 226, 250, .9)
+        );
+
+}
+
+
+/* ==========================================================
+   TUBO ACTIVO
+   ========================================================== */
+
+.nexus-tubo-grupo.tubo-activo
+.nexus-tubo-halo {
+
+    stroke:
+        rgba(34, 211, 238, .30);
+
+    stroke-width:
+        20px;
+
+    opacity:
+        1;
+
+}
+
+
+.nexus-tubo-grupo.tubo-activo
+.nexus-tubo-cristal {
+
+    opacity:
+        1;
+
+}
+
+
+.nexus-tubo-grupo.tubo-activo
+.nexus-tubo-borde {
+
+    stroke:
+        #bffaff;
+
+    stroke-width:
+        2.5px;
+
+}
+
+
+.nexus-tubo-grupo.tubo-activo
+.nexus-tubo-cable-azul {
+
+    stroke:
+        #7df4ff;
+
+    opacity:
+        1;
+
+    filter:
+        drop-shadow(
+            0 0 3px
+            rgba(80, 235, 255, 1)
+        );
+
+}
+
+
+.nexus-tubo-grupo.tubo-activo
+.nexus-tubo-cable-rojo {
+
+    stroke:
+        #ff5b6d;
+
+    opacity:
+        1;
+
+}
+
+
+.nexus-tubo-grupo.tubo-activo
+.nexus-tubo-nucleo {
+
+    stroke:
+        #ffffff;
+
+    stroke-width:
+        1.8px;
+
+    opacity:
+        1;
+
+    filter:
+        drop-shadow(
+            0 0 4px
+            rgba(130, 245, 255, 1)
+        );
+
+}
+
+
+.nexus-tubo-grupo.tubo-activo
+.nexus-tubo-reflejo {
+
+    stroke:
+        #ffffff;
+
+    opacity:
+        1;
+
+}
+
+
+/* ==========================================================
+   CODOS ACTIVOS
+   ========================================================== */
+
+.nexus-tubo-grupo.tubo-activo
+.nexus-codo-cuerpo {
+
+    stroke:
+        #d8fbff;
+
+}
+
+
+.nexus-tubo-grupo.tubo-activo
+.nexus-codo-nucleo {
+
+    filter:
+        drop-shadow(
+            0 0 5px
+            rgba(105, 240, 255, 1)
+        );
+
+}
+
+
+/* ==========================================================
+   CONECTOR ACTIVO
+   ========================================================== */
+
+.nexus-conector-grupo.conector-activo
+.nexus-conector-halo {
+
+    r:
+        16px;
+
+    fill:
+        rgba(34, 211, 238, .24);
+
+    stroke:
+        rgba(103, 232, 249, .75);
+
     animation:
-        tuboNucleoPulso
-        2.5s
+        conectorHalo
+        2s
         ease-in-out
         infinite;
 
 }
 
 
-@keyframes tuboNucleoPulso {
+.nexus-conector-grupo.conector-activo
+.nexus-conector {
+
+    fill:
+        #1b5263;
+
+    stroke:
+        #e8ffff;
+
+    stroke-width:
+        2px;
+
+}
+
+
+.nexus-conector-grupo.conector-activo
+.nexus-conector-aro {
+
+    stroke:
+        #dfffff;
+
+}
+
+
+.nexus-conector-grupo.conector-activo
+.nexus-conector-nucleo {
+
+    fill:
+        #ffffff;
+
+    stroke:
+        #67e8f9;
+
+    opacity:
+        1;
+
+    filter:
+        drop-shadow(
+            0 0 5px
+            rgba(103, 232, 249, 1)
+        );
+
+}
+
+
+/* ==========================================================
+   ANIMACIÓN DEL CONECTOR
+   ========================================================== */
+
+@keyframes conectorHalo {
 
     0%,
     100% {
 
         opacity:
-            .88;
+            .55;
 
     }
 
@@ -525,53 +900,17 @@
 
 
 /* ==========================================================
-   ESTADO GLOBAL DE RED ACTIVA
-   ----------------------------------------------------------
-   ESTO GARANTIZA QUE:
-   - TUBO MADRE
-   - TUBO NÚCLEO
-   SE ILUMINEN COMPLETAMENTE.
+   RED ACTIVA
    ========================================================== */
 
 .nexus-red.red-activa
-.nexus-tubo-madre {
+.nexus-tubo-halo {
 
     stroke:
-        #22d3ee;
-
-    stroke-width:
-        20;
+        rgba(34, 211, 238, .25);
 
     opacity:
         1;
-
-    filter:
-
-        drop-shadow(
-            0 0 4px
-            rgba(34,211,238,1)
-        )
-
-        drop-shadow(
-            0 0 12px
-            rgba(34,211,238,.95)
-        )
-
-        drop-shadow(
-            0 0 25px
-            rgba(6,182,212,.85)
-        )
-
-        drop-shadow(
-            0 0 45px
-            rgba(6,182,212,.5)
-        );
-
-    animation:
-        tuboMadrePulso
-        2.8s
-        ease-in-out
-        infinite;
 
 }
 
@@ -580,27 +919,49 @@
 .nexus-tubo-nucleo {
 
     stroke:
-        #22d3ee;
+        #8af3ff;
+
+    opacity:
+        1;
+
+}
+
+
+/* ==========================================================
+   COMPATIBILIDAD
+   ========================================================== */
+
+.nexus-tubo-madre {
+
+    fill:
+        none;
+
+    stroke:
+        url("#nexusCristal");
 
     stroke-width:
-        20;
+        10px;
 
-    filter:
+    stroke-linecap:
+        round;
 
-        drop-shadow(
-            0 0 5px
-            rgba(34,211,238,1)
-        )
+    stroke-linejoin:
+        round;
 
-        drop-shadow(
-            0 0 15px
-            rgba(34,211,238,.9)
-        )
+    opacity:
+        .90;
 
-        drop-shadow(
-            0 0 30px
-            rgba(6,182,212,.75)
-        );
+}
+
+
+/* ==========================================================
+   NÚCLEO
+   ========================================================== */
+
+.nexus-tubo-nucleo {
+
+    pointer-events:
+        none;
 
 }
 
@@ -609,164 +970,81 @@
    CAPAS
    ========================================================== */
 
-.nexus-red {
-
-    z-index:
-        40;
-
-}
-
-
 .nexus-agentes {
+
+    position:
+        relative;
 
     z-index:
         10;
 
 }
-/* ==========================================================
-   TORRE NEXUS
-   NÚCLEO CENTRAL DE LA RED
-   ========================================================== */
-
-.nexus-torre {
-    overflow: visible;
-    filter: url(#nexusShadow);
-}
 
 
 /* ==========================================================
-   CUERPO PRINCIPAL
+   TABLET / MÓVIL
    ========================================================== */
 
-.nexus-torre-cuerpo {
-    fill: rgba(7, 12, 22, 0.98);
-    stroke: rgba(80, 150, 190, 0.9);
-    stroke-width: 4;
+@media (
+    max-width: 700px
+) {
 
-    filter:
-        drop-shadow(0 0 4px rgba(30, 120, 170, 0.5))
-        drop-shadow(0 0 14px rgba(20, 100, 160, 0.25));
-}
+    .nexus-red {
 
+        --tubo-ancho:
+            8px;
 
-/* ==========================================================
-   NÚCLEO CENTRAL
-   ========================================================== */
+        --tubo-ancho-activo:
+            9px;
 
-.nexus-torre-nucleo {
-    fill: rgba(8, 18, 30, 1);
-    stroke: rgba(70, 190, 230, 0.95);
-    stroke-width: 3;
+        --tubo-halo:
+            15px;
 
-    filter:
-        drop-shadow(0 0 4px rgba(30, 180, 230, 0.8))
-        drop-shadow(0 0 14px rgba(20, 150, 220, 0.5));
+        --tubo-borde:
+            1.7px;
 
-    animation:
-        nexusNucleoRespira
-        3s
-        ease-in-out
-        infinite;
-}
+        --tubo-cable:
+            1.35px;
 
+        --tubo-nucleo:
+            1.15px;
 
-/* ==========================================================
-   CONEXIÓN DEL TUBO MADRE
-   ========================================================== */
+        --tubo-reflejo:
+            .9px;
 
-.nexus-torre-conexion {
-    fill: rgba(10, 25, 38, 1);
-    stroke: rgba(80, 210, 240, 1);
-    stroke-width: 3;
+        --codo-radio:
+            6.5px;
 
-    filter:
-        drop-shadow(0 0 5px rgba(40, 190, 240, 0.9));
-}
+        --codo-aro:
+            9px;
 
+        --codo-nucleo:
+            3.2px;
 
-/* ==========================================================
-   LÍNEA DE CONEXIÓN
-   ========================================================== */
+        --conector-radio:
+            6px;
 
-.nexus-torre-linea {
-    stroke: rgba(50, 190, 235, 0.95);
-    stroke-width: 8;
-    stroke-linecap: round;
+        --conector-aro:
+            8px;
 
-    filter:
-        drop-shadow(0 0 5px rgba(30, 180, 240, 0.9));
-}
-
-
-/* ==========================================================
-   DETALLES SUPERIOR / INFERIOR
-   ========================================================== */
-
-.nexus-torre-detalle {
-    stroke: rgba(50, 120, 160, 0.85);
-    stroke-width: 3;
-    stroke-linecap: round;
-
-    filter:
-        drop-shadow(0 0 4px rgba(30, 130, 180, 0.6));
-}
-
-
-/* ==========================================================
-   RESPIRACIÓN DEL NÚCLEO
-   ESTADO NORMAL
-   ========================================================== */
-
-@keyframes nexusNucleoRespira {
-
-    0% {
-
-        opacity:
-            0.65;
-
-        filter:
-            drop-shadow(
-                0 0 3px
-                rgba(30, 170, 220, 0.5)
-            )
-            drop-shadow(
-                0 0 8px
-                rgba(20, 120, 180, 0.25)
-            );
+        --conector-nucleo:
+            2.3px;
 
     }
 
-    50% {
 
-        opacity:
-            1;
+    .nexus-tubo-cristal {
 
-        filter:
-            drop-shadow(
-                0 0 7px
-                rgba(50, 210, 250, 0.9)
-            )
-            drop-shadow(
-                0 0 20px
-                rgba(20, 150, 220, 0.55)
-            );
+        stroke-width:
+            10px;
 
     }
 
-    100% {
 
-        opacity:
-            0.65;
+    .nexus-tubo-sombra {
 
-        filter:
-            drop-shadow(
-                0 0 3px
-                rgba(30, 170, 220, 0.5)
-            )
-            drop-shadow(
-                0 0 8px
-                rgba(20, 120, 180, 0.25)
-            );
+        stroke-width:
+            11px;
 
     }
 
@@ -774,216 +1052,69 @@
 
 
 /* ==========================================================
-   TORRE ACTIVA
+   TELÉFONOS PEQUEÑOS
    ========================================================== */
 
-.nexus-torre.torre-activa
-.nexus-torre-cuerpo {
+@media (
+    max-width: 420px
+) {
 
-    stroke:
-        rgba(80, 220, 255, 1);
+    .nexus-red {
 
-    filter:
-        drop-shadow(
-            0 0 7px
-            rgba(40, 210, 255, 0.9)
-        )
-        drop-shadow(
-            0 0 22px
-            rgba(20, 150, 230, 0.65)
-        );
+        --tubo-ancho:
+            7px;
 
-}
+        --tubo-ancho-activo:
+            8px;
 
+        --tubo-halo:
+            13px;
 
-/* ==========================================================
-   NÚCLEO ACTIVO
-   ========================================================== */
+        --tubo-borde:
+            1.5px;
 
-.nexus-torre.torre-activa
-.nexus-torre-nucleo {
+        --tubo-cable:
+            1.15px;
 
-    fill:
-        rgba(15, 60, 85, 1);
+        --tubo-nucleo:
+            1px;
 
-    stroke:
-        rgba(100, 240, 255, 1);
+        --tubo-reflejo:
+            .8px;
 
-    filter:
-        drop-shadow(
-            0 0 8px
-            rgba(50, 220, 255, 1)
-        )
-        drop-shadow(
-            0 0 25px
-            rgba(20, 170, 240, 0.9)
-        )
-        drop-shadow(
-            0 0 45px
-            rgba(10, 120, 220, 0.55)
-        );
+        --codo-radio:
+            5.5px;
 
-    animation:
-        nexusNucleoActivo
-        1.2s
-        ease-in-out
-        infinite;
+        --codo-aro:
+            7.5px;
 
-}
+        --codo-nucleo:
+            2.7px;
 
+        --conector-radio:
+            5px;
 
-/* ==========================================================
-   CONEXIÓN ACTIVA
-   ========================================================== */
+        --conector-aro:
+            7px;
 
-.nexus-torre.torre-activa
-.nexus-torre-conexion {
-
-    fill:
-        rgba(20, 90, 120, 1);
-
-    stroke:
-        rgba(120, 245, 255, 1);
-
-    filter:
-        drop-shadow(
-            0 0 8px
-            rgba(60, 230, 255, 1)
-        )
-        drop-shadow(
-            0 0 18px
-            rgba(20, 180, 240, 0.8)
-        );
-
-}
-
-
-/* ==========================================================
-   LÍNEA ACTIVA
-   ========================================================== */
-
-.nexus-torre.torre-activa
-.nexus-torre-linea {
-
-    stroke:
-        rgba(130, 245, 255, 1);
-
-    filter:
-        drop-shadow(
-            0 0 8px
-            rgba(60, 230, 255, 1)
-        )
-        drop-shadow(
-            0 0 18px
-            rgba(30, 170, 240, 0.9)
-        );
-
-}
-
-
-/* ==========================================================
-   DETALLES ACTIVOS
-   ========================================================== */
-
-.nexus-torre.torre-activa
-.nexus-torre-detalle {
-
-    stroke:
-        rgba(80, 220, 255, 1);
-
-    filter:
-        drop-shadow(
-            0 0 6px
-            rgba(40, 200, 255, 0.9)
-        );
-
-}
-
-
-/* ==========================================================
-   PULSO DEL NÚCLEO ACTIVO
-   ========================================================== */
-
-@keyframes nexusNucleoActivo {
-
-    0% {
-
-        opacity:
-            0.75;
-
-        transform:
-            scale(1);
-
-        transform-origin:
-            1060px 350px;
+        --conector-nucleo:
+            2px;
 
     }
 
-    50% {
 
-        opacity:
-            1;
+    .nexus-tubo-cristal {
 
-        transform:
-            scale(1.04);
-
-        transform-origin:
-            1060px 350px;
+        stroke-width:
+            8px;
 
     }
 
-    100% {
 
-        opacity:
-            0.75;
+    .nexus-tubo-sombra {
 
-        transform:
-            scale(1);
-
-        transform-origin:
-            1060px 350px;
-
-    }
-
-}
-
-
-/* ==========================================================
-   ANIMACIÓN DEL CUERPO DE LA TORRE
-   ========================================================== */
-
-.nexus-torre.torre-activa
-.nexus-torre-cuerpo {
-
-    animation:
-        nexusTorreEnergia
-        2s
-        ease-in-out
-        infinite;
-
-}
-
-
-@keyframes nexusTorreEnergia {
-
-    0% {
-
-        opacity:
-            0.9;
-
-    }
-
-    50% {
-
-        opacity:
-            1;
-
-    }
-
-    100% {
-
-        opacity:
-            0.9;
+        stroke-width:
+            9px;
 
     }
 
