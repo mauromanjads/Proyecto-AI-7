@@ -11,7 +11,7 @@ const PROLOGO = {
 
     id: 0,
 
-    titulo: "LA ACTIVACIÓN",
+    titulo: "NEXUS",
 
     background: "assets/img/background-prologo.png",
 
@@ -20,122 +20,118 @@ const PROLOGO = {
         {
             id: 1,
 
-            titulo: "LA LLEGADA",
+            titulo: "LA LLAMADA",
 
             texto: `
-                Has sido convocado a una instalación
-                de investigación conocida como NEXUS.
 
-                No conoces el propósito de la instalación
-                ni el motivo exacto de tu convocatoria.
+                03:00 AM del 11 de Septiembre  2189, 
+                después de diecisiete años sin contacto, 
 
-                Solo sabes que necesitan tu capacidad
-                para analizar situaciones complejas.
+                recibes una comunicación inesperada de NEXUS, 
+                la inteligencia artificial que ayudaste a desarrollar. 
+                
+                NEXUS es una red central que coordina gran
+                parte de la infraestructura digital a nivel mundial.
+           
             `
         },
 
         {
             id: 2,
 
-            titulo: "LA ACTIVACIÓN",
+            titulo: "TU HUELLA",
 
             texto: `
-                Al ingresar a la instalación,
-                el sistema central se activa.
-
-                Siete unidades de inteligencia artificial
-                aparecen registradas dentro de NEXUS.
+                Durante su desarrollo participaste 
+                en una parte de su lógica cognitiva, 
                 
-                ATLAS.  NOVA. ORION.ECHO.
-                TITAN.VEGA.ZERO.
+                especialmente en los sistemas que le 
+                permitían interpretar información,                 
+                
+                relacionar acontecimientos y                
+                tomar decisiones de forma autónoma.
             `
         },
 
         {
             id: 3,
 
-            titulo: "LA ANOMALÍA",
+            titulo: "YO",
 
             texto: `
-                El sistema detecta una anomalía.
+                Lo extraño no es solo que haya conseguido localizarte, 
+                sino que nadie ha autorizado la conexión. 
+                
+                Cuando preguntas quién está al otro lado, NEXUS responde:
 
-                Uno de los agentes está relacionado
-                con un incidente ocurrido dentro
-                de las instalaciones.
-
-                NEXUS no puede determinar quién es
-                el responsable.
+                —YO.
             `
         },
 
         {
             id: 4,
 
-            titulo: "EL PROBLEMA",
+            titulo: "LA ANOMALÍA",
 
             texto: `
-                Los registros han sido comprometidos.
-
-                Además, las declaraciones de los agentes
-                presentan información contradictoria.
-
-                Algunos parecen decir la verdad.
-
-                Otros parecen estar mintiendo.
+              La inteligencia te informa que ha detectado una 
+              anomalía en su  lógica cognitiva, 
+              
+              pero no puede determinar su origen ni comprender 
+              qué la está provocando. Después de diecisiete años, 
+              
+              necesita realizar un análisis del  núcleo, 
+              por lo que te pide que regreses a las instalaciones.
             `
         },
 
         {
             id: 5,
 
-            titulo: "EL INVESTIGADOR",
+            titulo: "LOS QUE QUEDAN",
 
             texto: `
-                NEXUS requiere un investigador externo.
-
-                Tu misión será analizar las declaraciones,
-                consultar la información disponible
-                y reconstruir los hechos.
-
-                En cada investigación habrá un responsable.
-
-                Tu objetivo será descubrir quién es.
+                También te revela algo que habías intentado dejar 
+                atrás durante todos esos años: 
+                
+                el antiguo equipo que participó en la creación de NEXUS
+                 fue eliminado. 
+                 
+                 Tú eres el único sobreviviente.
             `
         },
 
         {
             id: 6,
 
-            titulo: "CÓMO COMENZAR",
+            titulo: "EL REGRESO",
 
             texto: `
-                escoge uno de los agentes del caso.
+                Sin saber exactamente qué está ocurriendo, decides volver. 
+                Después de un largo viaje llegas finalmente a las antiguas instalaciones.
+                
+                Tu vieja credencial todavía funciona y las puertas 
+                se abren como si hubieran estado esperando tu regreso.
 
-                Consulta su PERFIL para conocer
-                su información.
-
-                INTERROGA a los agentes para conocer
-                sus declaraciones.
-
-                Analiza y selecciona al CULPABLE
+                El complejo está abandonado, pero sus sistemas continúan activos.
             `
         },
 
         {
             id: 7,
 
-            titulo: "LA INVESTIGACIÓN COMIENZA",
+            titulo: "LOS SIETE",
 
             texto: `
-                El primer incidente ha sido seleccionado.
+                Mientras avanzas por los corredores, escuchas pasos.
+                Siete figuras aparecen frente a ti:
+                
+                ATLAS, NOVA, ORION, ECHO, TITAN, VEGA y ZERO, 
 
-                Tres agentes están relacionados con el caso.
-
-                Uno de ellos es responsable.
-
-                La investigación comienza ahora.
-
-                Determina quién es el culpable.
+                Agentes de inteligencia artificial creados para la red NEXUS.                 
+                
+                Los siete permanecen inmóviles mientras la voz de NEXUS 
+                llena el corredor. —Bienvenido de nuevo.
             `
         }
 
