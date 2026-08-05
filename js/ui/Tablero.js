@@ -17,7 +17,7 @@ export default class Tablero {
             document.getElementById("titulo-capitulo");
 
         this.divAgentes =
-            document.getElementById("agentes");
+            document.getElementById("tablero-agentes");
 
         this.divCaso =
             document.getElementById("caso");

@@ -23,7 +23,7 @@ const CAPITULO_1 = {
 
     titulo: "EL PRIMER INCIDENTE",
 
-    background: "assets/img/background-capitulo1.png",
+    background: "assets/img/background-capitulo1.jpg",
 
     descripcion: `Los primeros incidentes parecen ser hechos aislados dentro de NEXUS.
 
