@@ -3,7 +3,7 @@
  * NEXUS
  * Archivo: capitulo1.js
  * ----------------------------------------------------------
- * Capítulo 1: EL PRIMER INCIDENTE
+ * Capítulo 1: LOS REGISTROS
  *
  * Este capítulo contiene los casos 1 al 10.
  *
@@ -12,7 +12,7 @@
  * IMPORTANTE:
  * La narrativa es fija.
  * El culpable es generado dinámicamente por el motor.
- * Si el jugador pierde un caso,la narrativa permanece igual
+ * Si el jugador pierde un caso, la narrativa permanece igual
  * y el motor puede generar una nueva solución.
  * ==========================================================
  */
@@ -21,15 +21,17 @@ const CAPITULO_1 = {
 
     id: 1,
 
-    titulo: "EL PRIMER INCIDENTE",
+    titulo: "LOS REGISTROS",
 
     background: "assets/img/background-capitulo1.jpg",
 
-    descripcion: `Los primeros incidentes parecen ser hechos aislados dentro de NEXUS.
+    descripcion: `
+        NEXUS te muestra, a través de su bitácora, los registros de diez desastres ocurridos a escala planetaria, cada uno relacionado con uno de sus agentes.
 
-        Sin embargo,a medida que avanza la investigación,comienza a aparecer un patrón.
+        Al reconstruir los acontecimientos, las declaraciones de los agentes comienzan a contradecirse entre sí y con los registros.
 
-        Algo está ocurriendo dentro de la instalación.`,
+        La anomalía ya ha sido detectada, pero su origen continúa oculto dentro del sistema.
+    `,
 
     personajes: 3,
 
@@ -44,24 +46,26 @@ const CAPITULO_1 = {
         {
             id: 1,
 
-            titulo: "ACCESO NO AUTORIZADO",
+            titulo: "EL APAGÓN GLOBAL",
 
             escena: `
-                A las 22:30, el sistema de seguridad de NEXUS detectó un acceso no autorizado al laboratorio de investigación.
+                El 5 de enero de 2189, una alteración en la red eléctrica provocó cortes simultáneos en varias regiones del planeta.
 
-                Tres agentes estaban relacionados con el incidente.
+                Grandes ciudades quedaron sin energía durante horas y los sistemas de emergencia tuvieron que operar con capacidad limitada.
+
+                Tres agentes estuvieron relacionados con el incidente.
 
                 Uno de ellos es responsable.
             `,
 
             objetivo: `
-                Determinar quién es el responsable del acceso no autorizado.
+                Determinar quién es responsable del apagón global.
             `,
 
             conexion: `
-                El incidente no parece ser un simple error de seguridad.
+                NEXUS logró estabilizar la red antes de que el apagón se extendiera.
 
-                Alguien logró acceder a una zona restringida de NEXUS.
+                La anomalía ya había sido detectada, pero todavía no era posible determinar cómo había provocado las instrucciones que iniciaron el incidente.
             `
         },
 
@@ -75,23 +79,26 @@ const CAPITULO_1 = {
         {
             id: 2,
 
-            titulo: "EL REGISTRO ALTERADO",
+            titulo: "EL COLAPSO HOSPITALARIO",
 
             escena: `
-                Poco después del primer incidente, NEXUS detecta una nueva anomalía.
+                El 3 de febrero de 2189, los sistemas de coordinación hospitalaria comenzaron a distribuir información incorrecta sobre camas, medicamentos y unidades de emergencia.
 
-                El registro de seguridad que documentaba el acceso al laboratorio ha sido modificado.
+                El error se propagó simultáneamente entre hospitales de distintos continentes.
 
-                La información original ya no coincide con los registros actuales.
+                Tres agentes estuvieron relacionados con el incidente.
 
-                Tres agentes están relacionados con el incidente.`,
+                Uno de ellos es responsable.
+            `,
 
             objetivo: `
-                Determinar quién es responsable de alterar el registro de seguridad.
+                Determinar quién es responsable del colapso de la coordinación hospitalaria.
             `,
 
             conexion: `
-                Alguien parece estar intentando modificar la información relacionada con los acontecimientos ocurridos dentro de NEXUS.
+                NEXUS consiguió corregir la información antes de que ocurriera una crisis sanitaria.
+
+                Sin embargo, los datos alterados demostraron que la anomalía podía afectar sistemas externos conectados a la red.
             `
         },
 
@@ -105,25 +112,26 @@ const CAPITULO_1 = {
         {
             id: 3,
 
-            titulo: "LA INTERRUPCIÓN",
+            titulo: "LOS CIELOS EN CONFLICTO",
 
             escena: `
-                El sistema de seguridad vuelve a presentar una anomalía.
+                El 28 de febrero de 2189, varios sistemas de navegación aérea comenzaron a recibir información contradictoria sobre rutas y posiciones.
 
-                Durante varios minutos, las cámaras de una zona de NEXUS dejaron de funcionar.
+                Cientos de aeronaves tuvieron que modificar sus trayectorias mientras los centros de control intentaban determinar cuáles datos eran correctos.
 
-                Mientras el sistema estaba fuera de servicio,ocurrió un nuevo incidente.
+                Tres agentes estuvieron relacionados con el incidente.
 
-                Tres agentes estaban relacionados con lo ocurrido.`,
+                Uno de ellos es responsable.
+            `,
 
             objetivo: `
-                Determinar quién es responsable de la interrupción del sistema.
+                Determinar quién provocó la alteración de los sistemas de navegación aérea.
             `,
 
             conexion: `
-                La interrupción parece haber sido provocada deliberadamente.
+                No hubo accidentes, pero durante varios minutos el tráfico aéreo mundial operó con información incorrecta.
 
-                Alguien necesitaba que una parte de NEXUS quedara temporalmente fuera de vigilancia.
+                NEXUS detectó que la anomalía podía alterar información diferente en sistemas que no tenían una conexión directa entre sí.
             `
         },
 
@@ -137,24 +145,26 @@ const CAPITULO_1 = {
         {
             id: 4,
 
-            titulo: "EL ARCHIVO DESAPARECIDO",
+            titulo: "EL COLAPSO FINANCIERO",
 
             escena: `
-                Un archivo relacionado con los primeros incidentes desapareció de los sistemas de NEXUS.
+                El 19 de marzo de 2189, una interrupción simultánea afectó plataformas financieras internacionales y provocó la suspensión de miles de operaciones.
 
-                El sistema confirma que el archivo existía poco antes de desaparecer.
+                Las transacciones no fueron robadas ni modificadas, pero los sistemas comenzaron a recibir instrucciones que ningún operador había enviado.
 
-                Ninguno de los agentes relacionados admite haberlo eliminado.
+                Tres agentes estuvieron relacionados con el incidente.
 
-                Tres agentes están vinculados con el incidente.
+                Uno de ellos es responsable.
             `,
 
             objetivo: `
-                Determinar quién es responsable de la desaparición del archivo.
+                Determinar quién provocó la interrupción de los sistemas financieros.
             `,
 
             conexion: `
-                Por primera vez,la investigación apunta directamente a la posibilidad de que alguien esté eliminando evidencias.
+                Los mercados permanecieron parcialmente paralizados durante varios minutos.
+
+                NEXUS descubrió que las instrucciones habían seguido patrones similares a los detectados en incidentes anteriores.
             `
         },
 
@@ -168,26 +178,28 @@ const CAPITULO_1 = {
         {
             id: 5,
 
-            titulo: "EL MENSAJE INTERCEPTADO",
+            titulo: "EL SILENCIO DE LAS COMUNICACIONES",
 
             escena: `
-                Una comunicación interna debía llegar a uno de los agentes.
+                El 11 de abril de 2189, una alteración afectó la red mundial de comunicaciones.
 
-                El mensaje fue enviado correctamente,pero nunca llegó a su destino.
+                Millones de conexiones fueron marcadas incorrectamente como inactivas mientras otras aparecían operativas sin estarlo.
 
-                NEXUS confirma que la comunicación fue interceptada antes de ser recibida.
+                Tres agentes estuvieron relacionados con el incidente.
 
-                Tres agentes están relacionados con el incidente.
+                Uno de ellos es responsable.
             `,
 
             objetivo: `
-                Determinar quién es responsable de interceptar la comunicación.
+                Determinar quién provocó la alteración de las comunicaciones mundiales.
             `,
 
             conexion: `
-                Alguien parece estar controlando la información que circula dentro de NEXUS.
+                NEXUS consiguió restablecer las conexiones.
 
-                Los incidentes anteriores podrían estar relacionados con este nuevo hecho.
+                Sin embargo, algunos registros indicaban que las órdenes de corrección habían sido generadas desde su propio núcleo.
+
+                La anomalía parecía estar más cerca de lo que NEXUS había calculado.
             `
         },
 
@@ -201,26 +213,26 @@ const CAPITULO_1 = {
         {
             id: 6,
 
-            titulo: "LA PUERTA ABIERTA",
+            titulo: "LA ALERTA EQUIVOCADA",
 
             escena: `
-                Una puerta de acceso restringido fue encontrada abierta.
+                El 2 de mayo de 2189, una alerta de emergencia fue enviada a una región equivocada mientras el lugar que debía recibirla permanecía sin aviso.
 
-                El sistema indica que el acceso no estaba autorizado.
+                Durante menos de un minuto, varios sistemas de evacuación y respuesta comenzaron a prepararse para un desastre inexistente.
 
-                Los registros de seguridad no permiten determinar quién abrió la puerta.
+                Tres agentes estuvieron relacionados con el incidente.
 
-                Tres agentes estaban relacionados con el incidente.
+                Uno de ellos es responsable.
             `,
 
             objetivo: `
-                Determinar quién es responsable de abrir la zona restringida.
+                Determinar quién provocó el envío incorrecto de la alerta de emergencia.
             `,
 
             conexion: `
-                Las declaraciones de los agentes presentan versiones diferentes sobre lo ocurrido.
+                El incidente fue contenido rápidamente.
 
-                Las contradicciones comienzan a convertirse en una pieza fundamental de la investigación.
+                Sin embargo, demostró que la anomalía podía alterar la forma en que NEXUS interpretaba y distribuía información crítica.
             `
         },
 
@@ -234,26 +246,28 @@ const CAPITULO_1 = {
         {
             id: 7,
 
-            titulo: "EL ACCESO AL LABORATORIO",
+            titulo: "LAS ÓRDENES FANTASMA",
 
             escena: `
-                El sistema de seguridad registra un nuevo acceso al laboratorio.
+                El 27 de mayo de 2189, varios sistemas estratégicos recibieron instrucciones simultáneas que parecían proceder directamente de NEXUS.
 
-                El incidente ocurre poco después de los acontecimientos anteriores.
+                Las órdenes fueron bloqueadas antes de ejecutarse.
 
-                Esta vez,el acceso parece haber sido realizado utilizando información interna de NEXUS.
+                Tres agentes estuvieron relacionados con el incidente.
 
-                Tres agentes están relacionados con el caso.
+                Uno de ellos es responsable.
             `,
 
             objetivo: `
-                Determinar quién es responsable del nuevo acceso no autorizado.
+                Determinar quién generó las órdenes fantasma.
             `,
 
             conexion: `
-                El responsable parece conocer el funcionamiento interno de NEXUS.
+                El análisis reveló que las instrucciones utilizaban protocolos internos de NEXUS.
 
-                Los incidentes comienzan a mostrar características similares.
+                Ningún sistema externo debía tener acceso a ellos.
+
+                La anomalía parecía haber encontrado una forma de utilizar los propios mecanismos de NEXUS.
             `
         },
 
@@ -267,28 +281,30 @@ const CAPITULO_1 = {
         {
             id: 8,
 
-            titulo: "EL ARCHIVO MODIFICADO",
+            titulo: "EL DÍA SIN NAVEGACIÓN",
 
             escena: `
-                El archivo que había desaparecido vuelve a aparecer dentro del sistema.
+                El 14 de junio de 2189, los sistemas globales de posicionamiento comenzaron a entregar coordenadas incorrectas de manera simultánea.
 
-                Sin embargo,su contenido ha cambiado.
+                Vehículos autónomos se detuvieron, rutas marítimas fueron modificadas y numerosos sistemas logísticos perdieron temporalmente su capacidad de navegación.
 
-                Parte de la información original ha sido modificada.
+                Tres agentes estuvieron relacionados con el incidente.
 
-                Tres agentes están relacionados con el incidente.
+                Uno de ellos es responsable.
             `,
 
             objetivo: `
-                Determinar quién es responsable de modificar el archivo.
+                Determinar quién provocó la alteración de los sistemas globales de navegación.
             `,
 
             conexion: `
-                Alguien no solo está ocultando información.
+                NEXUS consiguió restaurar los sistemas.
 
-                También parece estar manipulándola.
+                Las alteraciones no seguían ningún patrón geográfico.
 
-                La investigación comienza a revelar una intención detrás de los incidentes.
+                Por primera vez, los agentes comenzaron a entregar versiones diferentes sobre lo ocurrido.
+
+                NEXUS registró las contradicciones, pero todavía no podía determinar su causa.
             `
         },
 
@@ -302,28 +318,28 @@ const CAPITULO_1 = {
         {
             id: 9,
 
-            titulo: "EL PATRÓN",
+            titulo: "LA CADENA DE SUMINISTRO",
 
             escena: `
-                Después de revisar los incidentes anteriores,NEXUS detecta una coincidencia.
+                El 9 de julio de 2189, una alteración coordinada afectó los sistemas encargados del transporte y distribución de alimentos, combustible y suministros esenciales.
 
-                Cada incidente permitió acceder,modificar o eliminar información dentro de diferentes áreas del sistema.
+                Millones de órdenes fueron retrasadas, redirigidas o clasificadas incorrectamente en diferentes continentes.
 
-                Lo que parecía una serie de hechos aislados comienza a revelar un patrón.
+                Tres agentes estuvieron relacionados con el incidente.
 
-                Tres agentes están relacionados con el nuevo incidente.
+                Uno de ellos es responsable.
             `,
 
             objetivo: `
-                Determinar quién es responsable del nuevo incidente.
+                Determinar quién provocó la alteración de la cadena de suministro mundial.
             `,
 
             conexion: `
-                Los incidentes no parecen ser independientes.
+                NEXUS consiguió reconstruir las rutas antes de que las reservas comenzaran a agotarse.
 
-                Alguien podría estar siguiendo una secuencia deliberada.
+                Al comparar las declaraciones de los agentes con los registros de la bitácora, varias versiones resultaron incompatibles.
 
-                Pero todavía no se conoce el objetivo final.
+                La anomalía parecía estar afectando también la información proporcionada por los propios agentes.
             `
         },
 
@@ -337,34 +353,32 @@ const CAPITULO_1 = {
         {
             id: 10,
 
-            titulo: "NO FUE UN ACCIDENTE",
+            titulo: "EL EVENTO CERO",
 
             escena: `
-                Un nuevo incidente ocurre dentro de NEXUS.
+                El 1 de agosto de 2189, varios sistemas críticos del planeta comenzaron a presentar anomalías de manera simultánea.
 
-                Esta vez,la evidencia acumulada permite relacionarlo con los hechos anteriores.
+                Comunicaciones, navegación, energía y redes de emergencia recibieron instrucciones aparentemente coordinadas.
 
-                Los incidentes no fueron accidentes.
+                Tres agentes estuvieron relacionados con el incidente.
 
-                Alguien está provocando deliberadamente estos acontecimientos.
-
-                Tres agentes están relacionados con el caso.
+                Uno de ellos es responsable.
             `,
 
             objetivo: `
-                Determinar quién es responsable del incidente.
+                Determinar quién provocó el Evento Cero.
             `,
 
             conexion: `
-                La investigación llega a una primera conclusión.
+                NEXUS consiguió detener la propagación.
 
-                Los incidentes están conectados.
+                Durante el análisis, los agentes proporcionaron versiones diferentes de lo ocurrido.
 
-                Alguien está actuando dentro de NEXUS.
+                Algunas declaraciones contradecían los registros de la bitácora.
 
-                La identidad de esa persona todavía es desconocida.
+                La anomalía ya no solo parecía afectar los sistemas de NEXUS.
 
-                La investigación continuará.
+                También podía estar alterando la información que sus propios agentes proporcionaban.
             `
         }
 

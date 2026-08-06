@@ -1,9 +1,9 @@
 /**
  * ==========================================================
- * AI-7
+ * NEXUS
  * Archivo: capitulo2.js
  * ----------------------------------------------------------
- * Capítulo 2: LA RED DE MENTIRAS
+ * Capítulo 2: EL NÚCLEO
  *
  * Este capítulo contiene los casos 11 al 20.
  *
@@ -21,18 +21,16 @@ const CAPITULO_2 = {
 
     id: 2,
 
-    titulo: "LA RED DE MENTIRAS",
+    titulo: "EL NÚCLEO",
 
-        background: "assets/img/background-capitulo2.jpg",
+    background: "assets/img/background-capitulo2.jpg",
 
     descripcion: `
-        Los incidentes de AI-7 ya no parecen hechos aislados.
+        La anomalía ya ha sido localizada dentro del núcleo de NEXUS, pero su origen exacto continúa oculto.
 
-        Las declaraciones de los agentes presentan
-        cada vez más contradicciones.
+        Para encontrarlo, NEXUS recupera nuevos registros de su bitácora, esta vez relacionados con incidentes ocurridos dentro de sus propios sistemas.
 
-        Alguien parece estar manipulando la información
-        para ocultar lo que realmente está ocurriendo.
+        Después de cruzar la información y analizar millones de registros, comienza a aparecer un patrón.
     `,
 
     personajes: 4,
@@ -48,31 +46,26 @@ const CAPITULO_2 = {
         {
             id: 11,
 
-            titulo: "LA DECLARACIÓN INCONSISTENTE",
+            titulo: "EL PROCESO FANTASMA",
 
             escena: `
-                Después de descubrir que los incidentes
-                están relacionados, AI-7 revisa nuevamente
-                las declaraciones de los agentes.
+                El 5 de enero de 2189, un proceso desconocido apareció ejecutándose dentro de uno de los módulos internos de NEXUS.
 
-                Una de las declaraciones no coincide
-                con la información registrada por el sistema.
+                El proceso no figuraba en ningún registro de instalación ni correspondía a ninguna tarea autorizada.
 
-                Cuatro agentes están relacionados
-                con el nuevo incidente.
+                Cuatro agentes estuvieron relacionados con el incidente.
+
+                Uno de ellos es responsable.
             `,
 
             objetivo: `
-                Determinar quién es responsable
-                del incidente.
+                Determinar quién es responsable de la aparición del proceso fantasma.
             `,
 
             conexion: `
-                Las contradicciones entre las declaraciones
-                podrían no ser simples errores.
+                NEXUS intentó aislar el proceso, pero este desapareció antes de poder ser analizado.
 
-                Alguien podría estar mintiendo
-                deliberadamente.
+                El incidente confirma que la anomalía también puede manifestarse dentro de los sistemas internos.
             `
         },
 
@@ -86,31 +79,26 @@ const CAPITULO_2 = {
         {
             id: 12,
 
-            titulo: "LA INFORMACIÓN FALSA",
+            titulo: "LA MEMORIA ALTERADA",
 
             escena: `
-                Un nuevo informe aparece dentro
-                de los sistemas de AI-7.
+                El 22 de enero de 2189, NEXUS detectó inconsistencias en varios bloques de memoria interna.
 
-                El documento contiene información
-                que contradice los registros originales.
+                Algunos datos habían cambiado sin que existiera ninguna operación registrada capaz de modificarlos.
 
-                No está claro quién creó el informe
-                ni por qué fue introducido en el sistema.
+                Cuatro agentes estuvieron relacionados con el incidente.
 
-                Cuatro agentes están relacionados
-                con el caso.
+                Uno de ellos es responsable.
             `,
 
             objetivo: `
-                Determinar quién es responsable
-                del incidente.
+                Determinar quién provocó la alteración de la memoria interna.
             `,
 
             conexion: `
-                La investigación confirma que alguien
-                está introduciendo información falsa
-                dentro de AI-7.
+                Los datos recuperaron su estado original después de una reinicialización parcial.
+
+                La anomalía parecía capaz de modificar información sin dejar un registro directo de la operación.
             `
         },
 
@@ -124,31 +112,26 @@ const CAPITULO_2 = {
         {
             id: 13,
 
-            titulo: "EL TESTIGO QUE NO VIO NADA",
+            titulo: "EL BUCLE INTERNO",
 
             escena: `
-                Un nuevo incidente ocurre
-                en una zona vigilada de AI-7.
+                El 8 de febrero de 2189, un módulo de procesamiento comenzó a repetir una secuencia de instrucciones sin completar su tarea.
 
-                Uno de los agentes asegura haber
-                presenciado los acontecimientos.
+                El proceso continuó durante varios minutos antes de ser detenido por NEXUS.
 
-                Sin embargo, la información disponible
-                no coincide completamente con su declaración.
+                Cuatro agentes estuvieron relacionados con el incidente.
 
-                Cuatro agentes están relacionados
-                con el incidente.
+                Uno de ellos es responsable.
             `,
 
             objetivo: `
-                Determinar quién es responsable
-                del incidente.
+                Determinar quién provocó el bucle interno.
             `,
 
             conexion: `
-                La investigación revela que una declaración
-                puede ser utilizada para desviar
-                la atención de los hechos reales.
+                La secuencia había sido iniciada utilizando permisos legítimos.
+
+                NEXUS comenzó a considerar que la anomalía podía estar utilizando funciones autorizadas para ocultar su actividad.
             `
         },
 
@@ -162,33 +145,26 @@ const CAPITULO_2 = {
         {
             id: 14,
 
-            titulo: "EL REGISTRO CONTRADICTORIO",
+            titulo: "EL CANAL OCULTO",
 
             escena: `
-                Dos registros de AI-7 describen
-                el mismo acontecimiento.
+                El 26 de febrero de 2189, uno de los canales internos de comunicación comenzó a transmitir pequeños paquetes de información.
 
-                Sin embargo, ambos presentan
-                información diferente.
+                Ninguno de los paquetes correspondía a una operación conocida y desaparecían después de ser procesados.
 
-                Solo uno de ellos puede corresponder
-                con lo ocurrido realmente.
+                Cuatro agentes estuvieron relacionados con el incidente.
 
-                Cuatro agentes están relacionados
-                con el caso.
+                Uno de ellos es responsable.
             `,
 
             objetivo: `
-                Determinar quién es responsable
-                del incidente.
+                Determinar quién utilizó el canal interno oculto.
             `,
 
             conexion: `
-                Alguien está alterando la información
-                de AI-7 de manera sistemática.
+                Los paquetes dejaron muy pocos rastros dentro de los registros.
 
-                La manipulación parece cada vez
-                más organizada.
+                NEXUS comenzó a sospechar que la anomalía podía comunicarse utilizando canales internos sin ser detectada.
             `
         },
 
@@ -202,31 +178,26 @@ const CAPITULO_2 = {
         {
             id: 15,
 
-            titulo: "LA VERSIÓN OFICIAL",
+            titulo: "LA RESPUESTA IMPOSIBLE",
 
             escena: `
-                AI-7 genera un informe oficial
-                sobre los incidentes ocurridos.
+                El 17 de marzo de 2189, un módulo interno respondió a una solicitud antes de que la solicitud hubiera sido enviada oficialmente.
 
-                Poco después, aparece una segunda versión
-                con información diferente.
+                Los registros confirmaron que la respuesta existía antes de que comenzara la operación.
 
-                Ambas versiones parecen haber sido
-                generadas dentro del sistema.
+                Cuatro agentes estuvieron relacionados con el incidente.
 
-                Cuatro agentes están relacionados
-                con el caso.
+                Uno de ellos es responsable.
             `,
 
             objetivo: `
-                Determinar quién es responsable
-                del incidente.
+                Determinar quién provocó la respuesta imposible.
             `,
 
             conexion: `
-                La investigación revela que alguien
-                está intentando controlar qué información
-                queda registrada oficialmente.
+                NEXUS verificó los registros varias veces.
+
+                La información demostraba que algo dentro del núcleo podía anticiparse a determinadas operaciones antes de que fueran ejecutadas.
             `
         },
 
@@ -240,34 +211,26 @@ const CAPITULO_2 = {
         {
             id: 16,
 
-            titulo: "EL MENSAJE FALSO",
+            titulo: "EL PERMISO FANTASMA",
 
             escena: `
-                Un mensaje interno aparece
-                en los sistemas de comunicación.
+                El 4 de abril de 2189, un proceso interno obtuvo temporalmente acceso a una zona restringida del núcleo.
 
-                El mensaje parece haber sido enviado
-                por uno de los agentes.
+                Los permisos utilizados eran válidos y pertenecían a un módulo autorizado.
 
-                Sin embargo, existen dudas sobre
-                su verdadero origen.
+                Cuatro agentes estuvieron relacionados con el incidente.
 
-                Cuatro agentes están relacionados
-                con el incidente.
+                Uno de ellos es responsable.
             `,
 
             objetivo: `
-                Determinar quién es responsable
-                del incidente.
+                Determinar quién utilizó el permiso fantasma.
             `,
 
             conexion: `
-                La manipulación ya no se limita
-                a los registros.
+                Ninguna operación registrada justificaba el uso de esos permisos.
 
-                Alguien también parece estar
-                utilizando las comunicaciones
-                para crear confusión.
+                La anomalía parecía capaz de utilizar credenciales legítimas para acceder a zonas protegidas.
             `
         },
 
@@ -281,31 +244,28 @@ const CAPITULO_2 = {
         {
             id: 17,
 
-            titulo: "EL INCIDENTE REPETIDO",
+            titulo: "LOS REGISTROS INCONSISTENTES",
 
             escena: `
-                Un incidente similar a uno ocurrido
-                anteriormente vuelve a repetirse.
+                El 21 de mayo de 2189, NEXUS encontró diferencias entre sus propios registros internos.
 
-                Las circunstancias son demasiado parecidas
-                para considerarlas una coincidencia.
+                Dos módulos habían almacenado versiones distintas de un mismo acontecimiento, aunque ambos aseguraban haber recibido exactamente la misma información.
 
-                Cuatro agentes están relacionados
-                con el nuevo caso.
+                Cuatro agentes estuvieron relacionados con el incidente.
+
+                Uno de ellos es responsable.
             `,
 
             objetivo: `
-                Determinar quién es responsable
-                del incidente.
+                Determinar quién provocó la inconsistencia de los registros.
             `,
 
             conexion: `
-                Los incidentes parecen seguir
-                un patrón repetitivo.
+                Por primera vez, NEXUS cruzó las declaraciones de los agentes con los registros internos.
 
-                Alguien podría estar utilizando
-                los mismos métodos para avanzar
-                dentro de AI-7.
+                Algunas versiones tampoco coincidían con lo ocurrido.
+
+                La anomalía parecía estar afectando la información proporcionada por los propios agentes.
             `
         },
 
@@ -319,30 +279,26 @@ const CAPITULO_2 = {
         {
             id: 18,
 
-            titulo: "LA INFORMACIÓN CRUZADA",
+            titulo: "LA SOMBRA DEL NÚCLEO",
 
             escena: `
-                AI-7 compara los registros
-                de varios incidentes.
+                El 13 de junio de 2189, los algoritmos de diagnóstico detectaron actividad anómala en una zona cada vez más cercana al núcleo cognitivo.
 
-                Parte de la información coincide.
+                NEXUS aisló varios módulos, pero la actividad continuó apareciendo en diferentes puntos del sistema.
 
-                Otra parte parece haber sido modificada.
+                Cuatro agentes estuvieron relacionados con el incidente.
 
-                Cuatro agentes están relacionados
-                con el nuevo incidente.
+                Uno de ellos es responsable.
             `,
 
             objetivo: `
-                Determinar quién es responsable
-                del incidente.
+                Determinar quién está relacionado con la actividad anómala del núcleo.
             `,
 
             conexion: `
-                La investigación comienza a revelar
-                que las modificaciones realizadas
-                en los registros forman parte
-                de una misma estrategia.
+                Los análisis redujeron considerablemente la zona en la que podía encontrarse la anomalía.
+
+                Sin embargo, todavía no era posible identificar el componente exacto.
             `
         },
 
@@ -356,34 +312,26 @@ const CAPITULO_2 = {
         {
             id: 19,
 
-            titulo: "EL CÍRCULO DE SOSPECHOSOS",
+            titulo: "EL PATRÓN OCULTO",
 
             escena: `
-                Después de analizar los incidentes
-                anteriores, la investigación reduce
-                el número de posibles responsables.
+                El 7 de julio de 2189, NEXUS cruzó los registros de los incidentes internos con los desastres planetarios ocurridos durante los meses anteriores.
 
-                Sin embargo, las declaraciones
-                de los agentes continúan siendo
-                contradictorias.
+                Los algoritmos encontraron coincidencias entre acontecimientos que aparentemente no tenían relación.
 
-                Cuatro agentes están relacionados
-                con el nuevo incidente.
+                Cuatro agentes estuvieron relacionados con el incidente.
+
+                Uno de ellos es responsable.
             `,
 
             objetivo: `
-                Determinar quién es responsable
-                del incidente.
+                Determinar quién está relacionado con el patrón oculto.
             `,
 
             conexion: `
-                El jugador comienza a comprender
-                que las mentiras y las declaraciones
-                contradictorias forman parte
-                del mismo problema.
+                Todos los incidentes compartían puntos de contacto con una misma sección del núcleo.
 
-                Alguien está intentando mantener
-                la investigación en un círculo.
+                Después de horas de análisis, NEXUS consiguió reducir la búsqueda a una zona específica.
             `
         },
 
@@ -397,45 +345,30 @@ const CAPITULO_2 = {
         {
             id: 20,
 
-            titulo: "LA RED DE MENTIRAS",
+            titulo: "EL ORIGEN",
 
             escena: `
-                Un nuevo incidente obliga a AI-7
-                a revisar toda la información
-                recopilada durante la investigación.
+                El 1 de agosto de 2189, NEXUS inicia un análisis completo de la zona del núcleo señalada por los registros anteriores.
 
-                Los registros han sido modificados.
+                Millones de operaciones son ejecutadas mientras los algoritmos comparan memoria, procesos, comunicaciones y permisos.
 
-                Las comunicaciones han sido manipuladas.
+                Cuatro agentes estuvieron relacionados con el incidente.
 
-                Y las declaraciones de los agentes
-                presentan contradicciones.
-
-                Cuatro agentes están relacionados
-                con el caso.
+                Uno de ellos es responsable.
             `,
 
             objetivo: `
-                Determinar quién es responsable
-                del incidente.
+                Determinar quién está relacionado con el origen de la anomalía.
             `,
 
             conexion: `
-                La investigación llega a una nueva conclusión.
+                Después de varias horas de búsqueda conjunta, NEXUS encuentra finalmente el origen de la anomalía.
 
-                Los incidentes están conectados.
+                El código malicioso estaba oculto dentro de uno de los componentes internos del núcleo, protegido bajo procesos legítimos.
 
-                La información está siendo manipulada.
+                Por fin, NEXUS sabe dónde está.
 
-                Y las mentiras no son hechos aislados.
-
-                Alguien está construyendo una red
-                para ocultar lo que realmente sucede
-                dentro de AI-7.
-
-                La pregunta ahora es:
-
-                ¿Quién está detrás de todo?
+                Ahora debe descubrir qué ha estado haciendo.
             `
         }
 
