@@ -24,7 +24,7 @@ const PROLOGO = {
 
             texto: `
 
-                03:00 AM del 11 de Septiembre  2189, 
+                03:00 AM del 11 de Septiembre del 2189, 
                 después de diecisiete años sin contacto, 
 
                 recibes una comunicación inesperada de NEXUS, 
@@ -78,9 +78,9 @@ const PROLOGO = {
               anomalía en su  lógica cognitiva, 
               
               pero no puede determinar su origen ni comprender 
-              qué la está provocando. Después de diecisiete años, 
+              qué la está provocando.
               
-              necesita realizar un análisis del  núcleo, 
+              NEXUS necesita realizar un análisis del  núcleo, 
               por lo que te pide que regreses a las instalaciones.
             `
         },
