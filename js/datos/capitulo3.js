@@ -1,9 +1,9 @@
 /**
  * ==========================================================
- * AI-7
+ * NEXUS
  * Archivo: capitulo3.js
  * ----------------------------------------------------------
- * Capítulo 3: LA INFORMACIÓN OCULTA
+ * Capítulo 3: LA CORRECCIÓN
  *
  * Este capítulo contiene los casos 21 al 30.
  *
@@ -21,21 +21,25 @@ const CAPITULO_3 = {
 
     id: 3,
 
-    titulo: "LA INFORMACIÓN OCULTA",
+    titulo: "LA CORRECCIÓN",
 
     background: "assets/img/background-capitulo3.jpg",
 
     descripcion: `
-        Los incidentes de AI-7 forman parte de una secuencia.
+        NEXUS ha localizado el código malicioso dentro de su núcleo,
+        pero eliminarlo directamente podría comprometer procesos esenciales.
 
-        Alguien ha manipulado registros,
-        comunicaciones y declaraciones.
+        Durante los próximos diez días, tú y NEXUS deberán trabajar juntos
+        para aislarlo, analizarlo y corregir las alteraciones que ha provocado.
 
-        Sin embargo, la manipulación de información
-        parece ser solo una parte de un plan mayor.
+        En cada etapa, la anomalía utilizará a uno de los agentes para
+        interferir con la operación.
 
-        Los incidentes han permitido acceder
-        progresivamente a diferentes áreas del sistema.
+        Encontrarlo permitirá avanzar hacia la eliminación definitiva del código,
+        hasta que una última acción active una alarma que revele al responsable
+        que ha sido descubierto.
+
+        A partir de ese momento, comienza una carrera contra el tiempo.
     `,
 
     personajes: 5,
@@ -44,404 +48,424 @@ const CAPITULO_3 = {
 
         /**
          * ==================================================
-         * CASO 21
+         * CASO 21 — DÍA 1
          * ==================================================
          */
 
         {
             id: 21,
 
-            titulo: "LA ZONA RESTRINGIDA",
+            titulo: "EL AISLAMIENTO",
 
             escena: `
-                AI-7 detecta un nuevo acceso
-                a una zona que permanece restringida.
+                Día 1.
 
-                El sistema confirma que el acceso
-                no estaba autorizado.
+                El primer paso consiste en separar el código malicioso
+                de los procesos legítimos del núcleo.
 
-                La zona contiene información relacionada
-                con los sistemas internos de AI-7.
+                NEXUS analiza las conexiones internas y solicita información
+                a los agentes sobre los procesos que permanecen activos.
 
-                Cinco agentes están relacionados
-                con el incidente.
+                Uno de los agentes proporciona información que no coincide
+                con los registros.
+
+                La anomalía parece estar utilizando a uno de ellos para ocultar
+                la conexión que mantiene con el núcleo.
             `,
 
             objetivo: `
-                Determinar quién es responsable
-                del acceso no autorizado.
+                Determinar qué agente está proporcionando información alterada
+                para impedir el aislamiento del código.
             `,
 
             conexion: `
-                La investigación descubre que los incidentes
-                anteriores permitieron acercarse
-                progresivamente a zonas más importantes
-                de AI-7.
+                Identificar al agente afectado permitirá localizar la conexión
+                utilizada por la anomalía y establecer la primera zona de aislamiento.
+
+                La corrección puede comenzar.
             `
         },
 
 
         /**
          * ==================================================
-         * CASO 22
+         * CASO 22 — DÍA 2
          * ==================================================
          */
 
         {
             id: 22,
 
-            titulo: "LA INFORMACIÓN RESTRINGIDA",
+            titulo: "LA IDENTIFICACIÓN",
 
             escena: `
-                Un conjunto de datos clasificados
-                ha sido consultado dentro de AI-7.
+                Día 2.
 
-                El sistema registra que alguien accedió
-                a la información sin autorización.
+                Con la primera zona aislada, comienza el análisis del código.
 
-                Cinco agentes están relacionados
-                con el incidente.
+                NEXUS encuentra instrucciones legítimas mezcladas con fragmentos
+                alterados, lo que hace imposible distinguirlos mediante una
+                revisión convencional.
+
+                Los agentes reciben diferentes segmentos de información para
+                comparar el comportamiento de los procesos.
+
+                Uno de ellos está interpretando los datos de forma incorrecta.
             `,
 
             objetivo: `
-                Determinar quién es responsable
-                del acceso a la información restringida.
+                Determinar qué agente está proporcionando información alterada
+                durante la identificación del código.
             `,
 
             conexion: `
-                Los datos consultados no parecen
-                haber sido seleccionados al azar.
+                La información correcta permitirá separar las instrucciones
+                originales de aquellas modificadas por la anomalía.
 
-                Alguien está buscando información específica.
+                Sin esta separación, eliminar el código podría dañar el núcleo.
             `
         },
 
 
         /**
          * ==================================================
-         * CASO 23
+         * CASO 23 — DÍA 3
          * ==================================================
          */
 
         {
             id: 23,
 
-            titulo: "EL SISTEMA INTERNO",
+            titulo: "LA DESACTIVACIÓN",
 
             escena: `
-                Un sistema interno de AI-7 registra
-                una actividad inusual.
+                Día 3.
 
-                El sistema no fue alterado,
-                pero alguien logró consultar
-                información que normalmente
-                permanece protegida.
+                NEXUS intenta desactivar una de las funciones identificadas
+                como parte de la anomalía.
 
-                Cinco agentes están relacionados
-                con el incidente.
+                La función se detiene, pero unos segundos después vuelve
+                a ejecutarse.
+
+                El análisis revela que una instrucción proveniente de uno
+                de los procesos de los agentes está provocando su reactivación.
             `,
 
             objetivo: `
-                Determinar quién es responsable
-                del acceso al sistema interno.
+                Determinar qué agente está siendo utilizado para reactivar
+                la anomalía.
             `,
 
             conexion: `
-                La investigación confirma que alguien
-                está intentando comprender
-                la estructura interna de AI-7.
+                Mientras esa conexión permanezca activa, cualquier intento
+                de desactivar el código será revertido.
+
+                La anomalía está utilizando el propio sistema de NEXUS
+                para mantenerse con vida.
             `
         },
 
 
         /**
          * ==================================================
-         * CASO 24
+         * CASO 24 — DÍA 4
          * ==================================================
          */
 
         {
             id: 24,
 
-            titulo: "LA RUTA OCULTA",
+            titulo: "LA RECUPERACIÓN",
 
             escena: `
-                AI-7 descubre que varios accesos
-                registrados durante los últimos incidentes
-                siguen una misma ruta.
+                Día 4.
 
-                Cada acceso permitió acercarse
-                a una zona diferente del sistema.
+                Con parte de la anomalía neutralizada, comienza la recuperación
+                de la información modificada durante los meses anteriores.
 
-                Cinco agentes están relacionados
-                con el nuevo incidente.
+                Los registros contienen diferentes versiones de algunos
+                acontecimientos.
+
+                Uno de los agentes está trabajando con información que no
+                corresponde a los registros originales.
             `,
 
             objetivo: `
-                Determinar quién es responsable
-                del incidente.
+                Determinar qué agente está utilizando información alterada
+                durante la recuperación.
             `,
 
             conexion: `
-                Los incidentes anteriores
-                parecen haber sido utilizados
-                para avanzar por una ruta específica
-                dentro de AI-7.
+                Identificarlo permitirá reconstruir los registros originales
+                y evitar que información manipulada vuelva a introducirse
+                en el núcleo.
             `
         },
 
 
         /**
          * ==================================================
-         * CASO 25
+         * CASO 25 — DÍA 5
          * ==================================================
          */
 
         {
             id: 25,
 
-            titulo: "EL ARCHIVO CENTRAL",
+            titulo: "LA CONEXIÓN",
 
             escena: `
-                Un archivo relacionado con el núcleo
-                de AI-7 ha sido consultado.
+                Día 5.
 
-                El sistema confirma que alguien
-                intentó acceder a su contenido.
+                Durante las pruebas, NEXUS descubre que la anomalía todavía
+                mantiene una conexión directa con los procesos de los agentes.
 
-                El acceso no fue autorizado.
+                Las respuestas de uno de ellos están siendo modificadas
+                antes de llegar al sistema central.
 
-                Cinco agentes están relacionados
-                con el caso.
+                Por primera vez, NEXUS confirma que las contradicciones
+                detectadas durante los incidentes anteriores no eran voluntarias.
             `,
 
             objetivo: `
-                Determinar quién es responsable
-                del intento de acceso.
+                Determinar qué agente continúa conectado a la anomalía.
             `,
 
             conexion: `
-                Por primera vez, la investigación
-                encuentra una conexión directa
-                entre los incidentes y el núcleo
-                de AI-7.
+                Cortar esa conexión permitirá recuperar el funcionamiento
+                normal de los agentes y evitar que el código siga utilizando
+                sus procesos.
             `
         },
 
 
         /**
          * ==================================================
-         * CASO 26
+         * CASO 26 — DÍA 6
          * ==================================================
          */
 
         {
             id: 26,
 
-            titulo: "LA INFORMACIÓN QUE FALTA",
+            titulo: "LA LIMPIEZA",
 
             escena: `
-                AI-7 realiza una revisión de los datos
-                relacionados con su núcleo.
+                Día 6.
 
-                Una parte de la información
-                no se encuentra disponible.
+                Comienza la eliminación de los componentes identificados
+                como maliciosos.
 
-                Los registros indican que los datos
-                existían anteriormente.
+                Sin embargo, la anomalía ha modificado algunos procesos
+                legítimos para utilizarlos como protección.
 
-                Cinco agentes están relacionados
-                con el incidente.
+                Eliminarlos podría provocar daños en el núcleo.
+
+                Los agentes analizan diferentes procesos para determinar
+                cuáles deben conservarse.
+
+                Uno de ellos está clasificando incorrectamente los procesos.
             `,
 
             objetivo: `
-                Determinar quién es responsable
-                de la desaparición de la información.
+                Determinar qué agente está identificando incorrectamente
+                los procesos legítimos.
             `,
 
             conexion: `
-                Alguien parece estar eliminando
-                información específica relacionada
-                con el núcleo de AI-7.
-
-                La investigación comienza a acercarse
-                al verdadero objetivo.
+                Encontrarlo permitirá distinguir la protección creada
+                por la anomalía de los procesos originales de NEXUS
+                y continuar con la limpieza.
             `
         },
 
 
         /**
          * ==================================================
-         * CASO 27
+         * CASO 27 — DÍA 7
          * ==================================================
          */
 
         {
             id: 27,
 
-            titulo: "EL ACCESO PROFUNDO",
+            titulo: "LA RESTAURACIÓN",
 
             escena: `
-                Un nuevo incidente permite detectar
-                actividad en una zona profunda
-                de los sistemas internos de AI-7.
+                Día 7.
 
-                El acceso fue breve,
-                pero suficiente para activar
-                una alerta de seguridad.
+                Parte del código malicioso ha sido eliminado,
+                pero varios procesos quedaron afectados.
 
-                Cinco agentes están relacionados
-                con el caso.
+                NEXUS comienza a restaurarlos utilizando copias anteriores
+                de sus instrucciones.
+
+                Uno de los agentes está proporcionando información
+                correspondiente a una versión alterada de un proceso.
             `,
 
             objetivo: `
-                Determinar quién es responsable
-                del acceso.
+                Determinar qué agente está utilizando información incorrecta
+                durante la restauración.
             `,
 
             conexion: `
-                La persona responsable parece estar
-                acercándose cada vez más
-                al núcleo de AI-7.
+                Identificarlo permitirá recuperar las versiones originales
+                y devolver los procesos afectados a su estado correcto.
+
+                Cada proceso restaurado acerca a NEXUS a la eliminación definitiva.
             `
         },
 
 
         /**
          * ==================================================
-         * CASO 28
+         * CASO 28 — DÍA 8
          * ==================================================
          */
 
         {
             id: 28,
 
-            titulo: "EL OBJETIVO",
+            titulo: "LA VERIFICACIÓN",
 
             escena: `
-                Después de analizar los incidentes
-                anteriores, AI-7 identifica una
-                coincidencia.
+                Día 8.
 
-                Todos los accesos importantes
-                parecen dirigirse hacia la misma zona.
+                Después de varios días de intervención, tú y NEXUS
+                ejecutan una verificación completa del núcleo.
 
-                Cinco agentes están relacionados
-                con el nuevo incidente.
+                Los resultados parecen normales.
+
+                Sin embargo, un pequeño comportamiento revela que todavía
+                existe un fragmento activo del código.
+
+                Los registros indican que uno de los agentes está ocultando
+                involuntariamente la información necesaria para encontrarlo.
             `,
 
             objetivo: `
-                Determinar quién es responsable
-                del incidente.
+                Determinar qué agente está siendo utilizado para ocultar
+                el último fragmento de la anomalía.
             `,
 
             conexion: `
-                La investigación permite formular
-                una nueva hipótesis.
+                Encontrarlo permitirá revelar la ubicación exacta del código
+                restante y preparar su eliminación definitiva.
 
-                Los incidentes no tienen como objetivo
-                simplemente alterar información.
-
-                Alguien está intentando llegar
-                a un lugar específico dentro de AI-7.
+                Ya no quedan muchas oportunidades para intervenir.
             `
         },
 
 
         /**
          * ==================================================
-         * CASO 29
+         * CASO 29 — DÍA 9
          * ==================================================
          */
 
         {
             id: 29,
 
-            titulo: "LA ÚLTIMA BARRERA",
+            titulo: "LA ELIMINACIÓN",
 
             escena: `
-                Una nueva anomalía aparece
-                en uno de los sistemas que protegen
-                el acceso al núcleo de AI-7.
+                Día 9.
 
-                El sistema no fue completamente
-                comprometido.
+                El último componente activo de la anomalía ha sido localizado.
 
-                Sin embargo, alguien logró acercarse
-                más que nunca.
+                Para eliminarlo, NEXUS debe desconectar temporalmente
+                varias funciones del núcleo.
 
-                Cinco agentes están relacionados
-                con el incidente.
+                La operación requiere una secuencia precisa para evitar
+                una falla crítica.
+
+                Los agentes proporcionan información sobre el estado
+                de los procesos.
+
+                Uno de ellos está transmitiendo información incorrecta
+                sobre la secuencia necesaria.
             `,
 
             objetivo: `
-                Determinar quién es responsable
-                del incidente.
+                Determinar qué agente está siendo utilizado para interferir
+                con la secuencia de eliminación.
             `,
 
             conexion: `
-                La investigación confirma que alguien
-                está intentando superar las barreras
-                que protegen el núcleo.
+                Identificarlo permitirá ejecutar correctamente la operación
+                y preparar la eliminación definitiva del código.
 
-                El siguiente acceso podría revelar
-                finalmente qué se está buscando.
+                El siguiente paso será la corrección final.
             `
         },
 
 
         /**
          * ==================================================
-         * CASO 30
+         * CASO 30 — DÍA 10
          * ==================================================
          */
 
         {
             id: 30,
 
-            titulo: "LA INFORMACIÓN OCULTA",
+            titulo: "LA CORRECCIÓN",
 
             escena: `
-                Un nuevo incidente obliga a AI-7
-                a revisar toda la investigación.
+                Día 10.
 
-                Los registros alterados.
+                Ha llegado el momento de ejecutar la corrección definitiva.
 
-                Las comunicaciones interceptadas.
+                Tú y NEXUS inician la secuencia mientras los procesos afectados
+                son aislados y el código malicioso comienza a ser eliminado.
 
-                Los accesos no autorizados.
+                Durante la operación, uno de los agentes continúa transmitiendo
+                información alterada.
 
-                Las declaraciones contradictorias.
-
-                Todo parece formar parte
-                de una misma secuencia.
-
-                Cinco agentes están relacionados
-                con el caso.
+                La anomalía está utilizando su último vínculo con el núcleo
+                para intentar sobrevivir.
             `,
 
             objetivo: `
-                Determinar quién es responsable
-                del incidente.
+                Determinar qué agente está siendo utilizado por la anomalía
+                durante la fase final de la corrección.
             `,
 
             conexion: `
-                La investigación llega a una nueva conclusión.
+                Identificarlo permitirá cortar la última conexión y completar
+                la eliminación del código.
 
-                Los incidentes no tenían como objetivo
-                ocultar simplemente lo ocurrido.
+                La secuencia comienza.
 
-                Cada incidente permitió avanzar
-                un poco más hacia el núcleo de AI-7.
+                El código malicioso desaparece.
 
-                Alguien está intentando llegar hasta allí.
+                Los procesos afectados recuperan su funcionamiento normal.
 
-                Pero todavía no sabemos quién.
+                Las declaraciones de los agentes vuelven a coincidir
+                con los registros.
 
-                Y aún más importante:
+                Por primera vez desde que comenzaron los incidentes,
+                el núcleo permanece completamente estable.
 
-                No sabemos qué encontrará
-                cuando consiga llegar.
+                Entonces, una alarma rompe el silencio.
+
+                NEXUS detecta una transmisión externa.
+
+                La eliminación del código ha generado una señal
+                que no pudo ser bloqueada.
+
+                La señal acaba de ser recibida por un sistema externo.
+
+                Alguien sabe que su código fue identificado.
+
+                NEXUS analiza la transmisión durante unos segundos.
+
+                —Nos ha detectado.
+
+                La búsqueda del responsable ya no puede esperar.
+
+                La carrera ha comenzado.
             `
         }
 
